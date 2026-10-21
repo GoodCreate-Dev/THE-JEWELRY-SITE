@@ -228,15 +228,6 @@ html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
 .window-media video, .window-media img { width: 100%; height: 100%; object-fit: cover; scale: calc(1.25 - var(--wp, 1) * .25); }
 .window-text { position: relative; z-index: 1; max-width: 900px; padding: 0 var(--pad); text-align: center; opacity: clamp(0, (var(--wp, 1) - .6) * 3.2, 1); translate: 0 calc((1 - var(--wp, 1)) * 40px); }
 
-/* ---------- gold cursor (fine pointers only, added by Motion.tsx) ---------- */
-.cursor, .cursor-dot { position: fixed; left: 0; top: 0; z-index: 95; pointer-events: none; border-radius: 50%; }
-.cursor { width: 38px; height: 38px; margin: -19px 0 0 -19px; border: 1px solid rgba(232, 211, 162, .7); transition: width .45s var(--ease), height .45s var(--ease), margin .45s var(--ease), background .45s, border-color .45s, opacity .3s; }
-.cursor-dot { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: var(--color-gold-hi); }
-.cursor.link { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(197, 162, 101, .14); border-color: var(--color-gold); }
-.cursor.view { width: 96px; height: 96px; margin: -48px 0 0 -48px; background: rgba(250, 248, 243, .08); border-color: rgba(250, 248, 243, .7); backdrop-filter: blur(2px); }
-.cursor.hide, .cursor-dot.hide { opacity: 0; }
-.has-cursor, .has-cursor a, .has-cursor button, .has-cursor label { cursor: none; }
-.has-cursor input, .has-cursor textarea, .has-cursor iframe { cursor: auto; }
 .btn { transition: color .6s var(--ease), border-color .6s, translate .5s var(--ease); }
 
 @media (prefers-reduced-motion: reduce) {

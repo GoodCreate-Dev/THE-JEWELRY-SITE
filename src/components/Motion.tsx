@@ -16,7 +16,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  *   --hp on [data-hero]    0 → 1 as the hero scrolls away (media grows, text drifts up)
  *   --wp on [data-window]  0 → 1 as the window section opens to full screen
  *   .frame img             slow parallax
- * On fine pointers it also adds the gold cursor and magnetic buttons.
+ * On fine pointers buttons also lean toward the pointer.
  */
 export function Motion() {
   const pathname = usePathname();
@@ -26,22 +26,9 @@ export function Motion() {
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true, anchors: true });
     const fine = window.matchMedia("(pointer: fine)").matches;
 
-    // gold cursor: a ring that trails the pointer and a dot that follows it exactly
-    let ring: HTMLDivElement | null = null;
-    let dot: HTMLDivElement | null = null;
-    const mouse = { x: -100, y: -100 };
-    const pos = { x: -100, y: -100 };
+    // magnetic buttons lean toward the pointer (fine pointers only)
     const onMove = (e: PointerEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      const t = e.target as Element;
-      ring?.classList.toggle("view", !!t.closest?.(".frame"));
-      ring?.classList.toggle("link", !t.closest?.(".frame") && !!t.closest?.("a, button, label, [role=button]"));
-      const hide = !!t.closest?.("input, textarea, select, iframe");
-      ring?.classList.toggle("hide", hide);
-      dot?.classList.toggle("hide", hide);
-      // magnetic buttons lean toward the pointer
-      const btn = t.closest?.<HTMLElement>(".btn, .head-cta");
+      const btn = (e.target as Element).closest?.<HTMLElement>(".btn, .head-cta");
       document.querySelectorAll<HTMLElement>(".btn, .head-cta").forEach((b) => {
         if (b !== btn) b.style.translate = "";
       });
@@ -50,18 +37,7 @@ export function Motion() {
         btn.style.translate = `${(e.clientX - r.left - r.width / 2) * 0.22}px ${(e.clientY - r.top - r.height / 2) * 0.32}px`;
       }
     };
-    const onLeave = () => {
-      ring?.classList.add("hide");
-      dot?.classList.add("hide");
-    };
-    if (fine) {
-      ring = Object.assign(document.createElement("div"), { className: "cursor hide" });
-      dot = Object.assign(document.createElement("div"), { className: "cursor-dot hide" });
-      document.body.append(ring, dot);
-      document.documentElement.classList.add("has-cursor");
-      window.addEventListener("pointermove", onMove, { passive: true });
-      document.addEventListener("pointerleave", onLeave);
-    }
+    if (fine) window.addEventListener("pointermove", onMove, { passive: true });
 
     const scrollEffects = () => {
       const vh = window.innerHeight;
@@ -85,29 +61,13 @@ export function Motion() {
     let id = requestAnimationFrame(function tick(t) {
       lenis.raf(t);
       scrollEffects();
-      if (ring && dot) {
-        pos.x += (mouse.x - pos.x) * 0.16;
-        pos.y += (mouse.y - pos.y) * 0.16;
-        ring.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
-        dot.style.transform = `translate(${mouse.x}px, ${mouse.y}px)`;
-      }
       id = requestAnimationFrame(tick);
     });
-    const showOnFirstMove = () => {
-      ring?.classList.remove("hide");
-      dot?.classList.remove("hide");
-    };
-    if (fine) window.addEventListener("pointermove", showOnFirstMove, { once: true });
 
     return () => {
       cancelAnimationFrame(id);
       lenis.destroy();
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointermove", showOnFirstMove);
-      document.removeEventListener("pointerleave", onLeave);
-      ring?.remove();
-      dot?.remove();
-      document.documentElement.classList.remove("has-cursor");
     };
   }, []);
 
