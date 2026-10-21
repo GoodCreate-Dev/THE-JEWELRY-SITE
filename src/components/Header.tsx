@@ -4,18 +4,42 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { content, path, PAGES, type Lang, type PageKey } from "@/content/site";
 
-/** Fixed header: white logo, page links, language switch, booking button. Turns solid on scroll. */
+/** Fixed header: white logo, page links, language switch, booking button, closable notice. */
 export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const t = content[lang];
   const [solid, setSolid] = useState(false);
+  const [away, setAway] = useState(false);
   const [open, setOpen] = useState(false);
+  const [notice, setNotice] = useState(true);
 
+  // Solid after the hero edge; slides away while scrolling down, returns on scroll up.
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 60);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setSolid(y > 60);
+      if (Math.abs(y - last) > 6) {
+        setAway(y > last && y > 240);
+        last = y;
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem("tj-notice")) setNotice(false);
+    } catch {}
+  }, []);
+
+  const closeNotice = () => {
+    setNotice(false);
+    try {
+      sessionStorage.setItem("tj-notice", "1");
+    } catch {}
+  };
 
   useEffect(() => {
     document.documentElement.classList.toggle("menu-open", open);
@@ -26,11 +50,14 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
 
   return (
     <>
-      <header className={`site-head${solid || open ? " solid" : ""}`}>
-        <div className="notice-bar">
-          <span>◆ {t.notice.text}</span>
-          <Link href={path(lang, "contact")}>{t.notice.link} →</Link>
-        </div>
+      <header className={`site-head${solid || open ? " solid" : ""}${away && !open ? " away" : ""}`}>
+        {notice && (
+          <div className="notice-bar">
+            <span>{t.notice.text}</span>
+            <Link href={path(lang, "contact")}>{t.notice.link} →</Link>
+            <button type="button" className="notice-close" aria-label={t.nav.close} onClick={closeNotice}>×</button>
+          </div>
+        )}
         <div className="head-row">
           <nav className="head-nav" aria-label="Main">
             {navPages.map((p) => (

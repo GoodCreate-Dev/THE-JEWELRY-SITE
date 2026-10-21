@@ -77,7 +77,7 @@ export function HomePage({ lang }: { lang: Lang }) {
               <div className="mt-5 flex items-baseline justify-between border-b border-gold/40 pb-4">
                 <span className="caption">{s.no}</span>
                 <h3 className="display text-2xl">{s.name}</h3>
-                <span className="display text-2xl text-gold-hi">{s.capacity}<small className="ml-1 text-xs text-white/50">{t.common.guests}</small></span>
+                <span className="display text-2xl">{s.capacity}<small className="ml-1 text-xs text-white/50">{t.common.guests}</small></span>
               </div>
               <p className="mt-4 text-sm text-white/65">{s.body}</p>
             </Link>
@@ -90,7 +90,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         <div className="frame rv-img min-h-[420px]"><img src="/images/dome-2.jpg" alt="" loading="lazy" /></div>
         <div className="ivory flex flex-col justify-center gap-6 p-[clamp(40px,6vw,96px)]">
           <p className="kicker rv">Re:Start</p>
-          <p className="display rv text-[clamp(72px,8vw,136px)] leading-none" style={d(".1s")}><span className="gold-text">{h.relaunch.date}</span></p>
+          <p className="display rv text-[clamp(80px,9vw,156px)] leading-none" style={d(".1s")}>{h.relaunch.date}</p>
           <h2 className="display rv text-[clamp(22px,2.2vw,34px)]" style={d(".2s")}>{h.relaunch.title}</h2>
           <p className="rv text-black/70" style={d(".3s")}>{h.relaunch.body}</p>
           <Link href={path(lang, "contact")} className="btn btn-dark rv self-start" style={d(".4s")}>{h.relaunch.cta} →</Link>
@@ -167,7 +167,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
       </section>
       <section className="sec text-center">
         <Ornament className="mx-auto mb-12 max-w-sm rv" />
-        <p className="display rv mx-auto max-w-3xl text-[clamp(28px,3.6vw,56px)]"><span className="gold-text">{a.quote}</span></p>
+        <p className={`display rv mx-auto max-w-3xltext-[clamp(28px,3.6vw,56px)] ${lang === "en" ? "italic" : ""}`}>{lang === "en" ? `“${a.quote}”` : `「${a.quote}」`}</p>
       </section>
       <ContactBand lang={lang} />
     </Shell>
@@ -192,13 +192,13 @@ export function SpacesPage({ lang }: { lang: Lang }) {
               <dl className="rv mt-10" style={d(".3s")}>
                 <div className={`flex justify-between border-t py-4 ${i % 2 ? "border-gold/40" : "border-black/80"}`}>
                   <dt className="text-xs tracking-[.16em] opacity-60">{s.capacityLabel}</dt>
-                  <dd className={`display text-3xl ${i % 2 ? "text-gold-hi" : "text-gold-lo"}`}>{sp.capacity} <small className="text-sm opacity-60">{t.common.guests}</small></dd>
+                  <dd className="display text-3xl">{sp.capacity} <small className="text-sm opacity-60">{t.common.guests}</small></dd>
                 </div>
                 <div className={`border-t border-b py-4 ${i % 2 ? "border-white/15" : "border-black/10"}`}>
                   <dt className="text-xs tracking-[.16em] opacity-60">{s.usesLabel}</dt>
                   <dd className="mt-2 flex flex-wrap gap-2">
                     {sp.uses.map((u) => (
-                      <span key={u} className={`border px-3 py-1 text-xs ${i % 2 ? "border-gold/50 text-gold-hi" : "border-black/30"}`}>{u}</span>
+                      <span key={u} className={`border px-3 py-1 text-xs ${i % 2 ? "border-white/25" : "border-black/30"}`}>{u}</span>
                     ))}
                   </dd>
                 </div>

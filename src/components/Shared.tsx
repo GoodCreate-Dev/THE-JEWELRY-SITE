@@ -17,6 +17,18 @@ export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; chi
   );
 }
 
+/** Black screen with the white logo and a gold line, shown once per visit (CSS hides it after). */
+export function Intro() {
+  return (
+    <div className="intro" aria-hidden="true">
+      <div className="intro-mark">
+        <span className="logo" />
+        <span className="intro-line" />
+      </div>
+    </div>
+  );
+}
+
 /** Large photo header used by every page except the home page. */
 export function PageHero({ lang, hero }: { lang: Lang; hero: { kicker: string; title: string; lead: string; image: string } }) {
   return (
@@ -54,7 +66,7 @@ export function ContactBand({ lang }: { lang: Lang }) {
       <Ornament className="mx-auto mb-14 max-w-md rv" />
       <p className="kicker rv">Contact</p>
       <h2 className="display sec-title rv mx-auto mt-5 max-w-4xl" style={{ "--d": ".1s" } as React.CSSProperties}>
-        <span className="gold-text">{t.home.contactTitle}</span>
+        {t.home.contactTitle}
       </h2>
       <p className="rv mx-auto mt-6 max-w-xl text-white/75" style={{ "--d": ".2s" } as React.CSSProperties}>{t.home.contactBody}</p>
       <div className="rv mt-10 flex flex-wrap justify-center gap-4" style={{ "--d": ".3s" } as React.CSSProperties}>
