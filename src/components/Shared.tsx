@@ -4,15 +4,13 @@ import { Fragment, type ReactNode } from "react";
 import { COMPANY_URL, content, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
 import { Header } from "./Header";
 
-/** Every page: header, content, footer, sample label. */
+/** Every page: header, content, footer. */
 export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; children: ReactNode }) {
-  const t = content[lang];
   return (
     <>
       <Header lang={lang} page={page} />
       <main>{children}</main>
       <Footer lang={lang} />
-      <span className="pointer-events-none fixed bottom-2 right-2 z-[70] bg-black/70 px-2 py-1 text-[8px] tracking-[.14em] text-gold-hi/80 md:bottom-3 md:right-3 md:px-3 md:py-2 md:text-[10px] md:tracking-[.18em]">{t.sample}</span>
     </>
   );
 }
@@ -53,7 +51,7 @@ export function SplitText({ text, start = 0 }: { text: string; start?: number })
 }
 
 /** Large photo (or film, when `video` is given) header used by every page except the home page. */
-export function PageHero({ lang, hero, video }: { lang: Lang; hero: { kicker: string; title: string; lead: string; image: string }; video?: string }) {
+export function PageHero({ hero, video }: { hero: { kicker: string; title: string; lead: string; image: string }; video?: string }) {
   return (
     <section className="page-hero" data-hero>
       <div className="hero-img">
@@ -68,7 +66,6 @@ export function PageHero({ lang, hero, video }: { lang: Lang; hero: { kicker: st
           </h1>
           <p className="lead rv" style={{ "--d": ".24s" } as React.CSSProperties}>{hero.lead}</p>
         </div>
-        <p className="caption rv" style={{ "--d": ".36s" } as React.CSSProperties}>{content[lang].common.temp}</p>
       </div>
     </section>
   );

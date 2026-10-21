@@ -33,7 +33,7 @@ export function HomePage({ lang }: { lang: Lang }) {
             <Link href={path(lang, "spaces")} className="btn btn-line">{h.ctaSecondary}</Link>
           </div>
         </div>
-        <p className="hero-caption caption rv" style={d(".8s")}><b>THE JEWELRY</b><br />{h.caption} {t.common.temp}</p>
+        <p className="hero-caption caption rv" style={d(".8s")}><b>THE JEWELRY</b><br />{h.caption}</p>
         <span className="hero-scroll" aria-hidden="true">Scroll</span>
       </section>
 
@@ -157,7 +157,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
   const a = content[lang].about;
   return (
     <Shell lang={lang} page="about">
-      <PageHero lang={lang} hero={a.hero} />
+      <PageHero hero={a.hero} />
       <Marquee words={["Museum", "Architecture", "Light", "Osaka Bay"]} />
       <section className="sec light">
         {a.chapters.map((c, i) => (
@@ -183,7 +183,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
   const s = t.spaces;
   return (
     <Shell lang={lang} page="spaces">
-      <PageHero lang={lang} hero={s.hero} />
+      <PageHero hero={s.hero} />
       <Marquee words={content.en.spaces.spaces.map((x) => x.name)} />
       {s.spaces.map((sp, i) => (
         <section key={sp.no} className={`sec ${i % 2 ? "" : "light"}`}>
@@ -222,7 +222,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
   const e = content[lang].events;
   return (
     <Shell lang={lang} page="events">
-      <PageHero lang={lang} hero={e.hero} video={asset("/videos/hero.mp4")} />
+      <PageHero hero={e.hero} video={asset("/videos/hero.mp4")} />
       <Marquee words={content.en.events.types.map((x) => x.title)} />
       <section className="sec light">
         <div className="grid gap-px bg-black/10 md:grid-cols-2">
@@ -264,7 +264,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
   const v = t.visit;
   return (
     <Shell lang={lang} page="visit">
-      <PageHero lang={lang} hero={v.hero} />
+      <PageHero hero={v.hero} />
       <Marquee words={["Yumeshima", "Osaka Bay", "Access", "Kansai"]} />
       <section className="sec light">
         <div className="grid gap-12 md:grid-cols-3">
@@ -322,7 +322,7 @@ export function NewsPage({ lang }: { lang: Lang }) {
   const ig = ["cafe-event.jpg", "dome-5.jpg", "cafe-sunset.jpg", "blue-impulse.jpg", "cafe-open.jpg", "fireworks.jpg"].map((n) => asset(`/images/${n}`));
   return (
     <Shell lang={lang} page="news">
-      <PageHero lang={lang} hero={n.hero} />
+      <PageHero hero={n.hero} />
       <Marquee words={["News", "Instagram", "@thejewelry_official"]} />
       <section className="sec light">
         <ul className="border-t border-black/80">
@@ -365,7 +365,7 @@ export function ContactPage({ lang }: { lang: Lang }) {
   const c = content[lang].contact;
   return (
     <Shell lang={lang} page="contact">
-      <PageHero lang={lang} hero={c.hero} />
+      <PageHero hero={c.hero} />
       <Marquee words={["Let's talk", "Exhibitions", "Events", "Receptions"]} />
       <section className="sec light">
         <div className="split">

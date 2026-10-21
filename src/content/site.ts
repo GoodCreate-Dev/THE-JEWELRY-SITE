@@ -28,8 +28,7 @@ export type Content = {
   meta: Record<PageKey, { title: string; description: string }>;
   nav: { labels: Record<PageKey, string>; cta: string; menu: string; close: string };
   notice: { text: string; link: string };
-  sample: string;
-  common: { guests: string; temp: string; more: string; pending: string };
+  common: { guests: string; more: string; pending: string };
   footer: { address: string; tagline: string; company: string; privacy: string; rights: string };
   home: {
     kicker: string;
@@ -126,8 +125,7 @@ const ja: Content = {
     close: "閉じる",
   },
   notice: { text: "2026年11月1日より、催事・展示のご依頼を正式に受け付けます。", link: "ご相談はこちら" },
-  sample: "DESIGN SAMPLE ・ 仮画像使用",
-  common: { guests: "名", temp: "※仮画像", more: "詳しく見る", pending: "※ 詳細は確認中（仮）" },
+  common: { guests: "名", more: "詳しく見る", pending: "※ 詳細は確認中（仮）" },
   footer: {
     address: "〒559-0034 大阪市住之江区南港北2-5-20",
     tagline: "Museum & Event Space, Osaka Bay",
@@ -239,7 +237,7 @@ const ja: Content = {
       { date: "2026.10.31", tag: "Info", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。" },
     ],
     igTitle: "Instagram",
-    igNote: "公式Instagramの最新投稿を自動で表示します（サンプルは仮画像）。",
+    igNote: "公式Instagramの最新投稿を自動で表示します。",
     follow: "フォローする",
   },
   contact: {
@@ -287,8 +285,7 @@ const en: Content = {
     close: "Close",
   },
   notice: { text: "From 1 November 2026, we officially welcome proposals for events and exhibitions.", link: "Get in touch" },
-  sample: "DESIGN SAMPLE · TEMPORARY IMAGES",
-  common: { guests: "guests", temp: "*Temporary image", more: "Discover", pending: "* Details being confirmed" },
+  common: { guests: "guests", more: "Discover", pending: "* Details being confirmed" },
   footer: {
     address: "2-5-20 Nanko-kita, Suminoe-ku, Osaka 559-0034",
     tagline: "Museum & Event Space, Osaka Bay",
@@ -400,7 +397,7 @@ const en: Content = {
       { date: "2026.10.31", tag: "Info", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed." },
     ],
     igTitle: "Instagram",
-    igNote: "The latest posts from our official Instagram appear here automatically (temporary images in this sample).",
+    igNote: "The latest posts from our official Instagram appear here automatically.",
     follow: "Follow",
   },
   contact: {
