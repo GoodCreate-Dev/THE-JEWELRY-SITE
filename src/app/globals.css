@@ -133,6 +133,7 @@ body::after { content: ""; position: fixed; inset: -50%; z-index: 80; pointer-ev
 .notice-bar a { color: var(--color-gold-hi); border-bottom: 1px solid rgba(232, 211, 162, .4); white-space: nowrap; }
 .notice-close { position: absolute; right: calc(var(--pad) - 10px); top: 50%; translate: 0 -50%; width: 32px; height: 32px; background: none; border: 0; color: rgba(250, 248, 243, .55); font-size: 16px; line-height: 1; cursor: pointer; transition: color .3s; }
 .notice-close:hover { color: var(--color-gold-hi); }
+.notice-closed .notice-bar { display: none; }
 .head-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 18px var(--pad); transition: padding .6s var(--ease); }
 .site-head.solid .head-row { padding-block: 10px; }
 .head-row .logo { width: 50px; transition: width .6s var(--ease); }
@@ -224,7 +225,7 @@ html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
 .window-stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
 .window-media { position: absolute; inset: 0; clip-path: inset(calc((1 - var(--wp, 1)) * 20%) calc((1 - var(--wp, 1)) * 30%)); }
 .window-media::after { content: ""; position: absolute; inset: 0; background: rgba(11, 11, 10, calc(var(--wp, 1) * .55)); }
-.window-media video { width: 100%; height: 100%; object-fit: cover; scale: calc(1.25 - var(--wp, 1) * .25); }
+.window-media video, .window-media img { width: 100%; height: 100%; object-fit: cover; scale: calc(1.25 - var(--wp, 1) * .25); }
 .window-text { position: relative; z-index: 1; max-width: 900px; padding: 0 var(--pad); text-align: center; opacity: clamp(0, (var(--wp, 1) - .6) * 3.2, 1); translate: 0 calc((1 - var(--wp, 1)) * 40px); }
 
 /* ---------- gold cursor (fine pointers only, added by Motion.tsx) ---------- */

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { COMPANY_URL, content, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
 import { Header } from "./Header";
 
@@ -52,12 +52,12 @@ export function SplitText({ text, start = 0 }: { text: string; start?: number })
   );
 }
 
-/** Large photo header used by every page except the home page. */
-export function PageHero({ lang, hero }: { lang: Lang; hero: { kicker: string; title: string; lead: string; image: string } }) {
+/** Large photo (or film, when `video` is given) header used by every page except the home page. */
+export function PageHero({ lang, hero, video }: { lang: Lang; hero: { kicker: string; title: string; lead: string; image: string }; video?: string }) {
   return (
     <section className="page-hero" data-hero>
       <div className="hero-img">
-        <img src={hero.image} alt="" />
+        {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="auto" aria-hidden="true" /> : <img src={hero.image} alt="" />}
       </div>
       <div className="hero-veil" />
       <div className="page-hero-inner hero-drift">
@@ -69,6 +69,41 @@ export function PageHero({ lang, hero }: { lang: Lang; hero: { kicker: string; t
           <p className="lead rv" style={{ "--d": ".24s" } as React.CSSProperties}>{hero.lead}</p>
         </div>
         <p className="caption rv" style={{ "--d": ".36s" } as React.CSSProperties}>{content[lang].common.temp}</p>
+      </div>
+    </section>
+  );
+}
+
+/** Slow band of large outlined words drifting across the screen. */
+export function Marquee({ words }: { words: string[] }) {
+  return (
+    <div className="marquee" aria-hidden="true">
+      <div className="marquee-track">
+        {[0, 1].map((k) => (
+          <span key={k}>
+            {words.map((w) => (
+              <Fragment key={w}>{w} <i /> </Fragment>
+            ))}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Film (or photo) that opens from a framed window to full screen while scrolling, then shows the text. */
+export function WindowFilm({ kicker, title, body, video, image }: { kicker: string; title: string; body?: string; video?: string; image: string }) {
+  return (
+    <section className="window" data-window>
+      <div className="window-stick">
+        <div className="window-media">
+          {video ? <video src={video} poster={image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <img src={image} alt="" />}
+        </div>
+        <div className="window-text">
+          <p className="kicker">{kicker}</p>
+          <h2 className="display sec-title mt-5">{title}</h2>
+          {body && <p className="mx-auto mt-6 max-w-xl text-white/80">{body}</p>}
+        </div>
       </div>
     </section>
   );

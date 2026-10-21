@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { asset, content, IG_URL, MAP_EMBED, path, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
-import { ContactBand, Ornament, PageHero, Shell, SplitText } from "./Shared";
+import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
 
@@ -59,14 +59,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* slow band of outlined words */}
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee-track">
-          {[0, 1].map((k) => (
-            <span key={k}>Museum <i /> Exhibitions <i /> Events <i /> Osaka Bay <i /> </span>
-          ))}
-        </div>
-      </div>
+      <Marquee words={["Museum", "Exhibitions", "Events", "Osaka Bay"]} />
 
       {/* spaces */}
       <section className="sec !pt-[clamp(60px,8vw,120px)]">
@@ -94,19 +87,8 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* window: the bay film opens from a framed window to full screen while scrolling */}
-      <section className="window" data-window>
-        <div className="window-stick">
-          <div className="window-media">
-            <video src={asset("/videos/bay.mp4")} poster={asset("/images/dome-4.jpg")} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
-          </div>
-          <div className="window-text">
-            <p className="kicker">{h.window.kicker}</p>
-            <h2 className="display sec-title mt-5">{h.window.title}</h2>
-            <p className="mx-auto mt-6 max-w-xl text-white/80">{h.window.body}</p>
-          </div>
-        </div>
-      </section>
+      {/* the bay film opens from a framed window to full screen while scrolling */}
+      <WindowFilm kicker={h.window.kicker} title={h.window.title} body={h.window.body} video={asset("/videos/bay.mp4")} image={asset("/images/dome-4.jpg")} />
 
       {/* relaunch band */}
       <section className="grid md:grid-cols-[7fr_5fr]">
@@ -176,6 +158,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="about">
       <PageHero lang={lang} hero={a.hero} />
+      <Marquee words={["Museum", "Architecture", "Light", "Osaka Bay"]} />
       <section className="sec light">
         {a.chapters.map((c, i) => (
           <article key={c.no} className={`grid items-center gap-[clamp(30px,5vw,90px)] py-[clamp(40px,6vw,80px)] md:grid-cols-2 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
@@ -188,10 +171,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
           </article>
         ))}
       </section>
-      <section className="sec text-center">
-        <Ornament className="mx-auto mb-12 max-w-sm rv" />
-        <p className={`display rv mx-auto max-w-3xltext-[clamp(28px,3.6vw,56px)] ${lang === "en" ? "italic" : ""}`}>{lang === "en" ? `“${a.quote}”` : `「${a.quote}」`}</p>
-      </section>
+      <WindowFilm kicker="Vision" title={a.quote} image={asset("/images/dome-3.jpg")} />
       <ContactBand lang={lang} />
     </Shell>
   );
@@ -204,6 +184,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="spaces">
       <PageHero lang={lang} hero={s.hero} />
+      <Marquee words={content.en.spaces.spaces.map((x) => x.name)} />
       {s.spaces.map((sp, i) => (
         <section key={sp.no} className={`sec ${i % 2 ? "" : "light"}`}>
           <div className={`grid items-center gap-[clamp(30px,5vw,90px)] md:grid-cols-[7fr_5fr] ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
@@ -230,11 +211,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
           </div>
         </section>
       ))}
-      <section className="sec ivory text-center">
-        <p className="kicker rv">Combination</p>
-        <h2 className="display sec-title rv mt-4">{s.combineTitle}</h2>
-        <p className="rv mx-auto mt-6 max-w-2xl text-black/70">{s.combineBody}</p>
-      </section>
+      <WindowFilm kicker="Combination" title={s.combineTitle} body={s.combineBody} image={asset("/images/dome-1.jpg")} />
       <ContactBand lang={lang} />
     </Shell>
   );
@@ -245,7 +222,8 @@ export function EventsPage({ lang }: { lang: Lang }) {
   const e = content[lang].events;
   return (
     <Shell lang={lang} page="events">
-      <PageHero lang={lang} hero={e.hero} />
+      <PageHero lang={lang} hero={e.hero} video={asset("/videos/hero.mp4")} />
+      <Marquee words={content.en.events.types.map((x) => x.title)} />
       <section className="sec light">
         <div className="grid gap-px bg-black/10 md:grid-cols-2">
           {e.types.map((ty, i) => (
@@ -287,6 +265,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="visit">
       <PageHero lang={lang} hero={v.hero} />
+      <Marquee words={["Yumeshima", "Osaka Bay", "Access", "Kansai"]} />
       <section className="sec light">
         <div className="grid gap-12 md:grid-cols-3">
           <div className="rv">
@@ -315,6 +294,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
           </div>
         </div>
       </section>
+      <WindowFilm kicker="Osaka Bay" title={v.window.title} body={v.window.body} video={asset("/videos/bay.mp4")} image={asset("/images/dome-4.jpg")} />
       <section className="grid md:grid-cols-2">
         <div className="min-h-[420px] grayscale-[.6] invert-[.9] hue-rotate-180">
           <iframe title="Map" src={MAP_EMBED} loading="lazy" className="h-full min-h-[420px] w-full border-0" />
@@ -343,6 +323,7 @@ export function NewsPage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="news">
       <PageHero lang={lang} hero={n.hero} />
+      <Marquee words={["News", "Instagram", "@thejewelry_official"]} />
       <section className="sec light">
         <ul className="border-t border-black/80">
           {n.items.map((it, i) => (
@@ -385,6 +366,7 @@ export function ContactPage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="contact">
       <PageHero lang={lang} hero={c.hero} />
+      <Marquee words={["Let's talk", "Exhibitions", "Events", "Receptions"]} />
       <section className="sec light">
         <div className="split">
           <div>

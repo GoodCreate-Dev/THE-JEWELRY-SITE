@@ -6,8 +6,8 @@ import { fontVars } from "@/lib/fonts";
 
 // Root layout for the Japanese site. The inline script marks JS as available
 // before paint, so fade-ins start hidden only when the script that reveals them can run.
-// Also skips the logo intro when it has already played in this visit.
-const INIT = "var d=document.documentElement;d.classList.add('js');try{if(sessionStorage.getItem('tj-intro'))d.classList.add('intro-seen');else sessionStorage.setItem('tj-intro','1')}catch(e){}";
+// Also skips the logo intro when it has already played in this visit, and keeps a closed notice closed.
+const INIT = "var d=document.documentElement;d.classList.add('js');try{if(sessionStorage.getItem('tj-intro'))d.classList.add('intro-seen');else sessionStorage.setItem('tj-intro','1');if(sessionStorage.getItem('tj-notice'))d.classList.add('notice-closed')}catch(e){}";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

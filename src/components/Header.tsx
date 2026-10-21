@@ -10,7 +10,6 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const [solid, setSolid] = useState(false);
   const [away, setAway] = useState(false);
   const [open, setOpen] = useState(false);
-  const [notice, setNotice] = useState(true);
 
   // Solid after the hero edge; slides away while scrolling down, returns on scroll up.
   useEffect(() => {
@@ -28,14 +27,9 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem("tj-notice")) setNotice(false);
-    } catch {}
-  }, []);
-
+  // Hidden by the `notice-closed` class, which the layout's inline script restores on later pages.
   const closeNotice = () => {
-    setNotice(false);
+    document.documentElement.classList.add("notice-closed");
     try {
       sessionStorage.setItem("tj-notice", "1");
     } catch {}
@@ -51,7 +45,7 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   return (
     <>
       <header className={`site-head${solid || open ? " solid" : ""}${away && !open ? " away" : ""}`}>
-        {notice && !open && (
+        {!open && (
           <div className="notice-bar">
             <span>{t.notice.text}</span>
             <Link href={path(lang, "contact")}>{t.notice.link} →</Link>

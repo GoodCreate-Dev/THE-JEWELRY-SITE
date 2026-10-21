@@ -75,6 +75,7 @@ export type Content = {
     parkingTitle: string;
     parking: string;
     routesTitle: string;
+    window: { title: string; body: string };
     routes: { caption: string; image: string }[];
   };
   news: { hero: Hero; items: { date: string; tag: string; title: string; body: string }[]; igTitle: string; igNote: string; follow: string };
@@ -222,6 +223,7 @@ const ja: Content = {
     parkingTitle: "駐車場",
     parking: "最寄りのコインパーキングをご利用ください。混雑時はATC駐車場もご利用いただけます。",
     routesTitle: "電車でのアクセス",
+    window: { title: "大阪湾に浮かぶ、夢洲へ。", body: "大阪・新大阪駅から約30分、関西国際空港から約40分。万博の舞台となったベイエリアにあります。" },
     routes: [
       { caption: "JR大阪駅・新大阪駅から", image: IMG("route-osaka.png") },
       { caption: "関西国際空港から", image: IMG("route-kanku.png") },
@@ -379,6 +381,7 @@ const en: Content = {
     parkingTitle: "Parking",
     parking: "Please use nearby coin parking. When busy, the ATC car park is also available.",
     routesTitle: "By train",
+    window: { title: "Out on the bay, at Yumeshima.", body: "About 30 minutes from Osaka and Shin-Osaka stations and 40 minutes from Kansai International Airport, on the bay that hosted the Expo." },
     routes: [
       { caption: "From JR Osaka / Shin-Osaka Station", image: IMG("route-osaka.png") },
       { caption: "From Kansai International Airport", image: IMG("route-kanku.png") },
