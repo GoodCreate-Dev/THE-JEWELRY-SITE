@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { content, path, PAGES, type Lang, type PageKey } from "@/content/site";
 
-/** Fixed header: gold logo, page links, language switch, booking button. Turns solid on scroll. */
+/** Fixed header: white logo, page links, language switch, booking button. Turns solid on scroll. */
 export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const t = content[lang];
   const [solid, setSolid] = useState(false);
