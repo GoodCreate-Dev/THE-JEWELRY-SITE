@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { content, PRIVACY_URL, type Lang } from "@/content/site";
 
 // Web3Forms delivers the enquiry by email. The access key is public by design (it only lets
-// this form send to the address it was created for); without it the form stays a sample.
+// this form send to the address it was created for); without it sending reports a failure.
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
 
 type Status = "idle" | "sending" | "sent" | "failed";
@@ -59,7 +59,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
     }
   };
 
-  const note = { idle: ACCESS_KEY ? "" : f.sampleNote, sending: f.sending, sent: f.sent, failed: ACCESS_KEY ? f.failed : f.sampleNote }[status];
+  const note = { idle: "", sending: f.sending, sent: f.sent, failed: f.failed }[status];
   const input = "mt-2 block w-full border-0 border-b border-black/30 bg-transparent px-0 py-3 text-base text-black outline-none transition focus:border-gold-lo";
   const label = "block text-[11px] tracking-[.18em] text-black/60";
   const req = <span className="ml-2 text-gold-lo">{f.required}</span>;
@@ -92,7 +92,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       </label>
       <div className="md:col-span-2">
         <button type="submit" disabled={status === "sending"} className="btn btn-dark w-full disabled:opacity-50 md:w-auto">{status === "sending" ? f.sending : `${f.submit} →`}</button>
-        <p className={`mt-4 text-sm ${status === "failed" && ACCESS_KEY ? "text-red-700" : "text-gold-lo"}`} role="status" aria-live="polite">{note}</p>
+        <p className={`mt-4 text-sm ${status === "failed" ? "text-red-700" : "text-gold-lo"}`} role="status" aria-live="polite">{note}</p>
       </div>
     </form>
   );

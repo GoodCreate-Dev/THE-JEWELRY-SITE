@@ -98,7 +98,6 @@ export type Content = {
       agree: [string, string, string];
       submit: string;
       required: string;
-      sampleNote: string;
       sending: string;
       sent: string;
       failed: string;
@@ -260,7 +259,6 @@ const ja: Content = {
       agree: ["", "プライバシーポリシー", "に同意する"],
       submit: "送信する",
       required: "必須",
-      sampleNote: "※ デザインサンプルのため、このフォームは送信されません。",
       sending: "送信しています…",
       sent: "お問い合わせありがとうございます。内容を確認のうえ、担当者よりご連絡いたします。",
       failed: "送信できませんでした。時間をおいて再度お試しいただくか、Instagram DMでご連絡ください。",
@@ -420,7 +418,6 @@ const en: Content = {
       agree: ["I agree to the ", "privacy policy", ""],
       submit: "Send",
       required: "Required",
-      sampleNote: "* This is a design sample; the form does not send.",
       sending: "Sending…",
       sent: "Thank you for your enquiry. Our team will review it and get back to you.",
       failed: "Your message could not be sent. Please try again later, or reach us by Instagram DM.",
