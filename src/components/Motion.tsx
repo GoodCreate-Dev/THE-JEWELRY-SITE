@@ -16,7 +16,6 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  *   --hp on [data-hero]    0 → 1 as the hero scrolls away (media grows, text drifts up)
  *   --wp on [data-window]  0 → 1 as the window section opens to full screen
  *   .frame img             slow parallax
- * On fine pointers buttons also lean toward the pointer.
  */
 export function Motion() {
   const pathname = usePathname();
@@ -24,20 +23,6 @@ export function Motion() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true, anchors: true });
-    const fine = window.matchMedia("(pointer: fine)").matches;
-
-    // magnetic buttons lean toward the pointer (fine pointers only)
-    const onMove = (e: PointerEvent) => {
-      const btn = (e.target as Element).closest?.<HTMLElement>(".btn, .head-cta");
-      document.querySelectorAll<HTMLElement>(".btn, .head-cta").forEach((b) => {
-        if (b !== btn) b.style.translate = "";
-      });
-      if (btn) {
-        const r = btn.getBoundingClientRect();
-        btn.style.translate = `${(e.clientX - r.left - r.width / 2) * 0.22}px ${(e.clientY - r.top - r.height / 2) * 0.32}px`;
-      }
-    };
-    if (fine) window.addEventListener("pointermove", onMove, { passive: true });
 
     const scrollEffects = () => {
       const vh = window.innerHeight;
@@ -67,7 +52,6 @@ export function Motion() {
     return () => {
       cancelAnimationFrame(id);
       lenis.destroy();
-      window.removeEventListener("pointermove", onMove);
     };
   }, []);
 
