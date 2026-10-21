@@ -12,7 +12,7 @@ export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; chi
       <Header lang={lang} page={page} />
       <main>{children}</main>
       <Footer lang={lang} />
-      <span className="fixed bottom-3 right-3 z-[70] bg-black/85 px-3 py-2 text-[10px] tracking-[.18em] text-gold-hi">{t.sample}</span>
+      <span className="pointer-events-none fixed bottom-2 right-2 z-[70] bg-black/70 px-2 py-1 text-[8px] tracking-[.14em] text-gold-hi/80 md:bottom-3 md:right-3 md:px-3 md:py-2 md:text-[10px] md:tracking-[.18em]">{t.sample}</span>
     </>
   );
 }

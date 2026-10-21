@@ -51,7 +51,7 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   return (
     <>
       <header className={`site-head${solid || open ? " solid" : ""}${away && !open ? " away" : ""}`}>
-        {notice && (
+        {notice && !open && (
           <div className="notice-bar">
             <span>{t.notice.text}</span>
             <Link href={path(lang, "contact")}>{t.notice.link} →</Link>

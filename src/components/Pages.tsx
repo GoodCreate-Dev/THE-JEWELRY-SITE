@@ -47,7 +47,7 @@ export function HomePage({ lang }: { lang: Lang }) {
             <div className="rv mt-16 grid grid-cols-3 border-t border-black/80" style={d(".24s")}>
               {h.figures.map((f) => (
                 <div key={f.label} className="border-r border-black/10 py-8 pr-4 last:border-r-0 [&:not(:first-child)]:pl-6">
-                  <p className="display text-[clamp(36px,4.4vw,68px)] leading-none text-gold-lo">
+                  <p className="display whitespace-nowrap text-[clamp(28px,4.4vw,68px)] leading-none text-gold-lo">
                     {f.value}<small className="ml-1 text-base">{f.unit}</small>
                   </p>
                   <p className="mt-3 text-xs tracking-[.14em] text-black/60">{f.label}</p>
@@ -298,7 +298,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
         </div>
         <div className="sec">
           <p className="kicker rv">{v.routesTitle}</p>
-          <div className="mt-8 grid grid-cols-2 gap-6">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2">
             {v.routes.map((r) => (
               <figure key={r.caption} className="rv bg-white p-4">
                 <img src={r.image} alt={r.caption} loading="lazy" className="mx-auto max-h-[360px] w-auto" />

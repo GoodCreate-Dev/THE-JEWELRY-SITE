@@ -50,7 +50,7 @@ html[lang="ja"] .display { font-family: var(--font-mincho); font-weight: 400; le
 .kicker { line-height: 1.6; }
 p.kicker { display: inline-flex; align-items: center; gap: 14px; }
 p.kicker::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .7; }
-.display { text-wrap: balance; }
+.display { text-wrap-style: balance; }
 html[lang="ja"] .display { word-break: auto-phrase; }
 ::selection { background: var(--color-gold); color: var(--color-black); }
 .caption { font-size: 11px; line-height: 1.7; letter-spacing: .08em; color: var(--color-mute); }
