@@ -12,6 +12,10 @@ export function path(lang: Lang, page: PageKey): string {
   return page === "home" ? root : `${root}${page}/`;
 }
 
+// Set when the site is served from a sub-path (GitHub Pages: /the-jewelry).
+export const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+export const asset = (p: string) => `${BASE}${p}`;
+
 export const IG_URL = "https://www.instagram.com/thejewelry_official/";
 export const COMPANY_URL = "https://symphonicsourire.com/";
 export const PRIVACY_URL = "https://symphonicsourire.com/privacypolicy.html";
@@ -98,7 +102,7 @@ export type Content = {
   };
 };
 
-const IMG = (n: string) => `/images/${n}`;
+const IMG = (n: string) => asset(`/images/${n}`);
 
 const ja: Content = {
   meta: {

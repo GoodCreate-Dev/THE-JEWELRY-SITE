@@ -58,7 +58,7 @@ html[lang="ja"] .display { word-break: auto-phrase; }
 
 /* ---------- logo (recolourable mask) ---------- */
 /* original logo colour: white */
-.logo { display: block; background: #ffffff; -webkit-mask: url(/images/logo.svg) center / contain no-repeat; mask: url(/images/logo.svg) center / contain no-repeat; aspect-ratio: 701.78 / 613.1; }
+.logo { display: block; background: #ffffff; -webkit-mask: var(--logo-url) center / contain no-repeat; mask: var(--logo-url) center / contain no-repeat; aspect-ratio: 701.78 / 613.1; }
 
 /* ---------- ornament: gold hairline with a small diamond ---------- */
 .ornament { display: flex; align-items: center; gap: 14px; color: var(--color-gold); }

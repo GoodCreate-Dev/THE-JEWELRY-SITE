@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
-import { content, IG_URL, MAP_EMBED, path, type Lang } from "@/content/site";
+import { asset, content, IG_URL, MAP_EMBED, path, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
 import { ContactBand, Ornament, PageHero, Shell } from "./Shared";
 
@@ -16,7 +16,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* hero */}
       <section className="hero">
         <div className="hero-img">
-          <img src="/images/dome-1.jpg" alt="" />
+          <img src={asset("/images/dome-1.jpg")} alt="" />
         </div>
         <div className="hero-veil" />
         <div className="hero-lines" aria-hidden="true"><i /><i /></div>
@@ -87,7 +87,7 @@ export function HomePage({ lang }: { lang: Lang }) {
 
       {/* relaunch band */}
       <section className="grid md:grid-cols-[7fr_5fr]">
-        <div className="frame rv-img min-h-[420px]"><img src="/images/dome-2.jpg" alt="" loading="lazy" /></div>
+        <div className="frame rv-img min-h-[420px]"><img src={asset("/images/dome-2.jpg")} alt="" loading="lazy" /></div>
         <div className="ivory flex flex-col justify-center gap-6 p-[clamp(40px,6vw,96px)]">
           <p className="kicker rv">Re:Start</p>
           <p className="display rv text-[clamp(80px,9vw,156px)] leading-none" style={d(".1s")}>{h.relaunch.date}</p>
@@ -316,7 +316,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
 /* ======================= NEWS ======================= */
 export function NewsPage({ lang }: { lang: Lang }) {
   const n = content[lang].news;
-  const ig = ["/images/cafe-event.jpg", "/images/dome-5.jpg", "/images/cafe-sunset.jpg", "/images/blue-impulse.jpg", "/images/cafe-open.jpg", "/images/fireworks.jpg"];
+  const ig = ["cafe-event.jpg", "dome-5.jpg", "cafe-sunset.jpg", "blue-impulse.jpg", "cafe-open.jpg", "fireworks.jpg"].map((n) => asset(`/images/${n}`));
   return (
     <Shell lang={lang} page="news">
       <PageHero lang={lang} hero={n.hero} />
