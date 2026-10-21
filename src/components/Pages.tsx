@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { asset, content, IG_URL, MAP_EMBED, path, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
-import { ContactBand, Ornament, PageHero, Shell } from "./Shared";
+import { ContactBand, Ornament, PageHero, Shell, SplitText } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
 
@@ -14,18 +14,18 @@ export function HomePage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="home">
       {/* hero */}
-      <section className="hero">
+      <section className="hero" data-hero>
         <div className="hero-img">
-          <img src={asset("/images/dome-1.jpg")} alt="" />
+          <video src={asset("/videos/hero.mp4")} poster={asset("/images/hero-poster.jpg")} autoPlay muted loop playsInline preload="auto" aria-hidden="true" />
         </div>
         <div className="hero-veil" />
         <div className="hero-lines" aria-hidden="true"><i /><i /></div>
-        <div className="hero-inner">
+        <div className="hero-inner hero-drift">
           <span className="logo rv w-[clamp(84px,8vw,124px)]" />
           <p className="kicker rv" style={d(".15s")}>{h.kicker}</p>
-          <h1 className="display rv" style={d(".3s")}>
-            <span>{h.title[0]}</span>
-            <span className="gold-text">{h.title[1]}</span>
+          <h1 className="display rv letters" style={d(".3s")} aria-label={h.title.join(" ")}>
+            <span aria-hidden="true"><SplitText text={h.title[0]} /></span>
+            <span aria-hidden="true" className="text-gold-hi"><SplitText text={h.title[1]} start={h.title[0].length + 2} /></span>
           </h1>
           <p className="hero-lead rv" style={d(".45s")}>{h.lead}</p>
           <div className="hero-actions rv" style={d(".6s")}>
@@ -59,8 +59,17 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
+      {/* slow band of outlined words */}
+      <div className="marquee" aria-hidden="true">
+        <div className="marquee-track">
+          {[0, 1].map((k) => (
+            <span key={k}>Museum <i /> Exhibitions <i /> Events <i /> Osaka Bay <i /> </span>
+          ))}
+        </div>
+      </div>
+
       {/* spaces */}
-      <section className="sec">
+      <section className="sec !pt-[clamp(60px,8vw,120px)]">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-8">
           <div>
             <p className="kicker rv">Spaces</p>
@@ -82,6 +91,20 @@ export function HomePage({ lang }: { lang: Lang }) {
               <p className="mt-4 text-sm text-white/65">{s.body}</p>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* window: the bay film opens from a framed window to full screen while scrolling */}
+      <section className="window" data-window>
+        <div className="window-stick">
+          <div className="window-media">
+            <video src={asset("/videos/bay.mp4")} poster={asset("/images/dome-4.jpg")} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
+          </div>
+          <div className="window-text">
+            <p className="kicker">{h.window.kicker}</p>
+            <h2 className="display sec-title mt-5">{h.window.title}</h2>
+            <p className="mx-auto mt-6 max-w-xl text-white/80">{h.window.body}</p>
+          </div>
         </div>
       </section>
 

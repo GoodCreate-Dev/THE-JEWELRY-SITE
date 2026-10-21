@@ -29,18 +29,43 @@ export function Intro() {
   );
 }
 
+/**
+ * Text split into letters that rise in one after another (CSS `.letters`).
+ * Words stay unbroken; `start` offsets the letter count so several lines run on in sequence.
+ */
+export function SplitText({ text, start = 0 }: { text: string; start?: number }) {
+  let i = start;
+  return (
+    <>
+      {text.split(/(\s+)/).map((word, w) =>
+        /^\s+$/.test(word) ? (
+          " "
+        ) : (
+          <span key={w} className="word">
+            {[...word].map((ch, c) => (
+              <span key={c} className="ch" style={{ "--i": i++ } as React.CSSProperties}>{ch}</span>
+            ))}
+          </span>
+        ),
+      )}
+    </>
+  );
+}
+
 /** Large photo header used by every page except the home page. */
 export function PageHero({ lang, hero }: { lang: Lang; hero: { kicker: string; title: string; lead: string; image: string } }) {
   return (
-    <section className="page-hero">
+    <section className="page-hero" data-hero>
       <div className="hero-img">
         <img src={hero.image} alt="" />
       </div>
       <div className="hero-veil" />
-      <div className="page-hero-inner">
+      <div className="page-hero-inner hero-drift">
         <div>
           <p className="kicker rv">{hero.kicker}</p>
-          <h1 className="display rv mt-4" style={{ "--d": ".12s" } as React.CSSProperties}>{hero.title}</h1>
+          <h1 className="display rv letters mt-4" aria-label={hero.title}>
+            <span aria-hidden="true"><SplitText text={hero.title} /></span>
+          </h1>
           <p className="lead rv" style={{ "--d": ".24s" } as React.CSSProperties}>{hero.lead}</p>
         </div>
         <p className="caption rv" style={{ "--d": ".36s" } as React.CSSProperties}>{content[lang].common.temp}</p>
