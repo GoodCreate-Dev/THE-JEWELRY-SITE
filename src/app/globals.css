@@ -12,9 +12,9 @@
   --color-gold-hi: #e8d3a2;
   --color-gold-lo: #957336;
   --color-mute: #8f8a80;
-  --font-display: var(--font-cormorant), var(--font-mincho), serif;
-  --font-mincho: var(--font-mincho), var(--font-cormorant), serif;
-  --font-sans: var(--font-noto), system-ui, sans-serif;
+  --font-display: var(--font-bodoni), var(--font-mincho), serif;
+  --font-mincho: var(--font-mincho), var(--font-bodoni), serif;
+  --font-sans: var(--font-jost), var(--font-noto), system-ui, sans-serif;
 }
 
 :root {
@@ -42,7 +42,7 @@ a { color: inherit; }
 
 /* ---------- type ---------- */
 .kicker { font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--color-gold); }
-.display { font-family: var(--font-display); font-weight: 300; line-height: 1.12; letter-spacing: .01em; }
+.display { font-family: var(--font-display); font-weight: 400; line-height: 1.1; letter-spacing: -.01em; font-optical-sizing: auto; }
 html[lang="ja"] .display { font-family: var(--font-mincho); font-weight: 400; letter-spacing: .08em; line-height: 1.45; }
 .gold-text { background: linear-gradient(115deg, #cfaa66 0%, #f5e6bf 35%, #d9b673 60%, #f7e9c6 82%, #cba35c 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 16s ease-in-out infinite; }
 @keyframes shimmer { 0%, 100% { background-position: 0% 0; } 50% { background-position: 100% 0; } }
@@ -168,6 +168,7 @@ html[lang="ja"] .mobile-menu a { font-family: var(--font-mincho); font-size: 22p
 .hero h1 { font-size: clamp(46px, 7.4vw, 118px); }
 html[lang="ja"] .hero h1 { font-size: clamp(40px, 6vw, 96px); }
 .hero h1 span { display: block; }
+html[lang="en"] .hero h1 span + span { font-style: italic; }
 .hero-lead { max-width: 560px; font-size: clamp(14px, 1.2vw, 16px); color: rgba(250, 248, 243, .82); }
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 6px; }
 .hero-caption { position: absolute; left: var(--pad); bottom: 34px; text-align: left; }
