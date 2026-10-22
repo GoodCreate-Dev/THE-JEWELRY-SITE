@@ -195,6 +195,22 @@ html[lang="ja"] .page-hero h1 { font-size: clamp(36px, 5vw, 76px); }
 html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
 .split { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(30px, 6vw, 120px); }
 
+/* ---------- train route charts (Visit) ---------- */
+.route { display: flex; flex-direction: column; align-items: stretch; padding: clamp(20px, 3vw, 36px); background: #fff; border: 1px solid rgba(11, 11, 10, .1); }
+.route figcaption { margin-bottom: 24px; }
+.route-paths { display: grid; gap: 14px; }
+.route-path { display: flex; flex-direction: column; }
+.route-stop { display: block; padding: 10px 8px; border: 1px solid var(--color-black); text-align: center; font-size: 13px; letter-spacing: .06em; }
+.route-start { background: var(--color-black); color: var(--color-white); }
+.route-leg { position: relative; display: flex; justify-content: center; padding: 16px 0; }
+.route-leg::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; translate: -50% 0; background: var(--c); }
+.route-leg > span { position: relative; display: flex; flex-direction: column; align-items: center; padding: 6px 12px; border-radius: 14px; background: var(--c); color: #fff; font-size: 11px; line-height: 1.4; text-align: center; }
+.route-leg b { font-weight: 500; font-size: 12px; }
+.route-path::after { content: ""; display: block; flex: 1; align-self: center; width: 3px; min-height: 16px; background: #029a4a; }
+.route-cosmo { background: var(--color-gold-lo); border-color: var(--color-gold-lo); color: #fff; font-size: 14px; }
+.route-walk { position: relative; align-self: center; margin: 0; padding: 14px 0 14px 18px; font-size: 12px; color: var(--color-gold-lo); border-left: 3px dashed var(--color-gold-lo); }
+.route-goal { background: var(--color-black); color: var(--color-white); font-family: var(--font-display); font-size: 20px; letter-spacing: .14em; }
+
 @media (max-width: 1020px) {
   .head-nav, .head-right .head-lang, .head-right .head-cta { display: none; }
   .menu-btn { display: block; }

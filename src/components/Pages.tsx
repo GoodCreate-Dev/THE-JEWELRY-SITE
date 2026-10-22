@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
-import { asset, content, IG_URL, MAP_EMBED, path, type Lang } from "@/content/site";
+import { Fragment } from "react";
+import { asset, content, IG_URL, MAP_EMBED, PARKING_URL, path, type Content, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
@@ -265,7 +266,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="visit">
       <PageHero hero={v.hero} />
-      <Marquee words={["Yumeshima", "Osaka Bay", "Access", "Kansai"]} />
+      <Marquee words={["Nanko", "Osaka Bay", "Cosmosquare", "Access"]} />
       <section className="sec light">
         <div className="grid gap-12 md:grid-cols-3">
           <div className="rv">
@@ -289,8 +290,6 @@ export function VisitPage({ lang }: { lang: Lang }) {
                 </li>
               ))}
             </ul>
-            <h3 className="kicker mt-10 border-b border-black/20 pb-2">{v.parkingTitle}</h3>
-            <p className="mt-3 text-sm text-black/70">{v.parking}</p>
           </div>
         </div>
       </section>
@@ -300,19 +299,53 @@ export function VisitPage({ lang }: { lang: Lang }) {
           <iframe title="Map" src={MAP_EMBED} loading="lazy" className="h-full min-h-[420px] w-full border-0" />
         </div>
         <div className="sec">
-          <p className="kicker rv">{v.routesTitle}</p>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            {v.routes.map((r) => (
-              <figure key={r.caption} className="rv bg-white p-4">
-                <img src={r.image} alt={r.caption} loading="lazy" className="mx-auto max-h-[360px] w-auto" />
-                <figcaption className="caption mt-3 !text-black/60">{r.caption}</figcaption>
-              </figure>
-            ))}
-          </div>
+          <p className="kicker rv">{v.parkingTitle}</p>
+          <p className="rv mt-6 max-w-md text-white/80" style={d(".1s")}>{v.parking}</p>
+          <a href={PARKING_URL} target="_blank" rel="noopener" className="btn btn-line rv mt-8" style={d(".2s")}>{v.parkingLink} ↗</a>
+          <figure className="rv mt-10" style={d(".3s")}>
+            <img src={asset("/images/parking-atc.png")} alt={v.parkingAtc} loading="lazy" className="w-full bg-white" />
+            <figcaption className="caption mt-3">{v.parkingAtc}</figcaption>
+          </figure>
         </div>
+      </section>
+      <section className="sec light">
+        <p className="kicker rv">{v.routesTitle}</p>
+        <div className="mt-10 grid items-start gap-10 lg:grid-cols-2">
+          {v.routes.map((r, i) => (
+            <RouteChart key={r.caption} route={r} end={v.routeEnd} delay={i * 0.12} />
+          ))}
+        </div>
+        <p className="caption rv mt-8">{v.routeEnd.note}</p>
       </section>
       <ContactBand lang={lang} />
     </Shell>
+  );
+}
+
+/** Train route chart drawn in HTML: each path's lines and stations, joined at Cosmosquare, then the walk. */
+function RouteChart({ route, end, delay }: { route: Content["visit"]["routes"][number]; end: Content["visit"]["routeEnd"]; delay: number }) {
+  return (
+    <figure className="route rv" style={d(`${delay}s`)}>
+      <figcaption className="display text-2xl">{route.caption}</figcaption>
+      <div className="route-paths" style={{ gridTemplateColumns: `repeat(${route.paths.length}, 1fr)` }}>
+        {route.paths.map((path, i) => (
+          <div key={i} className="route-path">
+            <span className="route-stop route-start">{path.from}</span>
+            {path.legs.map((leg) => (
+              <Fragment key={leg.line + leg.min}>
+                <span className="route-leg" style={{ "--c": leg.color } as React.CSSProperties}>
+                  <span>{leg.line}<b>{leg.min}</b></span>
+                </span>
+                {leg.to && <span className="route-stop">{leg.to}</span>}
+              </Fragment>
+            ))}
+          </div>
+        ))}
+      </div>
+      <span className="route-stop route-cosmo">{end.station}</span>
+      <span className="route-walk">{end.walk}</span>
+      <span className="route-stop route-goal">THE JEWELRY</span>
+    </figure>
   );
 }
 

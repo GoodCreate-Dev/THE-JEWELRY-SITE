@@ -24,6 +24,12 @@ export const MAP_EMBED = "https://www.google.com/maps?q=%E5%A4%A7%E9%98%AA%E5%B8
 type Hero = { kicker: string; title: string; lead: string; image: string };
 type Space = { no: string; name: string; en: string; capacity: string; body: string; uses: string[]; image: string };
 
+/** One train route chart: each path runs from `from` through its legs to Cosmosquare Station. */
+export type Route = { caption: string; paths: { from: string; legs: { line: string; min: string; color: string; to?: string }[] }[] };
+
+const LINE = { midosuji: "#e5171f", chuo: "#029a4a", nankai: "#5b4aae", jr: "#1b1b1b" };
+export const PARKING_URL = "https://times-info.net/P27-osaka/C125/park-detail-BUK0078037/";
+
 export type Content = {
   meta: Record<PageKey, { title: string; description: string }>;
   nav: { labels: Record<PageKey, string>; cta: string; menu: string; close: string };
@@ -73,9 +79,12 @@ export type Content = {
     times: { from: string; time: string }[];
     parkingTitle: string;
     parking: string;
+    parkingLink: string;
+    parkingAtc: string;
     routesTitle: string;
     window: { title: string; body: string };
-    routes: { caption: string; image: string }[];
+    routes: Route[];
+    routeEnd: { station: string; walk: string; note: string };
   };
   news: { hero: Hero; items: { date: string; tag: string; title: string; body: string }[]; igTitle: string; igNote: string; follow: string };
   contact: {
@@ -145,7 +154,7 @@ const ja: Content = {
     figures: [
       { value: "10,000", unit: "名", label: "最大収容人数" },
       { value: "3", unit: "空間", label: "目的に合わせたスペース" },
-      { value: "1", unit: "駅", label: "万博会場（夢洲）から" },
+      { value: "30", unit: "分", label: "大阪駅・新大阪駅から" },
     ],
     spacesTitle: "三つの空間",
     spacesLead: "単独でも、組み合わせても。催事の規模と目的にあわせてお選びいただけます。",
@@ -162,7 +171,7 @@ const ja: Content = {
     },
     programmeTitle: "ご利用いただける催事",
     visitTitle: "ご来館案内",
-    visitBody: "大阪・関西万博会場（夢洲）から1駅。大阪駅・新大阪駅から約30分、関西国際空港から約40分。",
+    visitBody: "コスモスクエア駅から徒歩約10分。大阪駅・新大阪駅から約30分、関西国際空港から約40分。",
     newsTitle: "お知らせ",
     contactTitle: "特別な一日の、ご相談を。",
     contactBody: "主催者さま・出展者さまからのご相談は、フォームまたは公式InstagramのDMで承ります。",
@@ -172,7 +181,7 @@ const ja: Content = {
     chapters: [
       { no: "I", title: "博物館として生まれた建築", body: "THE JEWELRY は、建築上は博物館として誕生したドーム型の展示施設です。展示のために設計された空間は、作品や商品を美しく見せ、訪れる人の記憶に残る体験をつくります。", image: IMG("dome-3.jpg") },
       { no: "II", title: "光をまとうドーム", body: "日が沈むと、ドームはゆっくりと輝きはじめます。ライトアップによる演出は、展示やレセプションに、ここでしか生まれない特別な雰囲気をもたらします。", image: IMG("dome-2.jpg") },
-      { no: "III", title: "世界へひらかれた大阪ベイエリア", body: "「大阪・関西万博」「大阪IR」に代表される、新時代の大阪を象徴するベイエリア。国内外から人が集まるこの場所で、新しい表現と出会いが始まります。", image: IMG("dome-5.jpg") },
+      { no: "III", title: "世界へひらかれた大阪ベイエリア", body: "大阪IRをはじめ、数々のエンターテイメントが予定されている大阪ベイエリア。THE JEWELRYは、このエリアを盛り上げるイベント会場＆ミュージアムです。国内外から人が集まるこの場所で、新しい表現と出会いが始まります。", image: IMG("dome-5.jpg") },
     ],
     quote: "表現と出会いのための、新しい舞台へ。",
   },
@@ -205,7 +214,7 @@ const ja: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪・関西万博会場から1駅。", image: IMG("dome-5.jpg") },
+    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪ベイエリアを盛り上げる、イベント会場＆ミュージアム。", image: IMG("dome-5.jpg") },
     hoursTitle: "開館時間",
     hours: "催事・展示の開催時に開館",
     hoursNote: "開館日・時間は、各催事のお知らせをご確認ください。",
@@ -215,19 +224,33 @@ const ja: Content = {
     trains: ["Osaka Metro 中央線「コスモスクエア駅」徒歩約10分", "ニュートラム「トレードセンター前駅」徒歩約10分"],
     timesTitle: "所要時間",
     times: [
-      { from: "大阪・関西万博会場（夢洲）", time: "1駅・約5分" },
       { from: "大阪駅・新大阪駅", time: "約30分" },
       { from: "ユニバーサル・スタジオ・ジャパン", time: "約25分" },
       { from: "関西国際空港", time: "約40分" },
     ],
     parkingTitle: "駐車場",
-    parking: "最寄りのコインパーキングをご利用ください。混雑時はATC駐車場もご利用いただけます。",
+    parking: "最寄りの駐車場（タイムズ）をご利用ください。混雑時はATC駐車場もご利用いただけます。",
+    parkingLink: "最寄りの駐車場情報（タイムズ）",
+    parkingAtc: "ATC駐車場から THE JEWELRY（徒歩約8分）",
     routesTitle: "電車でのアクセス",
-    window: { title: "大阪湾に浮かぶ、夢洲へ。", body: "大阪・新大阪駅から約30分、関西国際空港から約40分。万博の舞台となったベイエリアにあります。" },
+    window: { title: "大阪湾のほとり、南港へ。", body: "コスモスクエア駅から徒歩約10分。大阪IRをはじめ、数々のエンターテイメントが予定されている大阪ベイエリアにあります。" },
     routes: [
-      { caption: "JR大阪駅・新大阪駅から", image: IMG("route-osaka.png") },
-      { caption: "関西国際空港から", image: IMG("route-kanku.png") },
+      {
+        caption: "大阪駅・新大阪駅から",
+        paths: [
+          { from: "新大阪駅", legs: [{ line: "大阪メトロ御堂筋線", min: "10分", color: LINE.midosuji, to: "本町駅" }, { line: "大阪メトロ中央線", min: "14分", color: LINE.chuo }] },
+          { from: "大阪駅", legs: [{ line: "JR環状線", min: "8分", color: LINE.jr, to: "弁天町駅" }, { line: "大阪メトロ中央線", min: "8分", color: LINE.chuo }] },
+        ],
+      },
+      {
+        caption: "関西国際空港から",
+        paths: [
+          { from: "関西空港", legs: [{ line: "南海特急ラピート", min: "40分", color: LINE.nankai, to: "なんば駅" }, { line: "大阪メトロ御堂筋線", min: "4分", color: LINE.midosuji, to: "本町駅" }, { line: "大阪メトロ中央線", min: "14分", color: LINE.chuo }] },
+          { from: "関西空港", legs: [{ line: "JR関空快速", min: "69分", color: LINE.jr, to: "弁天町駅" }, { line: "大阪メトロ中央線", min: "8分", color: LINE.chuo }] },
+        ],
+      },
     ],
+    routeEnd: { station: "コスモスクエア駅", walk: "徒歩 約10分", note: "コスモスクエア駅から夢洲駅（大阪IR予定地）へは1駅・約5分です。" },
   },
   news: {
     hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("dome-2.jpg") },
@@ -304,7 +327,7 @@ const en: Content = {
     figures: [
       { value: "10,000", unit: "", label: "Maximum capacity" },
       { value: "3", unit: "", label: "Distinct spaces" },
-      { value: "1", unit: "stop", label: "From the Expo site" },
+      { value: "30", unit: "min", label: "From Osaka / Shin-Osaka" },
     ],
     spacesTitle: "Three spaces",
     spacesLead: "Used alone or together, chosen to suit the scale and purpose of your event.",
@@ -321,7 +344,7 @@ const en: Content = {
     },
     programmeTitle: "What you can host",
     visitTitle: "Plan your visit",
-    visitBody: "One stop from the Expo site at Yumeshima. About 30 minutes from Osaka and Shin-Osaka stations, 40 minutes from Kansai International Airport.",
+    visitBody: "A 10-minute walk from Cosmosquare Station. About 30 minutes from Osaka and Shin-Osaka stations, 40 minutes from Kansai International Airport.",
     newsTitle: "News",
     contactTitle: "Let’s plan your special day.",
     contactBody: "Organisers and exhibitors can reach us through the form or by Instagram DM.",
@@ -331,7 +354,7 @@ const en: Content = {
     chapters: [
       { no: "I", title: "Architecture built as a museum", body: "THE JEWELRY is a dome-shaped exhibition hall registered as a museum. Designed for display, its spaces present works and products at their best and create experiences people remember.", image: IMG("dome-3.jpg") },
       { no: "II", title: "A dome wrapped in light", body: "As the sun sets, the dome slowly begins to glow. The illumination gives exhibitions and receptions an atmosphere found nowhere else.", image: IMG("dome-2.jpg") },
-      { no: "III", title: "Osaka Bay, open to the world", body: "The Osaka Bay Area, home to Expo 2025 and the future Osaka IR, symbolises a new era for Osaka. Here, where people gather from Japan and abroad, new expression and new encounters begin.", image: IMG("dome-5.jpg") },
+      { no: "III", title: "Osaka Bay, open to the world", body: "The Osaka Bay Area is where Osaka IR and many other entertainment projects are planned. THE JEWELRY is an event venue and museum bringing this area to life, a place where people from Japan and abroad meet new expression.", image: IMG("dome-5.jpg") },
     ],
     quote: "A new stage for expression and encounters.",
   },
@@ -364,7 +387,7 @@ const en: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "Plan your visit", lead: "One stop from the Expo site.", image: IMG("dome-5.jpg") },
+    hero: { kicker: "Visit", title: "Plan your visit", lead: "An event venue and museum bringing the Osaka Bay Area to life.", image: IMG("dome-5.jpg") },
     hoursTitle: "Opening hours",
     hours: "Open during events and exhibitions",
     hoursNote: "Please check each event’s announcement for dates and times.",
@@ -374,19 +397,33 @@ const en: Content = {
     trains: ["10 min walk from Cosmosquare Station (Osaka Metro Chuo Line)", "10 min walk from Trade Center-mae Station (New Tram)"],
     timesTitle: "Travel times",
     times: [
-      { from: "Expo site (Yumeshima)", time: "1 stop · approx. 5 min" },
       { from: "Osaka / Shin-Osaka Station", time: "approx. 30 min" },
       { from: "Universal Studios Japan", time: "approx. 25 min" },
       { from: "Kansai International Airport", time: "approx. 40 min" },
     ],
     parkingTitle: "Parking",
-    parking: "Please use nearby coin parking. When busy, the ATC car park is also available.",
+    parking: "Please use the nearest car park (Times). When busy, the ATC car park is also available.",
+    parkingLink: "Nearest car park (Times)",
+    parkingAtc: "From the ATC car park to THE JEWELRY (approx. 8 min walk)",
     routesTitle: "By train",
-    window: { title: "Out on the bay, at Yumeshima.", body: "About 30 minutes from Osaka and Shin-Osaka stations and 40 minutes from Kansai International Airport, on the bay that hosted the Expo." },
+    window: { title: "On the waterfront at Nanko, Osaka Bay.", body: "A 10-minute walk from Cosmosquare Station, in the Osaka Bay Area, where Osaka IR and many other entertainment projects are planned." },
     routes: [
-      { caption: "From JR Osaka / Shin-Osaka Station", image: IMG("route-osaka.png") },
-      { caption: "From Kansai International Airport", image: IMG("route-kanku.png") },
+      {
+        caption: "From Osaka / Shin-Osaka Station",
+        paths: [
+          { from: "Shin-Osaka Sta.", legs: [{ line: "Osaka Metro Midosuji Line", min: "10 min", color: LINE.midosuji, to: "Hommachi Sta." }, { line: "Osaka Metro Chuo Line", min: "14 min", color: LINE.chuo }] },
+          { from: "Osaka Sta.", legs: [{ line: "JR Loop Line", min: "8 min", color: LINE.jr, to: "Bentencho Sta." }, { line: "Osaka Metro Chuo Line", min: "8 min", color: LINE.chuo }] },
+        ],
+      },
+      {
+        caption: "From Kansai International Airport",
+        paths: [
+          { from: "Kansai Airport", legs: [{ line: "Nankai Limited Express Rapi:t", min: "40 min", color: LINE.nankai, to: "Namba Sta." }, { line: "Osaka Metro Midosuji Line", min: "4 min", color: LINE.midosuji, to: "Hommachi Sta." }, { line: "Osaka Metro Chuo Line", min: "14 min", color: LINE.chuo }] },
+          { from: "Kansai Airport", legs: [{ line: "JR Kansai Airport Rapid", min: "69 min", color: LINE.jr, to: "Bentencho Sta." }, { line: "Osaka Metro Chuo Line", min: "8 min", color: LINE.chuo }] },
+        ],
+      },
     ],
+    routeEnd: { station: "Cosmosquare Sta.", walk: "approx. 10 min walk", note: "Yumeshima Station (planned site of Osaka IR) is one stop, about 5 minutes, from Cosmosquare." },
   },
   news: {
     hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("dome-2.jpg") },
