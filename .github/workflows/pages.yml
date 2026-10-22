@@ -24,7 +24,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
+      # Google Fonts downloads occasionally fail in CI; retry the build up to 3 times.
+      - run: |
+          for i in 1 2 3; do
+            npm run build && exit 0
+            echo "Build attempt $i failed, retrying in 20s"
+            sleep 20
+          done
+          exit 1
         env:
           GITHUB_PAGES: "1"
           PAGES_BASE_PATH: /${{ github.event.repository.name }}
