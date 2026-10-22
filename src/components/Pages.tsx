@@ -148,6 +148,8 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
+      <InstagramBlock lang={lang} />
+
       <ContactBand lang={lang} />
     </Shell>
   );
@@ -349,10 +351,37 @@ function RouteChart({ route, end, delay }: { route: Content["visit"]["routes"][n
   );
 }
 
+/**
+ * Instagram section (Home and News). Until the client connects their account for a live feed,
+ * the tiles are placeholder photos that all link to the official profile.
+ */
+function InstagramBlock({ lang }: { lang: Lang }) {
+  const n = content[lang].news;
+  const tiles = ["f-concert.jpg", "dome-5.jpg", "f-dusk.jpg", "f-stage.jpg", "f-day.jpg", "dome-2.jpg"].map((f) => asset(`/images/${f}`));
+  return (
+    <section className="sec">
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <p className="kicker rv">@thejewelry_official</p>
+          <h2 className="display sec-title rv mt-3">{n.igTitle}</h2>
+        </div>
+        <a href={IG_URL} target="_blank" rel="noopener" className="link-arrow rv">{n.follow} <span>→</span></a>
+      </div>
+      <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
+        {tiles.map((src, i) => (
+          <a key={src} href={IG_URL} target="_blank" rel="noopener" aria-label="Instagram @thejewelry_official" className="frame rv-img aspect-square" style={d(`${i * 0.06}s`)}>
+            <img src={src} alt="" loading="lazy" />
+          </a>
+        ))}
+      </div>
+      <p className="caption mt-4">{n.igNote}</p>
+    </section>
+  );
+}
+
 /* ======================= NEWS ======================= */
 export function NewsPage({ lang }: { lang: Lang }) {
   const n = content[lang].news;
-  const ig = ["cafe-event.jpg", "dome-5.jpg", "cafe-sunset.jpg", "blue-impulse.jpg", "cafe-open.jpg", "fireworks.jpg"].map((n) => asset(`/images/${n}`));
   return (
     <Shell lang={lang} page="news">
       <PageHero hero={n.hero} />
@@ -371,23 +400,7 @@ export function NewsPage({ lang }: { lang: Lang }) {
           ))}
         </ul>
       </section>
-      <section className="sec">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="kicker rv">@thejewelry_official</p>
-            <h2 className="display sec-title rv mt-3">{n.igTitle}</h2>
-          </div>
-          <a href={IG_URL} target="_blank" rel="noopener" className="link-arrow rv">{n.follow} <span>→</span></a>
-        </div>
-        <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
-          {ig.map((src, i) => (
-            <a key={src} href={IG_URL} target="_blank" rel="noopener" className="frame rv-img aspect-square" style={d(`${i * 0.06}s`)}>
-              <img src={src} alt="" loading="lazy" />
-            </a>
-          ))}
-        </div>
-        <p className="caption mt-4">{n.igNote}</p>
-      </section>
+      <InstagramBlock lang={lang} />
       <ContactBand lang={lang} />
     </Shell>
   );
