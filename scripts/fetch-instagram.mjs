@@ -85,7 +85,7 @@ for (const m of data) {
     ts,
     title: firstLine.length > 40 ? `${firstLine.slice(0, 40)}…` : firstLine,
     desc: firstLine.length > 40 ? caption : rest || caption,
-    image: `/instagram/images/${file}`,
+    image: `instagram/images/${file}`, // relative to the site root (works under a sub-path too)
     permalink: m.permalink ?? "",
   });
   if (posts.length >= KEEP) break;

@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { asset, content, IG_URL, MAP_EMBED, PARKING_URL, path, type Content, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
-import { feed, type FeedItem, type FeedKind } from "@/lib/feed";
-import { ContactBand, Marquee, Ornament, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
+import { feed, type FeedItem } from "@/lib/feed";
+import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
+import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
 
@@ -136,7 +137,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      <FeedSection lang={lang} limit={3} />
+      <FeedSection lang={lang} manual={feed(lang)} limit={3} />
 
       <ContactBand lang={lang} />
     </Shell>
@@ -227,7 +228,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
           ))}
         </div>
       </section>
-      <FeedSection lang={lang} kind="event" />
+      <FeedSection lang={lang} manual={feed(lang, "event")} kind="event" />
       <section className="sec">
         <div className="split">
           <p className="kicker rv">Flow</p>
@@ -340,86 +341,23 @@ function RouteChart({ route, end, delay }: { route: Content["visit"]["routes"][n
   );
 }
 
-/** Detail page link for a feed item: /news/<id>/ (or /en/news/<id>/). */
-const feedHref = (lang: Lang, id: string) => `${path(lang, "news")}${id}/`;
-
-/** One News / Event card: image, label, date, title, two lines of text. Opens the full post on this site. */
-function FeedCard({ lang, item, index }: { lang: Lang; item: FeedItem; index: number }) {
-  const n = content[lang].news;
-  return (
-    <Link href={feedHref(lang, item.id)} className="feed-card group rv block" style={d(`${index * 0.08}s`)}>
-      <div className="frame relative aspect-[4/3]">
-        <img src={item.image} alt="" loading="lazy" />
-        <span className="feed-label">{n.labels[item.kind]}</span>
-      </div>
-      <div className="pt-5">
-        <time className="text-[11px] tracking-[.2em] text-white/45">{item.date}</time>
-        <h3 className="display mt-2 line-clamp-2 text-[22px] leading-snug transition-colors duration-500 group-hover:text-gold-hi">{item.title}</h3>
-        <p className="mt-3 line-clamp-2 text-sm text-white/55">{item.desc}</p>
-        <span className="mt-4 inline-flex items-center gap-2 text-[11px] tracking-[.2em] text-gold/0 transition-colors duration-500 group-hover:text-gold">
-          {item.permalink ? n.viewOnIg : n.readMore} <span>→</span>
-        </span>
-      </div>
-    </Link>
-  );
-}
-
-/**
- * News & Events grid. Home shows the latest few, the News page all, the Events page only
- * Instagram posts tagged as events (or "coming soon" until there are some).
- */
-function FeedSection({ lang, kind, limit, all }: { lang: Lang; kind?: FeedKind; limit?: number; all?: boolean }) {
-  const n = content[lang].news;
-  const items = feed(lang, kind);
-  const shown = limit ? items.slice(0, limit) : items;
-  return (
-    <section className="sec">
-      {!all && (
-        <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="kicker rv">{kind === "event" ? "Events" : "News"}</p>
-            <h2 className="display sec-title rv mt-4" style={d(".1s")}>{kind === "event" ? n.eventsTitle : n.feedTitle}</h2>
-          </div>
-          {limit && items.length > limit && (
-            <Link href={path(lang, "news")} className="link-arrow rv" style={d(".2s")}>{n.viewAll} <span>→</span></Link>
-          )}
-        </div>
-      )}
-      {shown.length === 0 ? (
-        <p className="display rv py-10 text-center text-3xl text-white/60">{n.comingSoon}</p>
-      ) : (
-        <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {shown.map((item, i) => (
-            <FeedCard key={item.id} lang={lang} item={item} index={i} />
-          ))}
-        </div>
-      )}
-      <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-gold/20 pt-8">
-        <p className="caption">{n.igNote}</p>
-        <a href={IG_URL} target="_blank" rel="noopener" className="link-arrow">{n.follow} <span>↗</span></a>
-      </div>
-    </section>
-  );
-}
-
-/** Full post page for a news item or Instagram post: large image, full text, link out to Instagram. */
+/** Full page for a manual news item (static, one per item). */
 export function FeedDetailPage({ lang, item }: { lang: Lang; item: FeedItem }) {
   const n = content[lang].news;
   return (
     <Shell lang={lang} page="news">
       <PageHero hero={{ kicker: n.labels[item.kind], title: item.title, lead: item.date, image: item.image }} />
-      <section className="sec light">
-        <div className="mx-auto max-w-3xl">
-          <p className="rv whitespace-pre-line text-[17px] leading-[2.2] text-black/75">{item.desc}</p>
-          <Ornament className="rv my-14 max-w-xs" />
-          {item.permalink && (
-            <a href={item.permalink} target="_blank" rel="noopener" className="btn btn-dark rv">{n.viewOnIg} ↗</a>
-          )}
-          <div className="mt-16 border-t border-black/10 pt-8">
-            <Link href={path(lang, "news")} className="link-arrow !text-gold-lo">← {n.back}</Link>
-          </div>
-        </div>
-      </section>
+      <FeedBody lang={lang} item={item} />
+      <ContactBand lang={lang} />
+    </Shell>
+  );
+}
+
+/** Full page for an Instagram post (/news/post/?id=…), filled in the browser from posts.json. */
+export function IgPostPage({ lang }: { lang: Lang }) {
+  return (
+    <Shell lang={lang} page="news">
+      <IgPostDetail lang={lang} />
       <ContactBand lang={lang} />
     </Shell>
   );
@@ -432,7 +370,7 @@ export function NewsPage({ lang }: { lang: Lang }) {
     <Shell lang={lang} page="news">
       <PageHero hero={n.hero} />
       <Marquee words={["News", "Instagram", "@thejewelry_official"]} />
-      <FeedSection lang={lang} all />
+      <FeedSection lang={lang} manual={feed(lang)} all />
       <ContactBand lang={lang} />
     </Shell>
   );

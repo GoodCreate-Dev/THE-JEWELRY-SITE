@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Instagram images are downloaded in CI before each build
-/public/instagram/images/
+# Written by the Instagram fetch job (CI or the server's fetch.php), never committed
+/public/instagram/
