@@ -50,9 +50,9 @@ function FeedCard({ lang, item, index }: { lang: Lang; item: FeedItem; index: nu
       </div>
       <div className="pt-5">
         <time className="text-[11px] tracking-[.2em] text-white/45">{item.date}</time>
-        <h3 className="display mt-2 line-clamp-2 text-[22px] leading-snug transition-colors duration-500 group-hover:text-gold-hi">{item.title}</h3>
+        <h3 className="display mt-2 line-clamp-2 text-[22px] leading-snug transition-colors duration-500 group-hover:text-accent-hi">{item.title}</h3>
         <p className="mt-3 line-clamp-2 text-sm text-white/55">{item.desc}</p>
-        <span className="mt-4 inline-flex items-center gap-2 text-[11px] tracking-[.2em] text-gold/0 transition-colors duration-500 group-hover:text-gold">
+        <span className="mt-4 inline-flex items-center gap-2 text-[11px] tracking-[.2em] text-accent/0 transition-colors duration-500 group-hover:text-accent">
           {n.readMore} <span>→</span>
         </span>
       </div>
@@ -101,7 +101,7 @@ export function FeedSection({ lang, manual, kind, limit, all }: { lang: Lang; ma
           ))}
         </div>
       )}
-      <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-gold/20 pt-8">
+      <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-accent/20 pt-8">
         <p className="caption">{n.igNote}</p>
         <a href={IG_URL} target="_blank" rel="noopener" className="link-arrow">{n.follow} <span>↗</span></a>
       </div>
@@ -121,7 +121,7 @@ export function FeedBody({ lang, item }: { lang: Lang; item: FeedItem }) {
           <a href={item.permalink} target="_blank" rel="noopener" className="btn btn-dark rv">{n.viewOnIg} ↗</a>
         )}
         <div className="mt-16 border-t border-black/10 pt-8">
-          <Link href={path(lang, "news")} className="link-arrow !text-gold-lo">← {n.back}</Link>
+          <Link href={path(lang, "news")} className="link-arrow !text-accent-lo">← {n.back}</Link>
         </div>
       </div>
     </section>

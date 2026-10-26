@@ -60,9 +60,9 @@ export function ContactForm({ lang }: { lang: Lang }) {
   };
 
   const note = { idle: "", sending: f.sending, sent: f.sent, failed: f.failed }[status];
-  const input = "mt-2 block w-full border-0 border-b border-black/30 bg-transparent px-0 py-3 text-base text-black outline-none transition focus:border-gold-lo";
+  const input = "mt-2 block w-full border-0 border-b border-black/30 bg-transparent px-0 py-3 text-base text-black outline-none transition focus:border-accent-lo";
   const label = "block text-[11px] tracking-[.18em] text-black/60";
-  const req = <span className="ml-2 text-gold-lo">{f.required}</span>;
+  const req = <span className="ml-2 text-accent-lo">{f.required}</span>;
 
   return (
     <form onSubmit={onSubmit} className="rv grid gap-8 md:grid-cols-2" noValidate={false}>
@@ -72,7 +72,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
           {f.types.map((t) => (
             <label key={t} className="cursor-pointer">
               <input type="radio" name="type" value={t} checked={type === t} onChange={() => setType(t)} className="peer sr-only" />
-              <span className="inline-block border border-black/30 px-4 py-2 text-sm transition peer-checked:border-black peer-checked:bg-black peer-checked:text-gold-hi peer-focus-visible:outline peer-focus-visible:outline-2">{t}</span>
+              <span className="inline-block border border-black/30 px-4 py-2 text-sm transition peer-checked:border-black peer-checked:bg-black peer-checked:text-accent-hi peer-focus-visible:outline peer-focus-visible:outline-2">{t}</span>
             </label>
           ))}
         </div>
@@ -92,7 +92,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       </label>
       <div className="md:col-span-2">
         <button type="submit" disabled={status === "sending"} className="btn btn-dark w-full disabled:opacity-50 md:w-auto">{status === "sending" ? f.sending : `${f.submit} →`}</button>
-        <p className={`mt-4 text-sm ${status === "failed" ? "text-red-700" : "text-gold-lo"}`} role="status" aria-live="polite">{note}</p>
+        <p className={`mt-4 text-sm ${status === "failed" ? "text-red-700" : "text-accent-lo"}`} role="status" aria-live="polite">{note}</p>
       </div>
     </form>
   );

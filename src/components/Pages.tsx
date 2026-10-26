@@ -45,54 +45,66 @@ function HeroLive({ src }: { src: string }) {
   );
 }
 
+/** Wraps the first occurrence of `word` in iridescent text (the dome's LED colours). */
+function Highlight({ text, word }: { text: string; word: string }) {
+  const i = text.indexOf(word);
+  if (i < 0) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, i)}
+      <span className="iri-text">{word}</span>
+      {text.slice(i + word.length)}
+    </>
+  );
+}
+
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
   const h = t.home;
   return (
     <Shell lang={lang} page="home">
-      {/* hero */}
-      <section className="hero" data-hero>
+      {/* hero: editorial, text anchored bottom-left over the living still */}
+      <section className="hero hero-v2" data-hero>
         <div className="hero-img">
           <HeroLive src={asset("/images/ai-front.jpg")} />
         </div>
         <div className="hero-veil" />
-        <div className="hero-lines" aria-hidden="true"><i /><i /></div>
         <div className="hero-inner hero-drift">
           <span className="logo rv w-[clamp(109px,10.4vw,161px)]" />
           <p className="kicker rv" style={d(".15s")}>{h.kicker}</p>
           <h1 className="display rv letters" style={d(".3s")} aria-label={h.title.join(" ")}>
             <span aria-hidden="true"><SplitText text={h.title[0]} /></span>
-            <span aria-hidden="true" className="text-gold-hi"><SplitText text={h.title[1]} start={h.title[0].length + 2} /></span>
+            <span aria-hidden="true" className="iri-text"><SplitText text={h.title[1]} start={h.title[0].length + 2} /></span>
           </h1>
-          <p className="hero-lead rv" style={d(".45s")}>{h.lead}</p>
-          <div className="hero-actions rv" style={d(".6s")}>
-            <Link href={path(lang, "contact")} className="btn btn-gold">{h.ctaPrimary}</Link>
-            <Link href={path(lang, "spaces")} className="btn btn-line">{h.ctaSecondary}</Link>
+          <div className="hero-foot rv" style={d(".5s")}>
+            <p className="hero-lead">{h.lead}</p>
+            <div className="hero-actions">
+              <Link href={path(lang, "contact")} className="btn btn-accent">{h.ctaPrimary}</Link>
+              <Link href={path(lang, "spaces")} className="btn btn-line">{h.ctaSecondary}</Link>
+            </div>
           </div>
         </div>
-        <p className="hero-caption caption rv" style={d(".8s")}><b>THE JEWELRY</b><br />{h.caption}</p>
+        <p className="hero-meta rv" style={d(".8s")} aria-hidden="true">34°38′N&nbsp;&nbsp;135°24′E<br />Osaka Bay</p>
         <span className="hero-scroll" aria-hidden="true">Scroll</span>
       </section>
 
-      {/* story */}
-      <section className="sec light">
-        <div className="split">
-          <p className="kicker rv">{h.statementLabel}</p>
-          <div>
-            <h2 className="display sec-title rv">{h.statement}</h2>
-            <p className="rv mt-8 max-w-2xl text-black/70" style={d(".12s")}>{h.statementBody}</p>
-            <div className="rv mt-16 grid grid-cols-3 border-t border-black/80" style={d(".24s")}>
-              {h.figures.map((f) => (
-                <div key={f.label} className="border-r border-black/10 py-8 pr-4 last:border-r-0 [&:not(:first-child)]:pl-6">
-                  <p className="display whitespace-nowrap text-[clamp(28px,4.4vw,68px)] leading-none text-gold-lo">
-                    {f.value}<small className="ml-1 text-base">{f.unit}</small>
-                  </p>
-                  <p className="mt-3 text-xs tracking-[.14em] text-black/60">{f.label}</p>
-                </div>
-              ))}
+      {/* statement: one large sentence, the key phrase in the dome's colours */}
+      <section className="sec statement">
+        <p className="kicker rv">{h.statementLabel}</p>
+        <h2 className="display statement-text rv mt-10" style={d(".1s")}>
+          <Highlight text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} />
+        </h2>
+        <div className="statement-foot">
+          <p className="rv max-w-xl text-white/70" style={d(".15s")}>{h.statementBody}</p>
+          <Link href={path(lang, "about")} className="link-arrow rv" style={d(".2s")}>{t.common.more} <span>→</span></Link>
+        </div>
+        <div className="figures">
+          {h.figures.map((f, i) => (
+            <div key={f.label} className="rv" style={d(`${0.1 + i * 0.1}s`)}>
+              <p className="display figure-value">{f.value}<small>{f.unit}</small></p>
+              <p className="caption mt-3">{f.label}</p>
             </div>
-            <Link href={path(lang, "about")} className="link-arrow rv mt-12 !text-gold-lo" style={d(".3s")}>{t.common.more} <span>→</span></Link>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -125,47 +137,46 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* relaunch band */}
-      <section className="grid md:grid-cols-[7fr_5fr]">
-        <div className="frame rv-img min-h-[420px]"><img {...responsive(asset("/images/dome-2.jpg"), "(min-width: 768px) 58vw, 100vw")} alt="" loading="lazy" /></div>
-        <div className="ivory flex flex-col justify-center gap-6 p-[clamp(40px,6vw,96px)]">
-          <p className="kicker rv">Re:Start</p>
-          <p className="display rv text-[clamp(80px,9vw,156px)] leading-none" style={d(".1s")}>{h.relaunch.date}</p>
-          <h2 className="display rv text-[clamp(22px,2.2vw,34px)]" style={d(".2s")}>{h.relaunch.title}</h2>
-          <p className="rv text-black/70" style={d(".3s")}>{h.relaunch.body}</p>
-          <Link href={path(lang, "contact")} className="btn btn-dark rv self-start" style={d(".4s")}>{h.relaunch.cta} →</Link>
-        </div>
-      </section>
-
-      {/* programme */}
-      <section className="sec">
-        <div className="split">
-          <p className="kicker rv">Programme</p>
-          <div>
-            <h2 className="display sec-title rv">{h.programmeTitle}</h2>
-            <ol className="mt-12 border-t border-gold/50">
-              {t.events.types.map((e, i) => (
-                <li key={e.no} className="rv grid grid-cols-[60px_1fr] gap-x-6 border-b border-white/10 py-7 md:grid-cols-[70px_1.1fr_1.6fr]" style={d(`${i * 0.08}s`)}>
-                  <span className="display text-xl text-gold">{e.no}</span>
-                  <h3 className="display text-2xl">{e.title}<small className="mt-1 block font-sans text-[11px] tracking-[.2em] text-white/45">{e.en}</small></h3>
-                  <p className="col-start-2 text-sm text-white/65 md:col-start-auto">{e.body}</p>
-                </li>
-              ))}
-            </ol>
-            <Link href={path(lang, "events")} className="link-arrow rv mt-12">{t.common.more} <span>→</span></Link>
+      {/* programme: event types slide sideways while scrolling (swipe on phones) */}
+      <section className="hscroll" data-hscroll>
+        <div className="hscroll-stick">
+          <div className="hscroll-head">
+            <p className="kicker rv">Programme</p>
+            <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.programmeTitle}</h2>
           </div>
+          <ol className="hscroll-track">
+            {t.events.types.map((e) => (
+              <li key={e.no} className="hs-card">
+                <span className="hs-no display" aria-hidden="true">{e.no}</span>
+                <p className="caption">{e.en}</p>
+                <h3 className="display mt-3 text-[clamp(26px,2.6vw,40px)]">{e.title}</h3>
+                <p className="mt-5 text-sm leading-[2] text-white/65">{e.body}</p>
+              </li>
+            ))}
+            <li className="hs-card hs-end">
+              <Link href={path(lang, "events")} className="link-arrow">{t.common.more} <span>→</span></Link>
+            </li>
+          </ol>
         </div>
       </section>
 
-      {/* visit teaser */}
-      <section className="sec light">
-        <div className="split">
+      {/* relaunch: the date, full screen */}
+      <section className="relaunch">
+        <p className="kicker rv">Re:Start</p>
+        <p className="display relaunch-date iri-text rv" style={d(".1s")}>{h.relaunch.date}</p>
+        <h2 className="display rv mt-6 text-[clamp(24px,2.6vw,40px)]" style={d(".2s")}>{h.relaunch.title}</h2>
+        <p className="rv mx-auto mt-6 max-w-xl text-white/70" style={d(".3s")}>{h.relaunch.body}</p>
+        <Link href={path(lang, "contact")} className="btn btn-accent rv mt-10" style={d(".4s")}>{h.relaunch.cta} →</Link>
+      </section>
+
+      {/* visit: one row, photo and text */}
+      <section className="visit-row">
+        <div className="frame rv-img visit-photo"><img {...responsive(asset("/images/ai-promenade.jpg"), "(min-width: 1024px) 50vw, 100vw")} alt="" loading="lazy" /></div>
+        <div className="visit-text">
           <p className="kicker rv">Visit</p>
-          <div>
-            <h2 className="display sec-title rv">{h.visitTitle}</h2>
-            <p className="rv mt-6 max-w-xl text-black/70" style={d(".1s")}>{h.visitBody}</p>
-            <Link href={path(lang, "visit")} className="link-arrow rv mt-10 !text-gold-lo" style={d(".2s")}>{t.common.more} <span>→</span></Link>
-          </div>
+          <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.visitTitle}</h2>
+          <p className="rv mt-6 max-w-md text-white/70" style={d(".2s")}>{h.visitBody}</p>
+          <Link href={path(lang, "visit")} className="link-arrow rv mt-10" style={d(".3s")}>{t.common.more} <span>→</span></Link>
         </div>
       </section>
 
@@ -188,7 +199,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
           <article key={c.no} className={`grid items-center gap-[clamp(30px,5vw,90px)] py-[clamp(40px,6vw,80px)] md:grid-cols-2 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
             <div className="frame rv-img aspect-[4/3]"><img {...responsive(c.image, "(min-width: 768px) 50vw, 100vw")} alt="" loading="lazy" /></div>
             <div>
-              <p className="display rv text-5xl text-gold-lo">{c.no}.</p>
+              <p className="display rv text-5xl text-accent-lo">{c.no}.</p>
               <h2 className="display rv mt-4 text-[clamp(26px,2.8vw,42px)]" style={d(".1s")}>{c.title}</h2>
               <p className="rv mt-6 max-w-lg text-black/70" style={d(".2s")}>{c.body}</p>
             </div>
@@ -218,7 +229,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
               <h2 className="display sec-title rv mt-3" style={d(".1s")}>{sp.name}</h2>
               <p className="rv mt-6" style={d(".2s")}>{sp.body}</p>
               <dl className="rv mt-10" style={d(".3s")}>
-                <div className={`flex justify-between border-t py-4 ${i % 2 ? "border-gold/40" : "border-black/80"}`}>
+                <div className={`flex justify-between border-t py-4 ${i % 2 ? "border-accent/40" : "border-black/80"}`}>
                   <dt className="text-xs tracking-[.16em] opacity-60">{s.capacityLabel}</dt>
                   <dd className="display text-3xl">{sp.capacity} <small className="text-sm opacity-60">{t.common.guests}</small></dd>
                 </div>
@@ -252,7 +263,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
         <div className="grid gap-px bg-black/10 md:grid-cols-2">
           {e.types.map((ty, i) => (
             <article key={ty.no} className="rv bg-white p-[clamp(28px,4vw,60px)]" style={d(`${i * 0.08}s`)}>
-              <p className="display text-4xl text-gold-lo">{ty.no}</p>
+              <p className="display text-4xl text-accent-lo">{ty.no}</p>
               <h2 className="display mt-6 text-[clamp(26px,2.6vw,40px)]">{ty.title}</h2>
               <p className="mt-1 text-[11px] tracking-[.2em] text-black/45">{ty.en}</p>
               <p className="mt-6 text-black/70">{ty.body}</p>
@@ -266,10 +277,10 @@ export function EventsPage({ lang }: { lang: Lang }) {
           <p className="kicker rv">Flow</p>
           <div>
             <h2 className="display sec-title rv">{e.flowTitle}</h2>
-            <ol className="mt-12 grid gap-px bg-gold/30 md:grid-cols-4">
+            <ol className="mt-12 grid gap-px bg-accent/30 md:grid-cols-4">
               {e.flow.map((f, i) => (
                 <li key={f.no} className="rv bg-black p-7" style={d(`${i * 0.1}s`)}>
-                  <p className="display text-3xl text-gold">{f.no}</p>
+                  <p className="display text-3xl text-accent">{f.no}</p>
                   <h3 className="display mt-4 text-xl">{f.title}</h3>
                   <p className="mt-3 text-sm text-white/65">{f.body}</p>
                 </li>
@@ -297,7 +308,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
             <h2 className="kicker border-b border-black/80 pb-3">{v.hoursTitle}</h2>
             <p className="display mt-6 text-3xl">{v.hours}</p>
             <p className="mt-4 text-sm text-black/65">{v.hoursNote}</p>
-            <span className="mt-4 inline-block border border-gold-lo px-2 py-0.5 text-[11px] text-gold-lo">{t.common.pending}</span>
+            <span className="mt-4 inline-block border border-accent-lo px-2 py-0.5 text-[11px] text-accent-lo">{t.common.pending}</span>
           </div>
           <div className="rv" style={d(".1s")}>
             <h2 className="kicker border-b border-black/80 pb-3">{v.addressTitle}</h2>
@@ -310,7 +321,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
             <ul className="mt-4">
               {v.times.map((x) => (
                 <li key={x.from} className="flex justify-between gap-4 border-b border-black/10 py-3 text-sm">
-                  <span className="text-black/70">{x.from}</span><span className="text-right text-gold-lo">{x.time}</span>
+                  <span className="text-black/70">{x.from}</span><span className="text-right text-accent-lo">{x.time}</span>
                 </li>
               ))}
             </ul>

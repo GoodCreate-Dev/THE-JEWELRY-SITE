@@ -1,16 +1,28 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { content, path, PAGES, type Lang, type PageKey } from "@/content/site";
+import { asset, content, path, PAGES, type Lang, type PageKey } from "@/content/site";
+import { responsive } from "@/lib/img";
 
-/** Fixed header: white logo, page links, language switch, booking button, closable notice. */
+/** Photo shown beside each page name in the full-screen menu. */
+function menuImage(lang: Lang, p: PageKey) {
+  if (p === "home") return asset("/images/ai-front.jpg");
+  return content[lang][p].hero.image;
+}
+
+/**
+ * Fixed header: small logo left; language, enquiry and MENU right. MENU opens a full-screen
+ * menu with large numbered page names and a photo of the page under the pointer.
+ */
 export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const t = content[lang];
   const [solid, setSolid] = useState(false);
   const [away, setAway] = useState(false);
   const [open, setOpen] = useState(false);
   const [float, setFloat] = useState(false);
+  const [preview, setPreview] = useState<PageKey>(page);
 
   // Solid after the hero edge; slides away while scrolling down, returns on scroll up.
   useEffect(() => {
@@ -40,9 +52,11 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   useEffect(() => {
     document.documentElement.classList.toggle("menu-open", open);
     document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
-
-  const navPages = PAGES.filter((p) => p !== "home" && p !== "contact");
 
   return (
     <>
@@ -55,24 +69,16 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
           </div>
         )}
         <div className="head-row">
-          <nav className="head-nav" aria-label="Main">
-            {navPages.map((p) => (
-              <Link key={p} href={path(lang, p)} aria-current={p === page ? "page" : undefined}>
-                {t.nav.labels[p]}
-              </Link>
-            ))}
-          </nav>
-          <Link href={path(lang, "home")} className="logo" aria-label="THE JEWELRY" style={{ justifySelf: "center" }} />
+          <Link href={path(lang, "home")} className="logo" aria-label="THE JEWELRY" />
           <div className="head-right">
             <span className="head-lang">
               <Link href={path("ja", page)} aria-current={lang === "ja" ? "true" : undefined} lang="ja">JP</Link>
-              {" / "}
               <Link href={path("en", page)} aria-current={lang === "en" ? "true" : undefined} lang="en">EN</Link>
             </span>
             <Link href={path(lang, "contact")} className="head-cta">{t.nav.cta}</Link>
             <button type="button" className="menu-btn" aria-label={open ? t.nav.close : t.nav.menu} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-              <span />
-              <span />
+              <span className="menu-word">{open ? t.nav.close : "Menu"}</span>
+              <span className="menu-lines" aria-hidden="true"><i /><i /></span>
             </button>
           </div>
         </div>
@@ -84,17 +90,32 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
         </Link>
       )}
 
-      <nav className="mobile-menu" aria-label="Mobile" inert={!open}>
-        {PAGES.map((p) => (
-          <Link key={p} href={path(lang, p)} onClick={() => setOpen(false)}>
-            {t.nav.labels[p]}
-          </Link>
-        ))}
-        <div style={{ marginTop: 28, display: "flex", gap: 20, fontSize: 12, letterSpacing: ".2em" }}>
-          <Link href={path("ja", page)} onClick={() => setOpen(false)}>JP</Link>
-          <Link href={path("en", page)} onClick={() => setOpen(false)}>EN</Link>
+      <div className="menu-panel" inert={!open}>
+        <div className="menu-media" aria-hidden="true">
+          {PAGES.map((p) => (
+            <img key={p} {...responsive(menuImage(lang, p), "40vw")} alt="" className={p === preview ? "on" : ""} loading="lazy" />
+          ))}
         </div>
-      </nav>
+        <nav className="menu-links" aria-label="Main">
+          <ol>
+            {PAGES.map((p, i) => (
+              <li key={p} style={{ "--i": i } as React.CSSProperties}>
+                <Link href={path(lang, p)} aria-current={p === page ? "page" : undefined} onMouseEnter={() => setPreview(p)} onFocus={() => setPreview(p)} onClick={() => setOpen(false)}>
+                  <span className="menu-no">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="display menu-name">{t.nav.labels[p]}</span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+          <div className="menu-foot">
+            <span className="caption">THE JEWELRY · OSAKA BAY</span>
+            <span className="head-lang">
+              <Link href={path("ja", page)} aria-current={lang === "ja" ? "true" : undefined} onClick={() => setOpen(false)}>JP</Link>
+              <Link href={path("en", page)} aria-current={lang === "en" ? "true" : undefined} onClick={() => setOpen(false)}>EN</Link>
+            </span>
+          </div>
+        </nav>
+      </div>
     </>
   );
 }

@@ -116,52 +116,55 @@ export function Ornament({ className = "" }: { className?: string }) {
   );
 }
 
-/** Black band inviting enquiries; ends most pages. */
+/** Full-screen invitation to enquire; ends most pages. */
 export function ContactBand({ lang }: { lang: Lang }) {
   const t = content[lang];
   return (
-    <section className="sec text-center">
-      <Ornament className="mx-auto mb-14 max-w-md rv" />
+    <section className="contact-band">
       <p className="kicker rv">Contact</p>
-      <h2 className="display sec-title rv mx-auto mt-5 max-w-4xl" style={{ "--d": ".1s" } as React.CSSProperties}>
+      <h2 className="display contact-band-title rv mt-8" style={{ "--d": ".1s" } as React.CSSProperties}>
         {t.home.contactTitle}
       </h2>
-      <p className="rv mx-auto mt-6 max-w-xl text-white/75" style={{ "--d": ".2s" } as React.CSSProperties}>{t.home.contactBody}</p>
-      <div className="rv mt-10 flex flex-wrap justify-center gap-4" style={{ "--d": ".3s" } as React.CSSProperties}>
-        <Link href={path(lang, "contact")} className="btn btn-gold">{t.nav.cta}</Link>
+      <p className="rv mx-auto mt-8 max-w-xl text-white/70" style={{ "--d": ".2s" } as React.CSSProperties}>{t.home.contactBody}</p>
+      <div className="rv mt-12 flex flex-wrap justify-center gap-4" style={{ "--d": ".3s" } as React.CSSProperties}>
+        <Link href={path(lang, "contact")} className="btn btn-accent">{t.nav.cta}</Link>
         <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line">Instagram DM</a>
       </div>
     </section>
   );
 }
 
+/** Footer: details and links, closed by the name set across the full width. */
 function Footer({ lang }: { lang: Lang }) {
   const t = content[lang];
   return (
-    <footer className="border-t border-gold/25 px-[var(--pad)] pt-20 pb-10">
-      <div className="grid gap-12 md:grid-cols-[1.2fr_1fr_1fr]">
+    <footer className="site-foot">
+      <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <span className="logo w-20" />
+          <p className="kicker">THE JEWELRY</p>
           <p className="mt-6 text-sm text-white/70">{t.footer.address}</p>
           <p className="caption mt-1">{t.footer.tagline}</p>
         </div>
-        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-[13px] text-white/75" aria-label="Footer">
+        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-[13px] text-white/70" aria-label="Footer">
           {PAGES.map((p) => (
-            <Link key={p} href={path(lang, p)} className="transition hover:text-gold-hi">{t.nav.labels[p]}</Link>
+            <Link key={p} href={path(lang, p)} className="transition hover:text-white">{t.nav.labels[p]}</Link>
           ))}
         </nav>
-        <div className="flex flex-col gap-2 text-[13px] text-white/75">
-          <a href={IG_URL} target="_blank" rel="noopener" className="hover:text-gold-hi">Instagram ↗</a>
-          <a href={COMPANY_URL} target="_blank" rel="noopener" className="hover:text-gold-hi">{t.footer.company} ↗</a>
-          <a href={PRIVACY_URL} target="_blank" rel="noopener" className="hover:text-gold-hi">{t.footer.privacy} ↗</a>
-          <span className="mt-3 text-[11px] tracking-[.2em]">
-            <Link href={path("ja", "home")} className={lang === "ja" ? "text-gold-hi" : ""}>JP</Link> /{" "}
-            <Link href={path("en", "home")} className={lang === "en" ? "text-gold-hi" : ""}>EN</Link>
+        <div className="flex flex-col gap-2 text-[13px] text-white/70">
+          <a href={IG_URL} target="_blank" rel="noopener" className="hover:text-white">Instagram ↗</a>
+          <a href={COMPANY_URL} target="_blank" rel="noopener" className="hover:text-white">{t.footer.company} ↗</a>
+          <a href={PRIVACY_URL} target="_blank" rel="noopener" className="hover:text-white">{t.footer.privacy} ↗</a>
+          <span className="head-lang mt-3 text-[11px] tracking-[.2em]">
+            <Link href={path("ja", "home")} aria-current={lang === "ja" ? "true" : undefined}>JP</Link>
+            <Link href={path("en", "home")} aria-current={lang === "en" ? "true" : undefined}>EN</Link>
           </span>
         </div>
       </div>
-      <Ornament className="my-12" />
-      <p className="caption text-center">{t.footer.rights}</p>
+      <p className="foot-word display" aria-hidden="true">THE JEWELRY</p>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <span className="logo w-12" />
+        <p className="caption">{t.footer.rights}</p>
+      </div>
     </footer>
   );
 }

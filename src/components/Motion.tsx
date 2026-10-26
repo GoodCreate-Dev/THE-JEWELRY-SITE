@@ -16,6 +16,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  *   --hp on [data-hero]    0 → 1 as the hero scrolls away (media grows, text drifts up)
  *   --wp on [data-window]  0 → 1 as the window section opens to full screen
  *   --lp on [data-lights]  0 → 1 as the dome "switches on" (home)
+ *   [data-hscroll]         programme cards move sideways while scrolling (home, desktop)
  *   .frame img             slow parallax
  */
 export function Motion() {
@@ -36,6 +37,21 @@ export function Motion() {
         const r = el.getBoundingClientRect();
         // opens over the first 70% of the travel, then holds while the text reads
         el.style.setProperty("--wp", clamp01(-r.top / ((r.height - vh) * 0.7)).toFixed(4));
+      });
+      // Programme: section is as tall as the sideways travel; the track follows the scroll.
+      document.querySelectorAll<HTMLElement>("[data-hscroll]").forEach((el) => {
+        const track = el.querySelector<HTMLElement>(".hscroll-track");
+        if (!track) return;
+        if (window.innerWidth <= 1020) {
+          el.style.height = "";
+          track.style.transform = "";
+          return;
+        }
+        const dist = Math.max(0, track.scrollWidth - window.innerWidth);
+        const height = `${Math.round(vh + dist)}px`;
+        if (el.style.height !== height) el.style.height = height;
+        const r = el.getBoundingClientRect();
+        track.style.transform = `translate3d(${(-dist * clamp01(-r.top / Math.max(1, r.height - vh))).toFixed(1)}px, 0, 0)`;
       });
       document.querySelectorAll<HTMLElement>("[data-lights]").forEach((el) => {
         const r = el.getBoundingClientRect();
