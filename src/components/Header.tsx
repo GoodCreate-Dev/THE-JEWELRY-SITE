@@ -13,7 +13,7 @@ function menuImage(lang: Lang, p: PageKey) {
 }
 
 /**
- * Fixed header (no logo; the home hero carries it): language, enquiry and MENU on the right. MENU opens a full-screen
+ * Fixed header (no logo; the home hero carries it): language, enquiry and the menu icon on the right. The icon opens a full-screen
  * menu with large numbered page names and a photo of the page under the pointer.
  */
 export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
@@ -77,7 +77,6 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
               <span className="cta-short">{t.nav.ctaShort}</span>
             </Link>
             <button type="button" className="menu-btn" aria-label={open ? t.nav.close : t.nav.menu} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-              <span className="menu-word">{open ? t.nav.close : "Menu"}</span>
               <span className="menu-lines" aria-hidden="true"><i /><i /></span>
             </button>
           </div>

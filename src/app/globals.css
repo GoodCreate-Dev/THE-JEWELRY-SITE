@@ -153,7 +153,7 @@ body::after { content: ""; position: fixed; inset: -50%; z-index: 80; pointer-ev
 .head-cta::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--iri); transform-origin: right; transition: transform .6s var(--ease); }
 .head-cta:hover::after { transform: scaleX(0); }
 .head-cta .cta-short { display: none; }
-.menu-btn { display: inline-flex; align-items: center; gap: 14px; padding: 6px 0; background: none; border: 0; color: var(--color-white); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.menu-btn { display: inline-flex; align-items: center; padding: 14px 0 14px 10px; background: none; border: 0; color: var(--color-white); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
 .menu-lines { position: relative; width: 30px; height: 10px; }
 .menu-lines i { position: absolute; left: 0; right: 0; height: 1px; background: currentColor; transition: transform .5s var(--ease), top .5s var(--ease), width .5s var(--ease); }
 .menu-lines i:first-child { top: 0; } .menu-lines i:last-child { top: 9px; left: 10px; }
