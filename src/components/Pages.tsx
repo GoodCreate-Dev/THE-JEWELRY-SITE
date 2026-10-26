@@ -67,7 +67,7 @@ function LitText({ text, word }: { text: string; word: string }) {
 }
 
 /** Photos for the event types (same order as the content). */
-const TYPE_IMAGES = ["real-gold-walkway", "f-stage", "ai-aerial-gold", "ai-promenade"].map((n) => asset(`/images/${n}.jpg`));
+const TYPE_IMAGES = ["real-gold-walkway", "real-rainbow-lounge", "ai-aerial-gold", "ai-promenade"].map((n) => asset(`/images/${n}.jpg`));
 
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
