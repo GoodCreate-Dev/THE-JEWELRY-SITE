@@ -67,7 +67,7 @@ function LitText({ text, word }: { text: string; word: string }) {
 }
 
 /** Photos for the event types (same order as the content). */
-const TYPE_IMAGES = ["dome-2", "f-stage", "ai-aerial-gold", "ai-promenade"].map((n) => asset(`/images/${n}.jpg`));
+const TYPE_IMAGES = ["real-gold-walkway", "f-stage", "ai-aerial-gold", "ai-promenade"].map((n) => asset(`/images/${n}.jpg`));
 
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
@@ -102,8 +102,8 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* statement: one large sentence, the key phrase in the dome's colours */}
       <section className="sec statement aura">
         <div className="collage-item c1 frame" data-speed="0.18" aria-hidden="true"><img {...responsive(asset("/images/ai-aerial-gold.jpg"), "22vw")} alt="" loading="lazy" /></div>
-        <div className="collage-item c2 frame" data-speed="0.32" aria-hidden="true"><img {...responsive(asset("/images/dome-2.jpg"), "16vw")} alt="" loading="lazy" /></div>
-        <div className="collage-item c3 frame" data-speed="0.1" aria-hidden="true"><img {...responsive(asset("/images/f-dusk.jpg"), "14vw")} alt="" loading="lazy" /></div>
+        <div className="collage-item c2 frame" data-speed="0.32" aria-hidden="true"><img {...responsive(asset("/images/real-blue-trees.jpg"), "16vw")} alt="" loading="lazy" /></div>
+        <div className="collage-item c3 frame" data-speed="0.1" aria-hidden="true"><img {...responsive(asset("/images/real-rainbow-garden.jpg"), "14vw")} alt="" loading="lazy" /></div>
         <p className="kicker rv">{h.statementLabel}</p>
         <h2 className="display statement-text mt-10" aria-label={h.statement}>
           <span aria-hidden="true"><LitText text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} /></span>

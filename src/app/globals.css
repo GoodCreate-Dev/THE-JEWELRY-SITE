@@ -325,7 +325,7 @@ html[lang="ja"] .plate-title h2 { font-size: clamp(38px, 6vw, 96px); line-height
 .collage-item { position: absolute; z-index: 0; will-change: translate; }
 .collage-item img { width: 100%; height: 100%; object-fit: cover; }
 .collage-item.c1 { right: var(--pad); top: 6%; width: 22vw; aspect-ratio: 4 / 5; }
-.collage-item.c2 { right: 29vw; top: 62%; width: 14vw; aspect-ratio: 1; opacity: .9; }
+.collage-item.c2 { right: 29vw; top: 50%; width: 14vw; aspect-ratio: 1; opacity: .9; }
 .collage-item.c3 { right: var(--pad); top: 74%; width: 12vw; aspect-ratio: 3 / 4; opacity: .85; }
 
 /* 3. the date filled with the glowing dome */

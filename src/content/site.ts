@@ -208,7 +208,7 @@ const ja: Content = {
     spaces: [
       { no: "Pl. 01", name: "ドーム", en: "The Dome", capacity: "3,000", body: "施設の象徴である円形の展示空間。光の演出とともに、没入型の展示や発表会に。", uses: ["展覧会・インスタレーション", "ブランド発表会", "ライブ・パフォーマンス"], image: IMG("ai-aerial-color.jpg") },
       { no: "Pl. 02", name: "外周部", en: "Outer Area", capacity: "10,000", body: "海へひらけた広大な屋外空間。夜景を背景に、大規模な催事やマーケットに。", uses: ["催事・マーケット", "フェスティバル", "野外展示"], image: IMG("ai-promenade.jpg") },
-      { no: "Pl. 03", name: "エントランス館内", en: "Entrance Hall", capacity: "300", body: "落ち着いた館内空間。小規模な展示、レセプション、プライベートイベントに。", uses: ["小規模展示", "レセプション", "記者発表"], image: IMG("f-entrance.jpg") },
+      { no: "Pl. 03", name: "エントランス館内", en: "Entrance Hall", capacity: "300", body: "落ち着いた館内空間。小規模な展示、レセプション、プライベートイベントに。", uses: ["小規模展示", "レセプション", "記者発表"], image: IMG("real-aerial-entrance.jpg") },
     ],
     combineTitle: "空間を組み合わせて",
     combineBody: "ドームでの展示と外周部でのレセプションなど、複数の空間を組み合わせたご利用も可能です。内容に合わせてご提案いたします。",
@@ -272,7 +272,7 @@ const ja: Content = {
     hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("dome-2.jpg") },
     items: [
       { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("ai-front.jpg") },
-      { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("dome-1.jpg") },
+      { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("real-rainbow-walkway.jpg") },
     ],
     feedTitle: "お知らせ・イベント",
     eventsTitle: "開催情報",
@@ -390,7 +390,7 @@ const en: Content = {
     spaces: [
       { no: "Pl. 01", name: "The Dome", en: "The Dome", capacity: "3,000", body: "Our signature circular hall. With lighting effects, ideal for immersive exhibitions and launches.", uses: ["Exhibitions & installations", "Brand launches", "Live performances"], image: IMG("ai-aerial-color.jpg") },
       { no: "Pl. 02", name: "Outer Area", en: "Outer Area", capacity: "10,000", body: "A vast open-air space facing the sea, with the night view as a backdrop for large-scale events and markets.", uses: ["Fairs & markets", "Festivals", "Outdoor exhibitions"], image: IMG("ai-promenade.jpg") },
-      { no: "Pl. 03", name: "Entrance Hall", en: "Entrance Hall", capacity: "300", body: "A calm indoor space for small exhibitions, receptions and private events.", uses: ["Small exhibitions", "Receptions", "Press events"], image: IMG("f-entrance.jpg") },
+      { no: "Pl. 03", name: "Entrance Hall", en: "Entrance Hall", capacity: "300", body: "A calm indoor space for small exhibitions, receptions and private events.", uses: ["Small exhibitions", "Receptions", "Press events"], image: IMG("real-aerial-entrance.jpg") },
     ],
     combineTitle: "Combine the spaces",
     combineBody: "Spaces can be combined, for example an exhibition in the Dome with a reception in the Outer Area. We will propose the best layout for your event.",
@@ -454,7 +454,7 @@ const en: Content = {
     hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("dome-2.jpg") },
     items: [
       { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("ai-front.jpg") },
-      { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("dome-1.jpg") },
+      { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("real-rainbow-walkway.jpg") },
     ],
     feedTitle: "News & Events",
     eventsTitle: "What’s on",
