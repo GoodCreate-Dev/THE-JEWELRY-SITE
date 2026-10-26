@@ -34,9 +34,11 @@ export function Intro() {
  */
 export function SplitText({ text, start = 0 }: { text: string; start?: number }) {
   let i = start;
+  // Japanese has no spaces: each kana/kanji counts as its own "word" so long titles can wrap.
+  const words = text.split(/(\s+)/).flatMap((w) => w.split(/(?<=[　-ヿ㐀-鿿＀-￯])|(?=[　-ヿ㐀-鿿＀-￯])/).filter(Boolean));
   return (
     <>
-      {text.split(/(\s+)/).map((word, w) =>
+      {words.map((word, w) =>
         /^\s+$/.test(word) ? (
           " "
         ) : (
@@ -52,7 +54,7 @@ export function SplitText({ text, start = 0 }: { text: string; start?: number })
 }
 
 /** Large photo (or film, when `video` is given) header used by every page except the home page. */
-export function PageHero({ hero, video }: { hero: { kicker: string; title: string; lead: string; image: string }; video?: string }) {
+export function PageHero({ hero, video, index }: { hero: { kicker: string; title: string; lead: string; image: string }; video?: string; index?: string }) {
   return (
     <section className="page-hero" data-hero>
       <div className="hero-img">
@@ -60,14 +62,13 @@ export function PageHero({ hero, video }: { hero: { kicker: string; title: strin
       </div>
       <div className="hero-veil" />
       <div className="page-hero-inner hero-drift">
-        <div>
-          <p className="kicker rv">{hero.kicker}</p>
-          <h1 className="display rv letters mt-4" aria-label={hero.title}>
-            <span aria-hidden="true"><SplitText text={hero.title} /></span>
-          </h1>
-          <p className="lead rv" style={{ "--d": ".24s" } as React.CSSProperties}>{hero.lead}</p>
-        </div>
+        <p className="kicker rv">{index && <span className="page-index">{index}</span>}{hero.kicker}</p>
+        <h1 className="display rv letters" aria-label={hero.title}>
+          <span aria-hidden="true"><SplitText text={hero.title} /></span>
+        </h1>
+        <p className="lead rv" style={{ "--d": ".24s" } as React.CSSProperties}>{hero.lead}</p>
       </div>
+      <p className="hero-meta" aria-hidden="true">34°38′N&nbsp;&nbsp;135°24′E<br />Osaka Bay</p>
     </section>
   );
 }

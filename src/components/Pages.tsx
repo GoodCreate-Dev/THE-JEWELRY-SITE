@@ -192,20 +192,20 @@ export function AboutPage({ lang }: { lang: Lang }) {
   const a = content[lang].about;
   return (
     <Shell lang={lang} page="about">
-      <PageHero hero={a.hero} />
+      <PageHero hero={a.hero} index="02" />
       <Marquee words={["Museum", "Architecture", "Light", "Osaka Bay"]} />
-      <section className="sec light">
-        {a.chapters.map((c, i) => (
-          <article key={c.no} className={`grid items-center gap-[clamp(30px,5vw,90px)] py-[clamp(40px,6vw,80px)] md:grid-cols-2 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
-            <div className="frame rv-img aspect-[4/3]"><img {...responsive(c.image, "(min-width: 768px) 50vw, 100vw")} alt="" loading="lazy" /></div>
-            <div>
-              <p className="display rv text-5xl text-accent-lo">{c.no}.</p>
-              <h2 className="display rv mt-4 text-[clamp(26px,2.8vw,42px)]" style={d(".1s")}>{c.title}</h2>
-              <p className="rv mt-6 max-w-lg text-black/70" style={d(".2s")}>{c.body}</p>
-            </div>
-          </article>
-        ))}
-      </section>
+      {a.chapters.map((c) => (
+        <article key={c.no} className="chapter">
+          <div className="chapter-band frame rv-img">
+            <img {...responsive(c.image)} alt="" loading="lazy" />
+            <span className="chapter-no display" aria-hidden="true">{c.no}</span>
+          </div>
+          <div className="chapter-text">
+            <h2 className="display rv text-[clamp(30px,3.6vw,56px)] leading-tight">{c.title}</h2>
+            <p className="rv text-white/70" style={d(".12s")}>{c.body}</p>
+          </div>
+        </article>
+      ))}
       <WindowFilm kicker="Vision" title={a.quote} image={asset("/images/dome-3.jpg")} />
       <ContactBand lang={lang} />
     </Shell>
@@ -218,32 +218,34 @@ export function SpacesPage({ lang }: { lang: Lang }) {
   const s = t.spaces;
   return (
     <Shell lang={lang} page="spaces">
-      <PageHero hero={s.hero} />
+      <PageHero hero={s.hero} index="03" />
       <Marquee words={content.en.spaces.spaces.map((x) => x.name)} />
-      {s.spaces.map((sp, i) => (
-        <section key={sp.no} className={`sec ${i % 2 ? "" : "light"}`}>
-          <div className={`grid items-center gap-[clamp(30px,5vw,90px)] md:grid-cols-[7fr_5fr] ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
-            <div className="frame rv-img aspect-[16/11]"><img {...responsive(sp.image, "(min-width: 768px) 58vw, 100vw")} alt={sp.name} loading="lazy" /></div>
-            <div>
-              <p className="caption rv">{sp.no} ・ {sp.en}</p>
-              <h2 className="display sec-title rv mt-3" style={d(".1s")}>{sp.name}</h2>
-              <p className="rv mt-6" style={d(".2s")}>{sp.body}</p>
-              <dl className="rv mt-10" style={d(".3s")}>
-                <div className={`flex justify-between border-t py-4 ${i % 2 ? "border-accent/40" : "border-black/80"}`}>
-                  <dt className="text-xs tracking-[.16em] opacity-60">{s.capacityLabel}</dt>
-                  <dd className="display text-3xl">{sp.capacity} <small className="text-sm opacity-60">{t.common.guests}</small></dd>
-                </div>
-                <div className={`border-t border-b py-4 ${i % 2 ? "border-white/15" : "border-black/10"}`}>
-                  <dt className="text-xs tracking-[.16em] opacity-60">{s.usesLabel}</dt>
-                  <dd className="mt-2 flex flex-wrap gap-2">
-                    {sp.uses.map((u) => (
-                      <span key={u} className={`border px-3 py-1 text-xs ${i % 2 ? "border-white/25" : "border-black/30"}`}>{u}</span>
-                    ))}
-                  </dd>
-                </div>
-              </dl>
+      {s.spaces.map((sp) => (
+        <section key={sp.no} className="plate">
+          <div className="plate-photo frame rv-img">
+            <img {...responsive(sp.image)} alt={sp.name} loading="lazy" />
+            <div className="plate-title">
+              <p className="caption">{sp.no} · {sp.en}</p>
+              <h2 className="display">{sp.name}</h2>
             </div>
+            <p className="plate-cap display" aria-hidden="true">{sp.capacity}</p>
           </div>
+          <dl className="plate-specs">
+            <div className="rv">
+              <dt className="kicker">{s.capacityLabel}</dt>
+              <dd className="display mt-3 text-[clamp(30px,3vw,44px)]">{sp.capacity}<small className="ml-2 text-sm text-white/50">{t.common.guests}</small></dd>
+            </div>
+            <div className="rv" style={d(".1s")}>
+              <dt className="kicker">{s.usesLabel}</dt>
+              <dd className="mt-4 flex flex-wrap gap-2">
+                {sp.uses.map((u) => <span key={u} className="chip">{u}</span>)}
+              </dd>
+            </div>
+            <div className="rv" style={d(".2s")}>
+              <dt className="sr-only">{sp.name}</dt>
+              <dd className="text-white/70">{sp.body}</dd>
+            </div>
+          </dl>
         </section>
       ))}
       <WindowFilm kicker="Combination" title={s.combineTitle} body={s.combineBody} image={asset("/images/dome-1.jpg")} />
@@ -257,37 +259,37 @@ export function EventsPage({ lang }: { lang: Lang }) {
   const e = content[lang].events;
   return (
     <Shell lang={lang} page="events">
-      <PageHero hero={e.hero} video={asset("/videos/hero.mp4")} />
+      <PageHero hero={e.hero} video={asset("/videos/hero.mp4")} index="04" />
       <Marquee words={content.en.events.types.map((x) => x.title)} />
-      <section className="sec light">
-        <div className="grid gap-px bg-black/10 md:grid-cols-2">
+      <section className="sec">
+        <div className="type-grid">
           {e.types.map((ty, i) => (
-            <article key={ty.no} className="rv bg-white p-[clamp(28px,4vw,60px)]" style={d(`${i * 0.08}s`)}>
-              <p className="display text-4xl text-accent-lo">{ty.no}</p>
-              <h2 className="display mt-6 text-[clamp(26px,2.6vw,40px)]">{ty.title}</h2>
-              <p className="mt-1 text-[11px] tracking-[.2em] text-black/45">{ty.en}</p>
-              <p className="mt-6 text-black/70">{ty.body}</p>
+            <article key={ty.no} className="hs-card rv" style={d(`${i * 0.08}s`)}>
+              <span className="hs-no display" aria-hidden="true">{ty.no}</span>
+              <p className="caption">{ty.en}</p>
+              <h2 className="display mt-3 text-[clamp(26px,2.6vw,40px)]">{ty.title}</h2>
+              <p className="mt-5 text-sm leading-[2] text-white/65">{ty.body}</p>
             </article>
           ))}
         </div>
       </section>
       <FeedSection lang={lang} manual={feed(lang, "event")} kind="event" />
-      <section className="sec">
-        <div className="split">
+      <section className="sec flow">
+        <div className="flow-head">
           <p className="kicker rv">Flow</p>
-          <div>
-            <h2 className="display sec-title rv">{e.flowTitle}</h2>
-            <ol className="mt-12 grid gap-px bg-accent/30 md:grid-cols-4">
-              {e.flow.map((f, i) => (
-                <li key={f.no} className="rv bg-black p-7" style={d(`${i * 0.1}s`)}>
-                  <p className="display text-3xl text-accent">{f.no}</p>
-                  <h3 className="display mt-4 text-xl">{f.title}</h3>
-                  <p className="mt-3 text-sm text-white/65">{f.body}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
+          <h2 className="display sec-title rv mt-4" style={d(".1s")}>{e.flowTitle}</h2>
         </div>
+        <ol className="flow-steps">
+          {e.flow.map((f, i) => (
+            <li key={f.no} className="rv" style={d(`${i * 0.1}s`)}>
+              <span className="flow-no display">{f.no}</span>
+              <div>
+                <h3 className="display text-[clamp(22px,2vw,30px)]">{f.title}</h3>
+                <p className="mt-3 text-sm leading-[2] text-white/65">{f.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </section>
       <ContactBand lang={lang} />
     </Shell>
@@ -300,50 +302,45 @@ export function VisitPage({ lang }: { lang: Lang }) {
   const v = t.visit;
   return (
     <Shell lang={lang} page="visit">
-      <PageHero hero={v.hero} />
+      <PageHero hero={v.hero} index="05" />
       <Marquee words={["Nanko", "Osaka Bay", "Cosmosquare", "Access"]} />
-      <section className="sec light">
-        <div className="grid gap-12 md:grid-cols-3">
-          <div className="rv">
-            <h2 className="kicker border-b border-black/80 pb-3">{v.hoursTitle}</h2>
-            <p className="display mt-6 text-3xl">{v.hours}</p>
-            <p className="mt-4 text-sm text-black/65">{v.hoursNote}</p>
-            <span className="mt-4 inline-block border border-accent-lo px-2 py-0.5 text-[11px] text-accent-lo">{t.common.pending}</span>
-          </div>
-          <div className="rv" style={d(".1s")}>
-            <h2 className="kicker border-b border-black/80 pb-3">{v.addressTitle}</h2>
-            <p className="display mt-6 text-3xl">{v.address[0]}<br />{v.address[1]}</p>
-            <h3 className="kicker mt-10 border-b border-black/20 pb-2">{v.trainsTitle}</h3>
-            <ul className="mt-3 text-sm text-black/70">{v.trains.map((x) => <li key={x} className="border-b border-black/10 py-2">{x}</li>)}</ul>
-          </div>
-          <div className="rv" style={d(".2s")}>
-            <h2 className="kicker border-b border-black/80 pb-3">{v.timesTitle}</h2>
-            <ul className="mt-4">
-              {v.times.map((x) => (
-                <li key={x.from} className="flex justify-between gap-4 border-b border-black/10 py-3 text-sm">
-                  <span className="text-black/70">{x.from}</span><span className="text-right text-accent-lo">{x.time}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <section className="sec info-grid">
+        <div className="rv">
+          <h2 className="kicker">{v.hoursTitle}</h2>
+          <p className="display info-value">{v.hours}</p>
+          <p className="mt-4 text-sm text-white/60">{v.hoursNote}</p>
+          <span className="chip mt-5 inline-block">{t.common.pending}</span>
+        </div>
+        <div className="rv" style={d(".1s")}>
+          <h2 className="kicker">{v.addressTitle}</h2>
+          <p className="display info-value">{v.address[0]}<br />{v.address[1]}</p>
+          <ul className="mt-6 text-sm text-white/65">{v.trains.map((x) => <li key={x} className="border-t border-white/10 py-3">{x}</li>)}</ul>
+        </div>
+        <div className="rv" style={d(".2s")}>
+          <h2 className="kicker">{v.timesTitle}</h2>
+          <ul className="times">
+            {v.times.map((x) => (
+              <li key={x.from}><span>{x.from}</span><i aria-hidden="true" /><b>{x.time}</b></li>
+            ))}
+          </ul>
         </div>
       </section>
       <WindowFilm kicker="Osaka Bay" title={v.window.title} body={v.window.body} image={asset("/images/ai-aerial-gold.jpg")} />
       <section className="grid md:grid-cols-2">
-        <div className="min-h-[420px] grayscale-[.6] invert-[.9] hue-rotate-180">
-          <iframe title="Map" src={MAP_EMBED} loading="lazy" className="h-full min-h-[420px] w-full border-0" />
+        <div className="map-frame">
+          <iframe title="Map" src={MAP_EMBED} loading="lazy" className="h-full min-h-[460px] w-full border-0" />
         </div>
-        <div className="sec">
+        <div className="sec bg-coal">
           <p className="kicker rv">{v.parkingTitle}</p>
-          <p className="rv mt-6 max-w-md text-white/80" style={d(".1s")}>{v.parking}</p>
+          <p className="rv mt-6 max-w-md text-white/75" style={d(".1s")}>{v.parking}</p>
           <a href={PARKING_URL} target="_blank" rel="noopener" className="btn btn-line rv mt-8" style={d(".2s")}>{v.parkingLink} ↗</a>
           <figure className="rv mt-10" style={d(".3s")}>
-            <img src={asset("/images/parking-atc.png")} alt={v.parkingAtc} loading="lazy" className="w-full bg-white" />
+            <img src={asset("/images/parking-atc.png")} alt={v.parkingAtc} loading="lazy" className="w-full" />
             <figcaption className="caption mt-3">{v.parkingAtc}</figcaption>
           </figure>
         </div>
       </section>
-      <section className="sec light">
+      <section className="sec">
         <p className="kicker rv">{v.routesTitle}</p>
         <div className="mt-10 grid items-start gap-10 lg:grid-cols-2">
           {v.routes.map((r, i) => (
@@ -411,7 +408,7 @@ export function NewsPage({ lang }: { lang: Lang }) {
   const n = content[lang].news;
   return (
     <Shell lang={lang} page="news">
-      <PageHero hero={n.hero} />
+      <PageHero hero={n.hero} index="06" />
       <Marquee words={["News", "Instagram", "@thejewelry_official"]} />
       <FeedSection lang={lang} manual={feed(lang)} all />
       <ContactBand lang={lang} />
@@ -424,20 +421,18 @@ export function ContactPage({ lang }: { lang: Lang }) {
   const c = content[lang].contact;
   return (
     <Shell lang={lang} page="contact">
-      <PageHero hero={c.hero} />
+      <PageHero hero={c.hero} index="07" />
       <Marquee words={["Let's talk", "Exhibitions", "Events", "Receptions"]} />
-      <section className="sec light">
-        <div className="split">
-          <div>
-            <p className="rv text-black/75">{c.intro}</p>
-            <div className="rv mt-12 border-t border-black/80 pt-6" style={d(".1s")}>
-              <h2 className="display text-2xl">{c.dmTitle}</h2>
-              <p className="mt-3 text-sm text-black/65">{c.dmBody}</p>
-              <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-dark mt-6">Instagram DM</a>
-            </div>
+      <section className="sec contact-layout">
+        <aside className="contact-aside">
+          <p className="display rv text-[clamp(24px,2.4vw,34px)] leading-snug">{c.intro}</p>
+          <div className="dm-card rv" style={d(".1s")}>
+            <h2 className="display text-2xl">{c.dmTitle}</h2>
+            <p className="mt-3 text-sm text-white/65">{c.dmBody}</p>
+            <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line mt-6">Instagram DM ↗</a>
           </div>
-          <ContactForm lang={lang} />
-        </div>
+        </aside>
+        <ContactForm lang={lang} />
       </section>
     </Shell>
   );

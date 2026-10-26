@@ -113,15 +113,15 @@ export function FeedSection({ lang, manual, kind, limit, all }: { lang: Lang; ma
 export function FeedBody({ lang, item }: { lang: Lang; item: FeedItem }) {
   const n = content[lang].news;
   return (
-    <section className="sec light">
+    <section className="sec">
       <div className="mx-auto max-w-3xl">
-        <p className="rv whitespace-pre-line text-[17px] leading-[2.2] text-black/75">{item.desc}</p>
+        <p className="rv whitespace-pre-line text-[17px] leading-[2.2] text-white/75">{item.desc}</p>
         <Ornament className="rv my-14 max-w-xs" />
         {item.permalink && (
-          <a href={item.permalink} target="_blank" rel="noopener" className="btn btn-dark rv">{n.viewOnIg} ↗</a>
+          <a href={item.permalink} target="_blank" rel="noopener" className="btn btn-line rv">{n.viewOnIg} ↗</a>
         )}
-        <div className="mt-16 border-t border-black/10 pt-8">
-          <Link href={path(lang, "news")} className="link-arrow !text-accent-lo">← {n.back}</Link>
+        <div className="mt-16 border-t border-white/10 pt-8">
+          <Link href={path(lang, "news")} className="link-arrow">← {n.back}</Link>
         </div>
       </div>
     </section>

@@ -60,9 +60,9 @@ export function ContactForm({ lang }: { lang: Lang }) {
   };
 
   const note = { idle: "", sending: f.sending, sent: f.sent, failed: f.failed }[status];
-  const input = "mt-2 block w-full border-0 border-b border-black/30 bg-transparent px-0 py-3 text-base text-black outline-none transition focus:border-accent-lo";
-  const label = "block text-[11px] tracking-[.18em] text-black/60";
-  const req = <span className="ml-2 text-accent-lo">{f.required}</span>;
+  const input = "mt-2 block w-full border-0 border-b border-white/25 bg-transparent px-0 py-3 text-base text-white outline-none transition placeholder:text-white/30 focus:border-accent-hi";
+  const label = "block text-[11px] tracking-[.18em] text-white/55";
+  const req = <span className="ml-2 text-accent">{f.required}</span>;
 
   return (
     <form onSubmit={onSubmit} className="rv grid gap-8 md:grid-cols-2" noValidate={false}>
@@ -72,7 +72,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
           {f.types.map((t) => (
             <label key={t} className="cursor-pointer">
               <input type="radio" name="type" value={t} checked={type === t} onChange={() => setType(t)} className="peer sr-only" />
-              <span className="inline-block border border-black/30 px-4 py-2 text-sm transition peer-checked:border-black peer-checked:bg-black peer-checked:text-accent-hi peer-focus-visible:outline peer-focus-visible:outline-2">{t}</span>
+              <span className="inline-block border border-white/25 px-4 py-2 text-sm transition peer-checked:border-white peer-checked:bg-white peer-checked:text-black peer-focus-visible:outline peer-focus-visible:outline-2">{t}</span>
             </label>
           ))}
         </div>
@@ -86,13 +86,13 @@ export function ContactForm({ lang }: { lang: Lang }) {
       <label className={`${label} md:col-span-2`}>{f.message}{req}<textarea name="message" rows={5} required className={`${input} resize-y`} /></label>
       {/* honeypot: hidden from people, bots fill it in */}
       <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-      <label className="flex items-center gap-3 text-sm text-black/70 md:col-span-2">
-        <input type="checkbox" required className="size-4 accent-black" />
+      <label className="flex items-center gap-3 text-sm text-white/70 md:col-span-2">
+        <input type="checkbox" required className="size-4 accent-white" />
         <span>{f.agree[0]}<a href={PRIVACY_URL} target="_blank" rel="noopener" className="underline underline-offset-4">{f.agree[1]}</a>{f.agree[2]}</span>
       </label>
       <div className="md:col-span-2">
-        <button type="submit" disabled={status === "sending"} className="btn btn-dark w-full disabled:opacity-50 md:w-auto">{status === "sending" ? f.sending : `${f.submit} →`}</button>
-        <p className={`mt-4 text-sm ${status === "failed" ? "text-red-700" : "text-accent-lo"}`} role="status" aria-live="polite">{note}</p>
+        <button type="submit" disabled={status === "sending"} className="btn btn-accent w-full disabled:opacity-50 md:w-auto">{status === "sending" ? f.sending : `${f.submit} →`}</button>
+        <p className={`mt-4 text-sm ${status === "failed" ? "text-rose-300" : "text-accent"}`} role="status" aria-live="polite">{note}</p>
       </div>
     </form>
   );
