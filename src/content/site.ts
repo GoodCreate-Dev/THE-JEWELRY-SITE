@@ -32,7 +32,7 @@ export const PARKING_URL = "https://times-info.net/P27-osaka/C125/park-detail-BU
 
 export type Content = {
   meta: Record<PageKey, { title: string; description: string }>;
-  nav: { labels: Record<PageKey, string>; cta: string; menu: string; close: string };
+  nav: { labels: Record<PageKey, string>; cta: string; ctaShort: string; menu: string; close: string };
   notice: { text: string; link: string };
   common: { guests: string; more: string; pending: string };
   footer: { address: string; tagline: string; company: string; privacy: string; rights: string };
@@ -143,6 +143,7 @@ const ja: Content = {
   nav: {
     labels: { home: "トップ", about: "施設について", spaces: "スペース", events: "催事・展示", visit: "ご来館", news: "お知らせ", contact: "お問い合わせ" },
     cta: "催事・展示のご相談",
+    ctaShort: "ご相談",
     menu: "メニュー",
     close: "閉じる",
   },
@@ -324,6 +325,7 @@ const en: Content = {
   nav: {
     labels: { home: "Home", about: "About", spaces: "Spaces", events: "Exhibitions & Events", visit: "Visit", news: "News", contact: "Contact" },
     cta: "Host an event",
+    ctaShort: "Contact",
     menu: "Menu",
     close: "Close",
   },

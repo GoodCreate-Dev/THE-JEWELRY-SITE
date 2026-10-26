@@ -21,7 +21,6 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const [solid, setSolid] = useState(false);
   const [away, setAway] = useState(false);
   const [open, setOpen] = useState(false);
-  const [float, setFloat] = useState(false);
   const [preview, setPreview] = useState<PageKey>(page);
 
   // Solid after the hero edge; slides away while scrolling down, returns on scroll up.
@@ -30,7 +29,6 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
     const onScroll = () => {
       const y = window.scrollY;
       setSolid(y > 60);
-      setFloat(y > window.innerHeight * 0.9);
       if (Math.abs(y - last) > 6) {
         setAway(y > last && y > 240);
         last = y;
@@ -75,7 +73,10 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
               <Link href={path("ja", page)} aria-current={lang === "ja" ? "true" : undefined} lang="ja">JP</Link>
               <Link href={path("en", page)} aria-current={lang === "en" ? "true" : undefined} lang="en">EN</Link>
             </span>
-            <Link href={path(lang, "contact")} className="head-cta">{t.nav.cta}</Link>
+            <Link href={path(lang, "contact")} className="head-cta">
+              <span className="cta-long">{t.nav.cta}</span>
+              <span className="cta-short">{t.nav.ctaShort}</span>
+            </Link>
             <button type="button" className="menu-btn" aria-label={open ? t.nav.close : t.nav.menu} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
               <span className="menu-word">{open ? t.nav.close : "Menu"}</span>
               <span className="menu-lines" aria-hidden="true"><i /><i /></span>
@@ -83,12 +84,6 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
           </div>
         </div>
       </header>
-
-      {page !== "contact" && (
-        <Link href={path(lang, "contact")} className={`float-cta${float && !open ? " show" : ""}`} tabIndex={float ? 0 : -1}>
-          {t.nav.cta}
-        </Link>
-      )}
 
       <div className="menu-panel" inert={!open}>
         <div className="menu-media" aria-hidden="true">
