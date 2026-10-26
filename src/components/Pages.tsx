@@ -6,6 +6,7 @@ import { ContactForm } from "./ContactForm";
 import { feed, type FeedItem } from "@/lib/feed";
 import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
+import { SpacesIndex } from "./SpacesIndex";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
@@ -47,7 +48,6 @@ function HeroLive({ src }: { src: string }) {
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
   const h = t.home;
-  const sp = t.spaces;
   return (
     <Shell lang={lang} page="home">
       {/* hero */}
@@ -107,21 +107,7 @@ export function HomePage({ lang }: { lang: Lang }) {
           </div>
           <p className="rv max-w-md text-white/70" style={d(".2s")}>{h.spacesLead}</p>
         </div>
-        <div className="grid gap-8 md:grid-cols-3">
-          {sp.spaces.map((s, i) => (
-            <Link key={s.no} href={path(lang, "spaces")} className="group rv block" style={d(`${i * 0.12}s`)}>
-              <div className={`frame rv-img ${i === 1 ? "aspect-[4/5.4]" : "aspect-[4/5]"}`} style={d(`${i * 0.12}s`)}>
-                <img {...responsive(s.image, "(min-width: 768px) 33vw, 100vw")} alt={s.name} loading="lazy" />
-              </div>
-              <div className="mt-5 flex items-baseline justify-between border-b border-gold/40 pb-4">
-                <span className="caption">{s.no}</span>
-                <h3 className="display text-2xl">{s.name}</h3>
-                <span className="display text-2xl">{s.capacity}<small className="ml-1 text-xs text-white/50">{t.common.guests}</small></span>
-              </div>
-              <p className="mt-4 text-sm text-white/65">{s.body}</p>
-            </Link>
-          ))}
-        </div>
+        <SpacesIndex lang={lang} />
       </section>
 
       {/* the bay film opens from a framed window to full screen while scrolling */}
