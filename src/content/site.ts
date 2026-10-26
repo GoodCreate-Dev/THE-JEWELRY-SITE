@@ -190,7 +190,7 @@ const ja: Content = {
     contactBody: "主催者さま・出展者さまからのご相談は、フォームまたは公式InstagramのDMで承ります。",
   },
   about: {
-    hero: { kicker: "About", title: "施設について", lead: "博物館として生まれた、光のドーム。", image: IMG("dome-1.jpg") },
+    hero: { kicker: "About", title: "施設について", lead: "博物館として生まれた、光のドーム。", image: IMG("ai-aerial-gold.jpg") },
     chapters: [
       { no: "I", title: "博物館として生まれた建築", body: "THE JEWELRY は、建築上は博物館として誕生したドーム型の展示施設です。展示のために設計された空間は、作品や商品を美しく見せ、訪れる人の記憶に残る体験をつくります。", image: IMG("dome-3.jpg") },
       { no: "II", title: "光をまとうドーム", body: "日が沈むと、ドームはゆっくりと輝きはじめます。ライトアップによる演出は、展示やレセプションに、ここでしか生まれない特別な雰囲気をもたらします。", image: IMG("dome-2.jpg") },
@@ -203,8 +203,8 @@ const ja: Content = {
     usesLabel: "主な用途",
     capacityLabel: "収容人数",
     spaces: [
-      { no: "Pl. 01", name: "ドーム", en: "The Dome", capacity: "3,000", body: "施設の象徴である円形の展示空間。光の演出とともに、没入型の展示や発表会に。", uses: ["展覧会・インスタレーション", "ブランド発表会", "ライブ・パフォーマンス"], image: IMG("dome-3.jpg") },
-      { no: "Pl. 02", name: "外周部", en: "Outer Area", capacity: "10,000", body: "海へひらけた広大な屋外空間。夜景を背景に、大規模な催事やマーケットに。", uses: ["催事・マーケット", "フェスティバル", "野外展示"], image: IMG("dome-4.jpg") },
+      { no: "Pl. 01", name: "ドーム", en: "The Dome", capacity: "3,000", body: "施設の象徴である円形の展示空間。光の演出とともに、没入型の展示や発表会に。", uses: ["展覧会・インスタレーション", "ブランド発表会", "ライブ・パフォーマンス"], image: IMG("ai-aerial-color.jpg") },
+      { no: "Pl. 02", name: "外周部", en: "Outer Area", capacity: "10,000", body: "海へひらけた広大な屋外空間。夜景を背景に、大規模な催事やマーケットに。", uses: ["催事・マーケット", "フェスティバル", "野外展示"], image: IMG("ai-promenade.jpg") },
       { no: "Pl. 03", name: "エントランス館内", en: "Entrance Hall", capacity: "300", body: "落ち着いた館内空間。小規模な展示、レセプション、プライベートイベントに。", uses: ["小規模展示", "レセプション", "記者発表"], image: IMG("f-entrance.jpg") },
     ],
     combineTitle: "空間を組み合わせて",
@@ -227,7 +227,7 @@ const ja: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪ベイエリアを盛り上げる、イベント会場＆ミュージアム。", image: IMG("dome-5.jpg") },
+    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪ベイエリアを盛り上げる、イベント会場＆ミュージアム。", image: IMG("ai-promenade.jpg") },
     hoursTitle: "開館時間",
     hours: "催事・展示の開催時に開館",
     hoursNote: "開館日・時間は、各催事のお知らせをご確認ください。",
@@ -268,7 +268,7 @@ const ja: Content = {
   news: {
     hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("dome-2.jpg") },
     items: [
-      { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("dome-3.jpg") },
+      { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("ai-front.jpg") },
       { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("dome-1.jpg") },
     ],
     feedTitle: "お知らせ・イベント",
@@ -370,7 +370,7 @@ const en: Content = {
     contactBody: "Organisers and exhibitors can reach us through the form or by Instagram DM.",
   },
   about: {
-    hero: { kicker: "About", title: "About", lead: "A dome of light, born as a museum.", image: IMG("dome-1.jpg") },
+    hero: { kicker: "About", title: "About", lead: "A dome of light, born as a museum.", image: IMG("ai-aerial-gold.jpg") },
     chapters: [
       { no: "I", title: "Architecture built as a museum", body: "THE JEWELRY is a dome-shaped exhibition hall registered as a museum. Designed for display, its spaces present works and products at their best and create experiences people remember.", image: IMG("dome-3.jpg") },
       { no: "II", title: "A dome wrapped in light", body: "As the sun sets, the dome slowly begins to glow. The illumination gives exhibitions and receptions an atmosphere found nowhere else.", image: IMG("dome-2.jpg") },
@@ -383,8 +383,8 @@ const en: Content = {
     usesLabel: "Ideal for",
     capacityLabel: "Capacity",
     spaces: [
-      { no: "Pl. 01", name: "The Dome", en: "The Dome", capacity: "3,000", body: "Our signature circular hall. With lighting effects, ideal for immersive exhibitions and launches.", uses: ["Exhibitions & installations", "Brand launches", "Live performances"], image: IMG("dome-3.jpg") },
-      { no: "Pl. 02", name: "Outer Area", en: "Outer Area", capacity: "10,000", body: "A vast open-air space facing the sea, with the night view as a backdrop for large-scale events and markets.", uses: ["Fairs & markets", "Festivals", "Outdoor exhibitions"], image: IMG("dome-4.jpg") },
+      { no: "Pl. 01", name: "The Dome", en: "The Dome", capacity: "3,000", body: "Our signature circular hall. With lighting effects, ideal for immersive exhibitions and launches.", uses: ["Exhibitions & installations", "Brand launches", "Live performances"], image: IMG("ai-aerial-color.jpg") },
+      { no: "Pl. 02", name: "Outer Area", en: "Outer Area", capacity: "10,000", body: "A vast open-air space facing the sea, with the night view as a backdrop for large-scale events and markets.", uses: ["Fairs & markets", "Festivals", "Outdoor exhibitions"], image: IMG("ai-promenade.jpg") },
       { no: "Pl. 03", name: "Entrance Hall", en: "Entrance Hall", capacity: "300", body: "A calm indoor space for small exhibitions, receptions and private events.", uses: ["Small exhibitions", "Receptions", "Press events"], image: IMG("f-entrance.jpg") },
     ],
     combineTitle: "Combine the spaces",
@@ -407,7 +407,7 @@ const en: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "Plan your visit", lead: "An event venue and museum bringing the Osaka Bay Area to life.", image: IMG("dome-5.jpg") },
+    hero: { kicker: "Visit", title: "Plan your visit", lead: "An event venue and museum bringing the Osaka Bay Area to life.", image: IMG("ai-promenade.jpg") },
     hoursTitle: "Opening hours",
     hours: "Open during events and exhibitions",
     hoursNote: "Please check each event’s announcement for dates and times.",
@@ -448,7 +448,7 @@ const en: Content = {
   news: {
     hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("dome-2.jpg") },
     items: [
-      { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("dome-3.jpg") },
+      { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("ai-front.jpg") },
       { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("dome-1.jpg") },
     ],
     feedTitle: "News & Events",

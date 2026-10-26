@@ -18,7 +18,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* hero */}
       <section className="hero" data-hero>
         <div className="hero-img">
-          <video src={asset("/videos/hero.mp4")} poster={asset("/images/hero-poster.jpg")} autoPlay muted loop playsInline preload="auto" aria-hidden="true" />
+          <img src={asset("/images/ai-front.jpg")} alt="" />
         </div>
         <div className="hero-veil" />
         <div className="hero-lines" aria-hidden="true"><i /><i /></div>
@@ -90,7 +90,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       </section>
 
       {/* the bay film opens from a framed window to full screen while scrolling */}
-      <WindowFilm kicker={h.window.kicker} title={h.window.title} body={h.window.body} video={asset("/videos/bay.mp4")} image={asset("/images/dome-4.jpg")} />
+      <WindowFilm kicker={h.window.kicker} title={h.window.title} body={h.window.body} image={asset("/images/ai-aerial-color.jpg")} />
 
       {/* relaunch band */}
       <section className="grid md:grid-cols-[7fr_5fr]">
@@ -284,7 +284,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
           </div>
         </div>
       </section>
-      <WindowFilm kicker="Osaka Bay" title={v.window.title} body={v.window.body} video={asset("/videos/bay.mp4")} image={asset("/images/dome-4.jpg")} />
+      <WindowFilm kicker="Osaka Bay" title={v.window.title} body={v.window.body} image={asset("/images/ai-aerial-gold.jpg")} />
       <section className="grid md:grid-cols-2">
         <div className="min-h-[420px] grayscale-[.6] invert-[.9] hue-rotate-180">
           <iframe title="Map" src={MAP_EMBED} loading="lazy" className="h-full min-h-[420px] w-full border-0" />
