@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { asset, content, IG_URL, MAP_EMBED, PARKING_URL, path, type Content, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
 import { feed, type FeedItem } from "@/lib/feed";
+import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
@@ -32,10 +33,10 @@ function HeroLive({ src }: { src: string }) {
           <feDisplacementMap in="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </svg>
-      <img src={src} alt="" />
-      <div className="hero-live-water"><img src={src} alt="" /></div>
-      <div className="hero-live-water hero-live-reflection"><img src={src} alt="" className="hero-live-led" /></div>
-      <div className="hero-live-dome"><img src={src} alt="" className="hero-live-led" /></div>
+      <img {...responsive(src)} alt="" />
+      <div className="hero-live-water"><img {...responsive(src)} alt="" /></div>
+      <div className="hero-live-water hero-live-reflection"><img {...responsive(src)} alt="" className="hero-live-led" /></div>
+      <div className="hero-live-dome"><img {...responsive(src)} alt="" className="hero-live-led" /></div>
       {TWINKLES.map(([x, y, t]) => (
         <i key={`${x}-${y}`} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${t}s` }} />
       ))}
@@ -110,7 +111,7 @@ export function HomePage({ lang }: { lang: Lang }) {
           {sp.spaces.map((s, i) => (
             <Link key={s.no} href={path(lang, "spaces")} className="group rv block" style={d(`${i * 0.12}s`)}>
               <div className={`frame rv-img ${i === 1 ? "aspect-[4/5.4]" : "aspect-[4/5]"}`} style={d(`${i * 0.12}s`)}>
-                <img src={s.image} alt={s.name} loading="lazy" />
+                <img {...responsive(s.image, "(min-width: 768px) 33vw, 100vw")} alt={s.name} loading="lazy" />
               </div>
               <div className="mt-5 flex items-baseline justify-between border-b border-gold/40 pb-4">
                 <span className="caption">{s.no}</span>
@@ -128,7 +129,7 @@ export function HomePage({ lang }: { lang: Lang }) {
 
       {/* relaunch band */}
       <section className="grid md:grid-cols-[7fr_5fr]">
-        <div className="frame rv-img min-h-[420px]"><img src={asset("/images/dome-2.jpg")} alt="" loading="lazy" /></div>
+        <div className="frame rv-img min-h-[420px]"><img {...responsive(asset("/images/dome-2.jpg"), "(min-width: 768px) 58vw, 100vw")} alt="" loading="lazy" /></div>
         <div className="ivory flex flex-col justify-center gap-6 p-[clamp(40px,6vw,96px)]">
           <p className="kicker rv">Re:Start</p>
           <p className="display rv text-[clamp(80px,9vw,156px)] leading-none" style={d(".1s")}>{h.relaunch.date}</p>
@@ -187,7 +188,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
       <section className="sec light">
         {a.chapters.map((c, i) => (
           <article key={c.no} className={`grid items-center gap-[clamp(30px,5vw,90px)] py-[clamp(40px,6vw,80px)] md:grid-cols-2 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
-            <div className="frame rv-img aspect-[4/3]"><img src={c.image} alt="" loading="lazy" /></div>
+            <div className="frame rv-img aspect-[4/3]"><img {...responsive(c.image, "(min-width: 768px) 50vw, 100vw")} alt="" loading="lazy" /></div>
             <div>
               <p className="display rv text-5xl text-gold-lo">{c.no}.</p>
               <h2 className="display rv mt-4 text-[clamp(26px,2.8vw,42px)]" style={d(".1s")}>{c.title}</h2>
@@ -213,7 +214,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
       {s.spaces.map((sp, i) => (
         <section key={sp.no} className={`sec ${i % 2 ? "" : "light"}`}>
           <div className={`grid items-center gap-[clamp(30px,5vw,90px)] md:grid-cols-[7fr_5fr] ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
-            <div className="frame rv-img aspect-[16/11]"><img src={sp.image} alt={sp.name} loading="lazy" /></div>
+            <div className="frame rv-img aspect-[16/11]"><img {...responsive(sp.image, "(min-width: 768px) 58vw, 100vw")} alt={sp.name} loading="lazy" /></div>
             <div>
               <p className="caption rv">{sp.no} ・ {sp.en}</p>
               <h2 className="display sec-title rv mt-3" style={d(".1s")}>{sp.name}</h2>

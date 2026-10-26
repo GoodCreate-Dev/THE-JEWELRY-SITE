@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
   partialPrefetching: !pages,
   trailingSlash: true,
   ...(pages && { output: "export", basePath, images: { unoptimized: true } }),
-  env: { NEXT_PUBLIC_BASE_PATH: basePath },
+  // Absolute origin for link-share tags; set SITE_URL for the production domain.
+  env: { NEXT_PUBLIC_BASE_PATH: basePath, SITE_URL: process.env.SITE_URL ?? (pages ? "https://anamul009.github.io" : "http://localhost:3001") },
   turbopack: {
     rules: {
       "*.css": {

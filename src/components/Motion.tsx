@@ -2,7 +2,7 @@
 
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
@@ -19,6 +19,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  */
 export function Motion() {
   const pathname = usePathname();
+  const firstPage = useRef(true);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -77,6 +78,19 @@ export function Motion() {
     // After the first-visit logo intro, later page changes reveal without its extra delay.
     timers.push(window.setTimeout(() => document.documentElement.classList.add("intro-seen"), 3200));
     document.querySelector("main")?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: "cubic-bezier(.2,.7,.1,1)" });
+    // Between pages (not on first load, where the logo intro plays): a thin gold line sweeps across.
+    if (!firstPage.current && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const sweep = document.querySelector(".page-sweep") ?? document.body.appendChild(Object.assign(document.createElement("div"), { className: "page-sweep" }));
+      sweep.animate(
+        [
+          { transform: "scaleX(0)", transformOrigin: "left", opacity: 1 },
+          { transform: "scaleX(1)", transformOrigin: "left", opacity: 1, offset: 0.55 },
+          { transform: "scaleX(1)", transformOrigin: "right", opacity: 0 },
+        ],
+        { duration: 1200, easing: "cubic-bezier(.2,.7,.1,1)" },
+      );
+    }
+    firstPage.current = false;
     return () => {
       io.disconnect();
       timers.forEach(clearTimeout);

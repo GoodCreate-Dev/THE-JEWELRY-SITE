@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { asset, content, IG_URL, path, type Lang } from "@/content/site";
 import type { FeedItem, FeedKind } from "@/lib/feed";
+import { responsive } from "@/lib/img";
 import { Ornament, PageHero } from "./Shared";
 
 /**
@@ -44,7 +45,7 @@ function FeedCard({ lang, item, index }: { lang: Lang; item: FeedItem; index: nu
   return (
     <Link href={itemHref(lang, item)} className="feed-card group rv block" style={d(`${index * 0.08}s`)}>
       <div className="frame relative aspect-[4/3]">
-        <img src={item.image} alt="" loading="lazy" />
+        <img {...responsive(item.image, "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw")} alt="" loading="lazy" />
         <span className="feed-label">{n.labels[item.kind]}</span>
       </div>
       <div className="pt-5">

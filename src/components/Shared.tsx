@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
+import { responsive } from "@/lib/img";
 import { COMPANY_URL, content, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
 import { Header } from "./Header";
 
@@ -55,7 +56,7 @@ export function PageHero({ hero, video }: { hero: { kicker: string; title: strin
   return (
     <section className="page-hero" data-hero>
       <div className="hero-img">
-        {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="auto" aria-hidden="true" /> : <img src={hero.image} alt="" />}
+        {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="auto" aria-hidden="true" /> : <img {...responsive(hero.image)} alt="" />}
       </div>
       <div className="hero-veil" />
       <div className="page-hero-inner hero-drift">
@@ -94,7 +95,7 @@ export function WindowFilm({ kicker, title, body, video, image }: { kicker: stri
     <section className="window" data-window>
       <div className="window-stick">
         <div className="window-media">
-          {video ? <video src={video} poster={image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <img src={image} alt="" />}
+          {video ? <video src={video} poster={image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <img {...responsive(image)} alt="" />}
         </div>
         <div className="window-text">
           <p className="kicker">{kicker}</p>
