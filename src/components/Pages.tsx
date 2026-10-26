@@ -45,18 +45,29 @@ function HeroLive({ src }: { src: string }) {
   );
 }
 
-/** Wraps the first occurrence of `word` in iridescent text (the dome's LED colours). */
-function Highlight({ text, word }: { text: string; word: string }) {
+/**
+ * A sentence whose words light up one by one while scrolling (Motion.tsx adds `.lit`).
+ * Japanese is lit character by character; `word` is lit as one iridescent phrase.
+ */
+function LitText({ text, word }: { text: string; word: string }) {
   const i = text.indexOf(word);
-  if (i < 0) return <>{text}</>;
+  const parts = i < 0 ? [text] : [text.slice(0, i), word, text.slice(i + word.length)];
+  const tokens = (t: string) => t.split(/(\s+)/).flatMap((w) => (/[\u3000-\u9fff\uff00-\uffef]/.test(w) ? [...w] : [w])).filter(Boolean);
   return (
     <>
-      {text.slice(0, i)}
-      <span className="iri-text">{word}</span>
-      {text.slice(i + word.length)}
+      {parts.map((part, p) =>
+        p === 1 ? (
+          <span key={p} className="lw iri-text">{part}</span>
+        ) : (
+          tokens(part).map((w, k) => (/^\s+$/.test(w) ? " " : <span key={`${p}-${k}`} className="lw">{w}</span>))
+        ),
+      )}
     </>
   );
 }
+
+/** Photos for the event types (same order as the content). */
+const TYPE_IMAGES = ["dome-2", "f-stage", "ai-aerial-gold", "ai-promenade"].map((n) => asset(`/images/${n}.jpg`));
 
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
@@ -89,10 +100,13 @@ export function HomePage({ lang }: { lang: Lang }) {
       </section>
 
       {/* statement: one large sentence, the key phrase in the dome's colours */}
-      <section className="sec statement">
+      <section className="sec statement aura">
+        <div className="collage-item c1 frame" data-speed="0.18" aria-hidden="true"><img {...responsive(asset("/images/ai-aerial-gold.jpg"), "22vw")} alt="" loading="lazy" /></div>
+        <div className="collage-item c2 frame" data-speed="0.32" aria-hidden="true"><img {...responsive(asset("/images/dome-2.jpg"), "16vw")} alt="" loading="lazy" /></div>
+        <div className="collage-item c3 frame" data-speed="0.1" aria-hidden="true"><img {...responsive(asset("/images/f-dusk.jpg"), "14vw")} alt="" loading="lazy" /></div>
         <p className="kicker rv">{h.statementLabel}</p>
-        <h2 className="display statement-text rv mt-10" style={d(".1s")}>
-          <Highlight text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} />
+        <h2 className="display statement-text mt-10" aria-label={h.statement}>
+          <span aria-hidden="true"><LitText text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} /></span>
         </h2>
         <div className="statement-foot">
           <p className="rv max-w-xl text-white/70" style={d(".15s")}>{h.statementBody}</p>
@@ -111,7 +125,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       <Marquee words={["Museum", "Exhibitions", "Events", "Osaka Bay"]} />
 
       {/* spaces */}
-      <section className="sec !pt-[clamp(60px,8vw,120px)]">
+      <section className="sec aura !pt-[clamp(60px,8vw,120px)]">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-8">
           <div>
             <p className="kicker rv">Spaces</p>
@@ -145,9 +159,9 @@ export function HomePage({ lang }: { lang: Lang }) {
             <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.programmeTitle}</h2>
           </div>
           <ol className="hscroll-track">
-            {t.events.types.map((e) => (
+            {t.events.types.map((e, i) => (
               <li key={e.no} className="hs-card">
-                <span className="hs-no display" aria-hidden="true">{e.no}</span>
+                <div className="hs-photo frame rv-img"><img {...responsive(TYPE_IMAGES[i], "(min-width: 1020px) 30vw, 80vw")} alt="" loading="lazy" /><span className="hs-no display" aria-hidden="true">{e.no}</span></div>
                 <p className="caption">{e.en}</p>
                 <h3 className="display mt-3 text-[clamp(26px,2.6vw,40px)]">{e.title}</h3>
                 <p className="mt-5 text-sm leading-[2] text-white/65">{e.body}</p>
@@ -161,9 +175,9 @@ export function HomePage({ lang }: { lang: Lang }) {
       </section>
 
       {/* relaunch: the date, full screen */}
-      <section className="relaunch">
+      <section className="relaunch aura">
         <p className="kicker rv">Re:Start</p>
-        <p className="display relaunch-date iri-text rv" style={d(".1s")}>{h.relaunch.date}</p>
+        <p className="display relaunch-date rv" style={{ ...d(".1s"), backgroundImage: `url(${asset("/images/ai-aerial-color-1600.webp")})` }}>{h.relaunch.date}</p>
         <h2 className="display rv mt-6 text-[clamp(24px,2.6vw,40px)]" style={d(".2s")}>{h.relaunch.title}</h2>
         <p className="rv mx-auto mt-6 max-w-xl text-white/70" style={d(".3s")}>{h.relaunch.body}</p>
         <Link href={path(lang, "contact")} className="btn btn-accent rv mt-10" style={d(".4s")}>{h.relaunch.cta} →</Link>
@@ -265,7 +279,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
         <div className="type-grid">
           {e.types.map((ty, i) => (
             <article key={ty.no} className="hs-card rv" style={d(`${i * 0.08}s`)}>
-              <span className="hs-no display" aria-hidden="true">{ty.no}</span>
+              <div className="hs-photo frame rv-img"><img {...responsive(TYPE_IMAGES[i], "(min-width: 1020px) 45vw, 100vw")} alt="" loading="lazy" /><span className="hs-no display" aria-hidden="true">{ty.no}</span></div>
               <p className="caption">{ty.en}</p>
               <h2 className="display mt-3 text-[clamp(26px,2.6vw,40px)]">{ty.title}</h2>
               <p className="mt-5 text-sm leading-[2] text-white/65">{ty.body}</p>
@@ -274,7 +288,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
         </div>
       </section>
       <FeedSection lang={lang} manual={feed(lang, "event")} kind="event" />
-      <section className="sec flow">
+      <section className="sec flow aura">
         <div className="flow-head">
           <p className="kicker rv">Flow</p>
           <h2 className="display sec-title rv mt-4" style={d(".1s")}>{e.flowTitle}</h2>
@@ -304,7 +318,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
     <Shell lang={lang} page="visit">
       <PageHero hero={v.hero} index="05" />
       <Marquee words={["Nanko", "Osaka Bay", "Cosmosquare", "Access"]} />
-      <section className="sec info-grid">
+      <section className="sec info-grid aura">
         <div className="rv">
           <h2 className="kicker">{v.hoursTitle}</h2>
           <p className="display info-value">{v.hours}</p>
@@ -423,7 +437,7 @@ export function ContactPage({ lang }: { lang: Lang }) {
     <Shell lang={lang} page="contact">
       <PageHero hero={c.hero} index="07" />
       <Marquee words={["Let's talk", "Exhibitions", "Events", "Receptions"]} />
-      <section className="sec contact-layout">
+      <section className="sec contact-layout aura">
         <aside className="contact-aside">
           <p className="display rv text-[clamp(24px,2.4vw,34px)] leading-snug">{c.intro}</p>
           <div className="dm-card rv" style={d(".1s")}>

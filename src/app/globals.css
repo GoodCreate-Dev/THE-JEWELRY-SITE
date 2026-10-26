@@ -216,7 +216,7 @@ html[lang="ja"] .hero-v2 h1 { font-size: clamp(44px, 7vw, 116px); line-height: 1
 
 /* statement */
 .statement { position: relative; }
-.statement-text { max-width: 1240px; font-size: clamp(36px, 5.6vw, 92px); line-height: 1.12; letter-spacing: -.01em; }
+.statement-text { position: relative; z-index: 1; max-width: min(1080px, 74%); font-size: clamp(36px, 5.6vw, 92px); line-height: 1.12; letter-spacing: -.01em; }
 html[lang="ja"] .statement-text { font-size: clamp(30px, 4.4vw, 70px); line-height: 1.5; }
 .statement-foot { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 30px; margin-top: clamp(40px, 6vw, 80px); }
 .figures { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(60px, 8vw, 110px); border-top: 1px solid rgba(184, 199, 220, .2); }
@@ -313,6 +313,50 @@ html[lang="ja"] .plate-title h2 { font-size: clamp(38px, 6vw, 96px); line-height
   .flow-head, .contact-aside { position: static; }
   .plate-photo { height: 70vh; min-height: 420px; }
   .plate-cap { display: none; }
+}
+
+/* ---------- below-the-fold richness ---------- */
+/* 1. words light up while scrolling (Motion.tsx toggles .lit) */
+.js .lw { opacity: .16; transition: opacity .6s var(--ease); }
+.js .lw.lit { opacity: 1; }
+
+/* 2. floating photo collage around the statement (data-speed parallax) */
+.statement { overflow-x: clip; }
+.collage-item { position: absolute; z-index: 0; will-change: translate; }
+.collage-item img { width: 100%; height: 100%; object-fit: cover; }
+.collage-item.c1 { right: var(--pad); top: 6%; width: 22vw; aspect-ratio: 4 / 5; }
+.collage-item.c2 { right: 29vw; top: 62%; width: 14vw; aspect-ratio: 1; opacity: .9; }
+.collage-item.c3 { right: var(--pad); top: 74%; width: 12vw; aspect-ratio: 3 / 4; opacity: .85; }
+
+/* 3. the date filled with the glowing dome */
+.relaunch-date { color: transparent; background-size: cover; background-position: 50% 45%; -webkit-background-clip: text; background-clip: text; animation: datePan 22s ease-in-out infinite alternate; filter: saturate(1.35) brightness(1.7) contrast(1.1); }
+@keyframes datePan { from { background-position: 30% 40%; } to { background-position: 70% 55%; } }
+
+/* 4. event cards with photos */
+.hs-photo { position: relative; aspect-ratio: 16 / 10; margin: calc(-1 * clamp(28px, 3vw, 44px)) calc(-1 * clamp(28px, 3vw, 44px)) 26px; }
+.hs-photo img { transition: scale 2.8s var(--ease), transform 1.6s var(--ease), filter .8s; filter: saturate(.85) brightness(.8); }
+.hs-card:hover .hs-photo img { transform: scale(1.06); filter: saturate(1.05) brightness(1); }
+.hs-photo::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(transparent 40%, rgba(5, 7, 13, .8)); pointer-events: none; }
+.hs-photo .hs-no { position: absolute; left: 20px; bottom: 6px; z-index: 2; margin: 0; font-size: clamp(56px, 6vw, 90px); color: var(--color-white); -webkit-text-stroke: 0; text-shadow: 0 6px 30px rgba(5, 7, 13, .6); }
+
+/* 5. soft drifting light in the dome's colours behind sections */
+.aura { position: relative; isolation: isolate; overflow-x: clip; }
+.aura::before { content: ""; position: absolute; inset: -10% -15%; z-index: -1; pointer-events: none; background: radial-gradient(32% 28% at 18% 30%, rgba(95, 227, 212, .09), transparent 70%), radial-gradient(30% 26% at 82% 70%, rgba(169, 139, 255, .1), transparent 70%), radial-gradient(22% 20% at 60% 15%, rgba(255, 143, 207, .05), transparent 70%); animation: auraDrift 26s ease-in-out infinite alternate; }
+@keyframes auraDrift { from { transform: translate(-3%, -2%) scale(1); } to { transform: translate(3%, 3%) scale(1.08); } }
+
+/* 6. contact ending over the dome's reflection */
+.contact-band { position: relative; isolation: isolate; overflow: hidden; }
+.contact-band-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 50% 85%; opacity: .45; filter: saturate(.9) blur(1px); animation: pageDrift 30s ease-in-out infinite alternate; }
+.contact-band::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 60% at 50% 50%, rgba(5, 7, 13, .55), rgba(5, 7, 13, .92)); }
+
+@media (max-width: 1020px) {
+  .statement-text { max-width: none; }
+  .collage-item.c2, .collage-item.c3 { display: none; }
+  .collage-item.c1 { position: relative; right: auto; top: auto; display: block; width: 62%; margin: 0 0 40px auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .lw { opacity: 1; }
+  .aura::before, .relaunch-date, .contact-band-bg { animation: none; }
 }
 
 /* closing invitation + footer */

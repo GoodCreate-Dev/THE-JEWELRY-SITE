@@ -57,6 +57,16 @@ export function Motion() {
         const r = el.getBoundingClientRect();
         el.style.setProperty("--lp", clamp01(-r.top / ((r.height - vh) * 0.8)).toFixed(4));
       });
+      // Statement words light up one by one as they pass 62% of the screen height.
+      document.querySelectorAll<HTMLElement>(".lw").forEach((w) => {
+        w.classList.toggle("lit", w.getBoundingClientRect().top < vh * 0.62);
+      });
+      // Floating photos drift at their own speed (data-speed: fraction of the scroll).
+      document.querySelectorAll<HTMLElement>("[data-speed]").forEach((el) => {
+        const r = el.parentElement!.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) return;
+        el.style.translate = `0 ${((r.top + r.height / 2 - vh / 2) * -Number(el.dataset.speed)).toFixed(1)}px`;
+      });
       document.querySelectorAll<HTMLImageElement>(".frame img").forEach((img) => {
         const r = img.parentElement!.getBoundingClientRect();
         if (r.bottom < 0 || r.top > vh) return;

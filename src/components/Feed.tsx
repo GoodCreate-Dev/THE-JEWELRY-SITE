@@ -80,7 +80,7 @@ export function FeedSection({ lang, manual, kind, limit, all }: { lang: Lang; ma
   const items = [...manual, ...ig].sort((a, b) => dateKey(b.date) - dateKey(a.date));
   const shown = limit ? items.slice(0, limit) : items;
   return (
-    <section ref={ref} className="sec">
+    <section ref={ref} className="sec aura">
       {!all && (
         <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
           <div>

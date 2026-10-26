@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 import { responsive } from "@/lib/img";
-import { COMPANY_URL, content, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
+import { asset, COMPANY_URL, content, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
 import { Header } from "./Header";
 
 /** Every page: header, content, footer. */
@@ -122,6 +122,7 @@ export function ContactBand({ lang }: { lang: Lang }) {
   const t = content[lang];
   return (
     <section className="contact-band">
+      <img {...responsive(asset("/images/ai-front.jpg"))} alt="" className="contact-band-bg" loading="lazy" />
       <p className="kicker rv">Contact</p>
       <h2 className="display contact-band-title rv mt-8" style={{ "--d": ".1s" } as React.CSSProperties}>
         {t.home.contactTitle}
