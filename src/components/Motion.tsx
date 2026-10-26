@@ -65,7 +65,9 @@ export function Motion() {
       document.querySelectorAll<HTMLElement>("[data-speed]").forEach((el) => {
         const r = el.parentElement!.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) return;
-        el.style.translate = `0 ${((r.top + r.height / 2 - vh / 2) * -Number(el.dataset.speed)).toFixed(1)}px`;
+        // Small, capped drift so a photo never leaves its own section.
+        const shift = Math.max(-90, Math.min(90, (r.top + r.height / 2 - vh / 2) * -Number(el.dataset.speed)));
+        el.style.translate = `0 ${shift.toFixed(1)}px`;
       });
       document.querySelectorAll<HTMLImageElement>(".frame img").forEach((img) => {
         const r = img.parentElement!.getBoundingClientRect();
