@@ -13,7 +13,7 @@ import sharp from "sharp";
 
 const root = path.resolve(import.meta.dirname, "..");
 const app = path.join(root, "src", "app");
-const BLACK = "#0b0b0a";
+const BLACK = "#05070d";
 
 // Logo paths from the site logo, drawn in white (the file itself uses currentColor).
 const logoSvg = await readFile(path.join(root, "public", "images", "logo.svg"), "utf8");
@@ -72,8 +72,8 @@ const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${
   </defs>
   <rect width="${W}" height="${H}" fill="url(#g)"/>
   <g transform="translate(110 ${H / 2 - lhOg / 2 - 40}) scale(${lwOg / lw})">${logoInner}</g>
-  <line x1="110" x2="170" y1="${H / 2 + lhOg / 2 - 2}" y2="${H / 2 + lhOg / 2 - 2}" stroke="#c5a265" stroke-width="2"/>
-  <text x="110" y="${H / 2 + lhOg / 2 + 34}" fill="#e8d3a2" font-family="Georgia, 'Times New Roman', serif" font-size="22" letter-spacing="5">MUSEUM &amp; EVENT SPACE · OSAKA BAY</text>
+  <line x1="110" x2="170" y1="${H / 2 + lhOg / 2 - 2}" y2="${H / 2 + lhOg / 2 - 2}" stroke="#b8c7dc" stroke-width="2"/>
+  <text x="110" y="${H / 2 + lhOg / 2 + 34}" fill="#e6edf7" font-family="Georgia, 'Times New Roman', serif" font-size="22" letter-spacing="5">MUSEUM &amp; EVENT SPACE · OSAKA BAY</text>
 </svg>`;
 await sharp(photo).composite([{ input: Buffer.from(overlay) }]).jpeg({ quality: 84, mozjpeg: true }).toFile(path.join(root, "public", "og.jpg"));
 
