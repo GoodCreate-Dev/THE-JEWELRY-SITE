@@ -110,8 +110,20 @@ export function HomePage({ lang }: { lang: Lang }) {
         <SpacesIndex lang={lang} />
       </section>
 
-      {/* the bay film opens from a framed window to full screen while scrolling */}
-      <WindowFilm kicker={h.window.kicker} title={h.window.title} body={h.window.body} image={asset("/images/ai-aerial-color.jpg")} />
+      {/* lights on: scrolling turns the dark dome into its full colour illumination */}
+      <section className="lights" data-lights>
+        <div className="lights-stick">
+          <img {...responsive(asset("/images/ai-aerial-color.jpg"))} alt="" className="lights-img" />
+          <div className="lights-text">
+            <p className="kicker">{h.window.kicker}</p>
+            <h2 className="display sec-title mt-5">
+              <span className="lights-before">{h.lights.before}</span>
+              <span className="lights-after">{h.lights.after}</span>
+            </h2>
+            <p className="lights-after mx-auto mt-6 max-w-xl text-white/80">{h.window.body}</p>
+          </div>
+        </div>
+      </section>
 
       {/* relaunch band */}
       <section className="grid md:grid-cols-[7fr_5fr]">

@@ -205,7 +205,8 @@ html[lang="ja"] .hero h1 { font-size: clamp(40px, 6vw, 96px); }
 
 /* ---------- page hero (sub pages) ---------- */
 .page-hero { position: relative; min-height: 72svh; display: flex; align-items: flex-end; overflow: hidden; }
-.page-hero .hero-img img { animation-duration: 10s; }
+.page-hero .hero-img img { animation: pageDrift 26s ease-in-out infinite alternate; }
+@keyframes pageDrift { from { transform: scale(1.12) translate(1%, .6%); } to { transform: scale(1.03) translate(-1%, -.4%); } }
 .page-hero .hero-veil { background: radial-gradient(90% 80% at 50% 40%, transparent, rgba(11,11,10,.55)), linear-gradient(rgba(11,11,10,.65), rgba(11,11,10,.25) 45%, rgba(11,11,10,.92)); }
 .page-hero-inner { position: relative; width: 100%; padding: 200px var(--pad) 70px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 30px; }
 .page-hero h1 { font-size: clamp(48px, 7vw, 112px); }
@@ -248,6 +249,25 @@ html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
   .spaces-detail > div { padding-left: 52px; }
 }
 @media (prefers-reduced-motion: reduce) { .spaces-list li.on .spaces-progress { animation: none; transform: scaleX(1); } }
+
+/* ---------- lights on (home): --lp 0 → 1 while scrolling; default shows the lit state ---------- */
+.lights { position: relative; height: 260vh; background: var(--color-black); }
+.lights-stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+.lights-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; scale: calc(1.14 - var(--lp, 1) * .14); filter: grayscale(calc(1 - var(--lp, 1))) brightness(calc(.22 + var(--lp, 1) * .78)) saturate(calc(.7 + var(--lp, 1) * .45)); }
+.lights-stick::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 60% at 50% 50%, rgba(11, 11, 10, .25), rgba(11, 11, 10, .75)); pointer-events: none; }
+.lights-text { position: relative; z-index: 1; max-width: 960px; padding: 0 var(--pad); text-align: center; }
+.lights-text h2 { display: grid; }
+.lights-text h2 > span { grid-area: 1 / 1; }
+.lights-before { opacity: clamp(0, calc(1 - var(--lp, 1) * 2.4), 1); translate: 0 calc(var(--lp, 1) * -30px); }
+.lights-after { opacity: clamp(0, calc((var(--lp, 1) - .4) * 3), 1); translate: 0 calc((1 - var(--lp, 1)) * 30px); }
+.lights-text h2, .lights-text p { text-shadow: 0 2px 24px rgba(11, 11, 10, .85), 0 0 2px rgba(11, 11, 10, .6); }
+
+/* ---------- phone: floating enquiry button (Header.tsx) ---------- */
+.float-cta { display: none; }
+@media (max-width: 1020px) {
+  .float-cta { position: fixed; left: 50%; bottom: 18px; z-index: 58; display: block; padding: 14px 28px; background: var(--gold-grad); color: var(--color-black); font-size: 12px; font-weight: 500; letter-spacing: .16em; white-space: nowrap; box-shadow: 0 10px 30px rgba(0, 0, 0, .45); translate: -50% 140%; opacity: 0; transition: translate .7s var(--ease), opacity .5s; }
+  .float-cta.show { translate: -50% 0; opacity: 1; }
+}
 
 /* ---------- News & Events cards ---------- */
 .feed-label { position: absolute; left: 22px; top: 22px; z-index: 1; padding: 4px 10px; border: 1px solid rgba(232, 211, 162, .45); background: rgba(11, 11, 10, .55); font-size: 10px; letter-spacing: .25em; color: var(--color-gold-hi); }
@@ -308,7 +328,7 @@ html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
   .js .rv, .js .rv-img { opacity: 1; transform: none; clip-path: none; transition: none; }
   .js .rv-img img { scale: 1; }
   .hero-img img, .gold-text, .hero-scroll::after, body::after { animation: none; }
-  .hero-live, .hero-img .hero-live img.hero-live-led, .hero-live i { animation: none; }
+  .hero-live, .hero-img .hero-live img.hero-live-led, .hero-live i, .page-hero .hero-img img { animation: none; }
   .hero-live-water { filter: none; }
   .intro { display: none !important; }
 }

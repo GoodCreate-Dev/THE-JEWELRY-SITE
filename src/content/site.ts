@@ -50,6 +50,7 @@ export type Content = {
     spacesTitle: string;
     spacesLead: string;
     window: { kicker: string; title: string; body: string };
+    lights: { before: string; after: string };
     relaunch: { date: string; title: string; body: string; cta: string };
     programmeTitle: string;
     visitTitle: string;
@@ -176,6 +177,7 @@ const ja: Content = {
       title: "海に浮かぶ、光のドーム。",
       body: "大阪湾の水辺に佇むTHE JEWELRY。昼は空を映し、夜は光をまとう、ベイエリアの新しいランドマークです。",
     },
+    lights: { before: "日が沈むと、", after: "ジュエリーは、光をまとう。" },
     relaunch: {
       date: "11.01",
       title: "催事・展示のご依頼、正式受付を開始します。",
@@ -356,6 +358,7 @@ const en: Content = {
       title: "A dome of light on the water.",
       body: "Set on the edge of Osaka Bay, THE JEWELRY reflects the sky by day and glows by night: a new landmark for the Bay Area.",
     },
+    lights: { before: "As the sun goes down,", after: "the Jewelry puts on its light." },
     relaunch: {
       date: "11.01",
       title: "We now officially welcome events and exhibitions.",

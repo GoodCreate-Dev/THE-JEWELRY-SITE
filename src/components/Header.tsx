@@ -10,6 +10,7 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const [solid, setSolid] = useState(false);
   const [away, setAway] = useState(false);
   const [open, setOpen] = useState(false);
+  const [float, setFloat] = useState(false);
 
   // Solid after the hero edge; slides away while scrolling down, returns on scroll up.
   useEffect(() => {
@@ -17,6 +18,7 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
     const onScroll = () => {
       const y = window.scrollY;
       setSolid(y > 60);
+      setFloat(y > window.innerHeight * 0.9);
       if (Math.abs(y - last) > 6) {
         setAway(y > last && y > 240);
         last = y;
@@ -75,6 +77,12 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
           </div>
         </div>
       </header>
+
+      {page !== "contact" && (
+        <Link href={path(lang, "contact")} className={`float-cta${float && !open ? " show" : ""}`} tabIndex={float ? 0 : -1}>
+          {t.nav.cta}
+        </Link>
+      )}
 
       <nav className="mobile-menu" aria-label="Mobile" inert={!open}>
         {PAGES.map((p) => (

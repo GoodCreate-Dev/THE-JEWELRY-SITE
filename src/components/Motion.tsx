@@ -15,6 +15,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  * finished state, so a paused frame loop never hides anything:
  *   --hp on [data-hero]    0 → 1 as the hero scrolls away (media grows, text drifts up)
  *   --wp on [data-window]  0 → 1 as the window section opens to full screen
+ *   --lp on [data-lights]  0 → 1 as the dome "switches on" (home)
  *   .frame img             slow parallax
  */
 export function Motion() {
@@ -35,6 +36,10 @@ export function Motion() {
         const r = el.getBoundingClientRect();
         // opens over the first 70% of the travel, then holds while the text reads
         el.style.setProperty("--wp", clamp01(-r.top / ((r.height - vh) * 0.7)).toFixed(4));
+      });
+      document.querySelectorAll<HTMLElement>("[data-lights]").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--lp", clamp01(-r.top / ((r.height - vh) * 0.8)).toFixed(4));
       });
       document.querySelectorAll<HTMLImageElement>(".frame img").forEach((img) => {
         const r = img.parentElement!.getBoundingClientRect();
