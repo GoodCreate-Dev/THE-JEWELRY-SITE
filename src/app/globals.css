@@ -180,6 +180,26 @@ html[lang="ja"] .hero h1 { font-size: clamp(40px, 6vw, 96px); }
 .hero-scroll::after { content: ""; width: 1px; height: 60px; background: linear-gradient(var(--color-gold), transparent); animation: drop 2.6s var(--ease) infinite; transform-origin: top; }
 @keyframes drop { 0% { transform: scaleY(0); } 55% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
 
+/* ---------- living hero still (HeroLive) ---------- */
+/* Box with the photo's own proportions (2752×1536), sized to cover the hero, so masks line up. */
+.hero-img:has(.hero-live) { container-type: size; overflow: hidden; }
+/* Horizontally the dome (60% across) is kept centred on narrow screens, without exposing an edge. */
+.hero-live { --w: max(100cqw, calc(100cqh * 1.7917)); position: absolute; top: 50%; left: clamp(calc(100cqw - var(--w)), calc(50cqw - var(--w) * .597), 0px); width: var(--w); height: max(100cqh, calc(100cqw / 1.7917)); translate: 0 -50%; animation: heroDrift 28s ease-in-out infinite alternate; }
+.hero-live img, .hero-live > div { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-img .hero-live img { object-fit: fill; transform: none; animation: none; }
+/* water: everything below the shoreline ripples */
+.hero-live-water { filter: url(#hero-water); -webkit-mask-image: linear-gradient(to bottom, transparent 55%, #000 63%); mask-image: linear-gradient(to bottom, transparent 55%, #000 63%); }
+/* LED colours slowly shift on the glass and in its reflection */
+.hero-live-reflection { -webkit-mask-image: radial-gradient(ellipse 23% 19% at 59.7% 80%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 23% 19% at 59.7% 80%, #000 50%, transparent 100%); }
+.hero-live-dome { -webkit-mask-image: radial-gradient(ellipse 21% 21% at 59.7% 37%, #000 72%, transparent 100%); mask-image: radial-gradient(ellipse 21% 21% at 59.7% 37%, #000 72%, transparent 100%); }
+.hero-img .hero-live img.hero-live-led { animation: ledShift 16s ease-in-out infinite alternate; }
+/* twinkling lights in the sky */
+.hero-live i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px 2px rgba(214, 236, 255, .55); opacity: 0; animation: twinkle 6s ease-in-out infinite; }
+@keyframes heroDrift { from { transform: scale(1.07) translate(1%, .5%); } to { transform: scale(1.02) translate(-.8%, -.4%); } }
+@keyframes ledShift { 0% { filter: saturate(.9) contrast(1.05) hue-rotate(0deg); } 50% { filter: saturate(1.15) contrast(1.05) hue-rotate(-50deg); } 100% { filter: saturate(1) contrast(1.05) hue-rotate(40deg); } }
+@keyframes twinkle { 0%, 100% { opacity: 0; scale: .5; } 50% { opacity: .9; scale: 1; } }
+@media (max-width: 768px) { .hero-live-water { filter: none; } }
+
 /* ---------- page hero (sub pages) ---------- */
 .page-hero { position: relative; min-height: 72svh; display: flex; align-items: flex-end; overflow: hidden; }
 .page-hero .hero-img img { animation-duration: 10s; }
@@ -254,5 +274,7 @@ html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
   .js .rv, .js .rv-img { opacity: 1; transform: none; clip-path: none; transition: none; }
   .js .rv-img img { scale: 1; }
   .hero-img img, .gold-text, .hero-scroll::after, body::after { animation: none; }
+  .hero-live, .hero-img .hero-live img.hero-live-led, .hero-live i { animation: none; }
+  .hero-live-water { filter: none; }
   .intro { display: none !important; }
 }

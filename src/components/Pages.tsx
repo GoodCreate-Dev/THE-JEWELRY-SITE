@@ -10,6 +10,39 @@ import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
 
 /* ======================= HOME ======================= */
+
+// Sky twinkles, in image coordinates (% of width, % of height, delay in s).
+const TWINKLES = [
+  [11, 12, 0], [27, 21, 1.8], [44, 7, 3.1], [71, 9, 0.9], [84, 15, 2.4], [93, 29, 4.2], [6, 33, 3.6], [36, 30, 5.1],
+];
+
+/**
+ * Hero still made to feel like film: the camera drifts, the water ripples, the dome's LED
+ * colours shift and lights twinkle. All layers share the photo's proportions (cover-sized box)
+ * so the effects stay on the dome and its reflection at any screen size.
+ */
+function HeroLive({ src }: { src: string }) {
+  return (
+    <div className="hero-live" aria-hidden="true">
+      <svg className="absolute size-0" focusable="false">
+        <filter id="hero-water" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.002 0.06" numOctaves="2" seed="7">
+            <animate attributeName="baseFrequency" dur="14s" values="0.002 0.06;0.0026 0.078;0.002 0.06" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </svg>
+      <img src={src} alt="" />
+      <div className="hero-live-water"><img src={src} alt="" /></div>
+      <div className="hero-live-water hero-live-reflection"><img src={src} alt="" className="hero-live-led" /></div>
+      <div className="hero-live-dome"><img src={src} alt="" className="hero-live-led" /></div>
+      {TWINKLES.map(([x, y, t]) => (
+        <i key={`${x}-${y}`} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${t}s` }} />
+      ))}
+    </div>
+  );
+}
+
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
   const h = t.home;
@@ -19,7 +52,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* hero */}
       <section className="hero" data-hero>
         <div className="hero-img">
-          <img src={asset("/images/ai-front.jpg")} alt="" />
+          <HeroLive src={asset("/images/ai-front.jpg")} />
         </div>
         <div className="hero-veil" />
         <div className="hero-lines" aria-hidden="true"><i /><i /></div>
