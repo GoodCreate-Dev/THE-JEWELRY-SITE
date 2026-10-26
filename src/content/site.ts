@@ -86,7 +86,20 @@ export type Content = {
     routes: Route[];
     routeEnd: { station: string; walk: string; note: string };
   };
-  news: { hero: Hero; items: { date: string; tag: string; title: string; body: string }[]; igTitle: string; igNote: string; follow: string };
+  news: {
+    hero: Hero;
+    items: { id: string; date: string; title: string; body: string; image: string }[];
+    feedTitle: string;
+    eventsTitle: string;
+    labels: { news: string; event: string };
+    readMore: string;
+    viewOnIg: string;
+    back: string;
+    viewAll: string;
+    comingSoon: string;
+    igNote: string;
+    follow: string;
+  };
   contact: {
     hero: Hero;
     intro: string;
@@ -255,12 +268,19 @@ const ja: Content = {
   news: {
     hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("dome-2.jpg") },
     items: [
-      { date: "2026.11.01", tag: "Info", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。" },
-      { date: "2026.10.31", tag: "Info", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。" },
+      { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("dome-3.jpg") },
+      { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("dome-1.jpg") },
     ],
-    igTitle: "Instagram",
+    feedTitle: "お知らせ・イベント",
+    eventsTitle: "開催情報",
+    labels: { news: "NEWS", event: "EVENT" },
+    readMore: "詳しく見る",
+    viewOnIg: "Instagramで見る",
+    back: "お知らせ一覧へ",
+    viewAll: "一覧を見る",
+    comingSoon: "近日公開予定",
     igNote: "催事・展示の最新の様子は、公式Instagramでご覧いただけます。",
-    follow: "フォローする",
+    follow: "Instagramをフォロー",
   },
   contact: {
     hero: { kicker: "Contact", title: "お問い合わせ", lead: "催事・展示のご相談をお待ちしています。", image: IMG("dome-1.jpg") },
@@ -428,12 +448,19 @@ const en: Content = {
   news: {
     hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("dome-2.jpg") },
     items: [
-      { date: "2026.11.01", tag: "Info", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers." },
-      { date: "2026.10.31", tag: "Info", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed." },
+      { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("dome-3.jpg") },
+      { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("dome-1.jpg") },
     ],
-    igTitle: "Instagram",
+    feedTitle: "News & Events",
+    eventsTitle: "What’s on",
+    labels: { news: "NEWS", event: "EVENT" },
+    readMore: "Read more",
+    viewOnIg: "View on Instagram",
+    back: "Back to News",
+    viewAll: "View all",
+    comingSoon: "Coming soon",
     igNote: "See our latest events and exhibitions on our official Instagram.",
-    follow: "Follow",
+    follow: "Follow on Instagram",
   },
   contact: {
     hero: { kicker: "Contact", title: "Contact", lead: "We look forward to hearing about your event.", image: IMG("dome-1.jpg") },

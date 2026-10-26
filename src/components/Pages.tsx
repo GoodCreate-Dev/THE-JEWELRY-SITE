@@ -3,7 +3,8 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { asset, content, IG_URL, MAP_EMBED, PARKING_URL, path, type Content, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
-import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
+import { feed, type FeedItem, type FeedKind } from "@/lib/feed";
+import { ContactBand, Marquee, Ornament, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
 
@@ -123,32 +124,19 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* visit + news teaser */}
-      <section className="sec light grid gap-16 md:grid-cols-2">
-        <div>
+      {/* visit teaser */}
+      <section className="sec light">
+        <div className="split">
           <p className="kicker rv">Visit</p>
-          <h2 className="display sec-title rv mt-4">{h.visitTitle}</h2>
-          <p className="rv mt-6 max-w-md text-black/70" style={d(".1s")}>{h.visitBody}</p>
-          <Link href={path(lang, "visit")} className="link-arrow rv mt-10 !text-gold-lo" style={d(".2s")}>{t.common.more} <span>→</span></Link>
-        </div>
-        <div>
-          <p className="kicker rv">News</p>
-          <h2 className="display sec-title rv mt-4">{h.newsTitle}</h2>
-          <ul className="rv mt-8 border-t border-black/80" style={d(".1s")}>
-            {t.news.items.map((n) => (
-              <li key={n.title} className="border-b border-black/10 py-5">
-                <Link href={path(lang, "news")} className="grid grid-cols-[100px_1fr] gap-4">
-                  <time className="text-xs text-black/50">{n.date}</time>
-                  <span className="text-sm">{n.title}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <Link href={path(lang, "news")} className="link-arrow rv mt-10 !text-gold-lo" style={d(".2s")}>{t.common.more} <span>→</span></Link>
+          <div>
+            <h2 className="display sec-title rv">{h.visitTitle}</h2>
+            <p className="rv mt-6 max-w-xl text-black/70" style={d(".1s")}>{h.visitBody}</p>
+            <Link href={path(lang, "visit")} className="link-arrow rv mt-10 !text-gold-lo" style={d(".2s")}>{t.common.more} <span>→</span></Link>
+          </div>
         </div>
       </section>
 
-      <InstagramBlock lang={lang} />
+      <FeedSection lang={lang} limit={3} />
 
       <ContactBand lang={lang} />
     </Shell>
@@ -239,6 +227,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
           ))}
         </div>
       </section>
+      <FeedSection lang={lang} kind="event" />
       <section className="sec">
         <div className="split">
           <p className="kicker rv">Flow</p>
@@ -351,31 +340,88 @@ function RouteChart({ route, end, delay }: { route: Content["visit"]["routes"][n
   );
 }
 
-/**
- * Instagram section (Home and News). Until the client connects their account for a live feed,
- * the tiles are placeholder photos that all link to the official profile.
- */
-function InstagramBlock({ lang }: { lang: Lang }) {
+/** Detail page link for a feed item: /news/<id>/ (or /en/news/<id>/). */
+const feedHref = (lang: Lang, id: string) => `${path(lang, "news")}${id}/`;
+
+/** One News / Event card: image, label, date, title, two lines of text. Opens the full post on this site. */
+function FeedCard({ lang, item, index }: { lang: Lang; item: FeedItem; index: number }) {
   const n = content[lang].news;
-  const tiles = ["f-concert.jpg", "dome-5.jpg", "f-dusk.jpg", "f-stage.jpg", "f-day.jpg", "dome-2.jpg"].map((f) => asset(`/images/${f}`));
+  return (
+    <Link href={feedHref(lang, item.id)} className="feed-card group rv block" style={d(`${index * 0.08}s`)}>
+      <div className="frame relative aspect-[4/3]">
+        <img src={item.image} alt="" loading="lazy" />
+        <span className="feed-label">{n.labels[item.kind]}</span>
+      </div>
+      <div className="pt-5">
+        <time className="text-[11px] tracking-[.2em] text-white/45">{item.date}</time>
+        <h3 className="display mt-2 line-clamp-2 text-[22px] leading-snug transition-colors duration-500 group-hover:text-gold-hi">{item.title}</h3>
+        <p className="mt-3 line-clamp-2 text-sm text-white/55">{item.desc}</p>
+        <span className="mt-4 inline-flex items-center gap-2 text-[11px] tracking-[.2em] text-gold/0 transition-colors duration-500 group-hover:text-gold">
+          {item.permalink ? n.viewOnIg : n.readMore} <span>→</span>
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+/**
+ * News & Events grid. Home shows the latest few, the News page all, the Events page only
+ * Instagram posts tagged as events (or "coming soon" until there are some).
+ */
+function FeedSection({ lang, kind, limit, all }: { lang: Lang; kind?: FeedKind; limit?: number; all?: boolean }) {
+  const n = content[lang].news;
+  const items = feed(lang, kind);
+  const shown = limit ? items.slice(0, limit) : items;
   return (
     <section className="sec">
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <p className="kicker rv">@thejewelry_official</p>
-          <h2 className="display sec-title rv mt-3">{n.igTitle}</h2>
+      {!all && (
+        <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="kicker rv">{kind === "event" ? "Events" : "News"}</p>
+            <h2 className="display sec-title rv mt-4" style={d(".1s")}>{kind === "event" ? n.eventsTitle : n.feedTitle}</h2>
+          </div>
+          {limit && items.length > limit && (
+            <Link href={path(lang, "news")} className="link-arrow rv" style={d(".2s")}>{n.viewAll} <span>→</span></Link>
+          )}
         </div>
-        <a href={IG_URL} target="_blank" rel="noopener" className="link-arrow rv">{n.follow} <span>→</span></a>
+      )}
+      {shown.length === 0 ? (
+        <p className="display rv py-10 text-center text-3xl text-white/60">{n.comingSoon}</p>
+      ) : (
+        <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map((item, i) => (
+            <FeedCard key={item.id} lang={lang} item={item} index={i} />
+          ))}
+        </div>
+      )}
+      <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-gold/20 pt-8">
+        <p className="caption">{n.igNote}</p>
+        <a href={IG_URL} target="_blank" rel="noopener" className="link-arrow">{n.follow} <span>↗</span></a>
       </div>
-      <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
-        {tiles.map((src, i) => (
-          <a key={src} href={IG_URL} target="_blank" rel="noopener" aria-label="Instagram @thejewelry_official" className="frame rv-img aspect-square" style={d(`${i * 0.06}s`)}>
-            <img src={src} alt="" loading="lazy" />
-          </a>
-        ))}
-      </div>
-      <p className="caption mt-4">{n.igNote}</p>
     </section>
+  );
+}
+
+/** Full post page for a news item or Instagram post: large image, full text, link out to Instagram. */
+export function FeedDetailPage({ lang, item }: { lang: Lang; item: FeedItem }) {
+  const n = content[lang].news;
+  return (
+    <Shell lang={lang} page="news">
+      <PageHero hero={{ kicker: n.labels[item.kind], title: item.title, lead: item.date, image: item.image }} />
+      <section className="sec light">
+        <div className="mx-auto max-w-3xl">
+          <p className="rv whitespace-pre-line text-[17px] leading-[2.2] text-black/75">{item.desc}</p>
+          <Ornament className="rv my-14 max-w-xs" />
+          {item.permalink && (
+            <a href={item.permalink} target="_blank" rel="noopener" className="btn btn-dark rv">{n.viewOnIg} ↗</a>
+          )}
+          <div className="mt-16 border-t border-black/10 pt-8">
+            <Link href={path(lang, "news")} className="link-arrow !text-gold-lo">← {n.back}</Link>
+          </div>
+        </div>
+      </section>
+      <ContactBand lang={lang} />
+    </Shell>
   );
 }
 
@@ -386,21 +432,7 @@ export function NewsPage({ lang }: { lang: Lang }) {
     <Shell lang={lang} page="news">
       <PageHero hero={n.hero} />
       <Marquee words={["News", "Instagram", "@thejewelry_official"]} />
-      <section className="sec light">
-        <ul className="border-t border-black/80">
-          {n.items.map((it, i) => (
-            <li key={it.title} className="rv grid gap-2 border-b border-black/10 py-8 md:grid-cols-[140px_90px_1fr]" style={d(`${i * 0.08}s`)}>
-              <time className="text-sm text-black/50">{it.date}</time>
-              <span className="text-[11px] tracking-[.2em] text-gold-lo">{it.tag}</span>
-              <div>
-                <h2 className="display text-[clamp(20px,2vw,28px)]">{it.title}</h2>
-                <p className="mt-2 text-sm text-black/65">{it.body}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-      <InstagramBlock lang={lang} />
+      <FeedSection lang={lang} all />
       <ContactBand lang={lang} />
     </Shell>
   );

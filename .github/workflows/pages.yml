@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Hourly rebuild picks up new tagged Instagram posts (like the LOBMEYR cron).
+  schedule:
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -24,6 +27,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Tagged Instagram posts -> public/instagram/posts.json + images (skips cleanly without a token).
+      - run: node scripts/fetch-instagram.mjs
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
       # Google Fonts downloads occasionally fail in CI; retry the build up to 3 times.
       - run: |
           for i in 1 2 3; do
