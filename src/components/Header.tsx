@@ -13,7 +13,7 @@ function menuImage(lang: Lang, p: PageKey) {
 }
 
 /**
- * Fixed header: small logo left; language, enquiry and MENU right. MENU opens a full-screen
+ * Fixed header (no logo; the home hero carries it): language, enquiry and MENU on the right. MENU opens a full-screen
  * menu with large numbered page names and a photo of the page under the pointer.
  */
 export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
@@ -67,7 +67,6 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
           </div>
         )}
         <div className="head-row">
-          <Link href={path(lang, "home")} className="logo" aria-label="THE JEWELRY" />
           <div className="head-right">
             <span className="head-lang">
               <Link href={path("ja", page)} aria-current={lang === "ja" ? "true" : undefined} lang="ja">JP</Link>

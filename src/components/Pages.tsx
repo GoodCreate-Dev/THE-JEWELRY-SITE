@@ -81,7 +81,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
         <div className="hero-veil" />
         <div className="hero-inner hero-drift">
-          <span className="logo rv w-[clamp(109px,10.4vw,161px)]" />
+          <span className="logo rv w-[clamp(136px,13vw,200px)]" />
           <p className="kicker rv" style={d(".15s")}>{h.kicker}</p>
           <h1 className="display rv letters" style={d(".3s")} aria-label={h.title.join(" ")}>
             <span aria-hidden="true"><SplitText text={h.title[0]} /></span>

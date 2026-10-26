@@ -142,7 +142,7 @@ body::after { content: ""; position: fixed; inset: -50%; z-index: 80; pointer-ev
 .notice-close { position: absolute; right: calc(var(--pad) - 10px); top: 50%; translate: 0 -50%; width: 32px; height: 32px; background: none; border: 0; color: rgba(238, 241, 246, .55); font-size: 16px; line-height: 1; cursor: pointer; transition: color .3s; }
 .notice-close:hover { color: var(--color-accent-hi); }
 .notice-closed .notice-bar { display: none; }
-.head-row { display: flex; justify-content: space-between; align-items: center; padding: 22px var(--pad); transition: padding .6s var(--ease); }
+.head-row { display: flex; justify-content: flex-end; align-items: center; padding: 22px var(--pad); transition: padding .6s var(--ease); }
 .site-head.solid .head-row { padding-block: 12px; }
 .head-row .logo { width: 46px; transition: width .6s var(--ease); }
 .site-head.solid .head-row .logo { width: 36px; }
