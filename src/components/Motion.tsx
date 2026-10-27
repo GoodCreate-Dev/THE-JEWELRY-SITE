@@ -109,7 +109,7 @@ export function Motion() {
     });
     timers.push(window.setTimeout(() => els.forEach(show), 4000));
     // After the first-visit logo intro, later page changes reveal without its extra delay.
-    timers.push(window.setTimeout(() => document.documentElement.classList.add("intro-seen"), 3700));
+    timers.push(window.setTimeout(() => document.documentElement.classList.add("intro-seen"), 3900));
     document.querySelector("main")?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: "cubic-bezier(.2,.7,.1,1)" });
     // Between pages (not on first load, where the logo intro plays): a thin gold line sweeps across.
     if (!firstPage.current && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {

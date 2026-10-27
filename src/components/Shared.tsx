@@ -16,11 +16,11 @@ export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; chi
   );
 }
 
-/** Dome opening, once per visit: the logo shines in, then an iridescent ring opens to reveal the page (CSS). */
+/** Curtain opening, once per visit: the logo shines in, then the black splits left and right to reveal the page (CSS). */
 export function Intro() {
   return (
     <div className="intro" aria-hidden="true">
-      <span className="intro-ring" />
+      <span className="intro-seam" />
       <div className="intro-mark">
         <span className="intro-logo"><span className="logo" /><span className="logo shine" /></span>
         <span className="intro-line" />
