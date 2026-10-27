@@ -7,6 +7,7 @@ import { feed, type FeedItem } from "@/lib/feed";
 import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
 import { SpacesCards } from "./SpacesCards";
+import { ProgrammeCarousel } from "./ProgrammeCarousel";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
@@ -151,27 +152,19 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* programme: event types slide sideways while scrolling (swipe on phones) */}
-      <section className="hscroll" data-hscroll>
-        <div className="hscroll-stick">
-          <div className="hscroll-head">
-            <p className="kicker rv">Programme</p>
-            <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.programmeTitle}</h2>
-          </div>
-          <ol className="hscroll-track">
-            {t.events.types.map((e, i) => (
-              <li key={e.no} className="hs-card">
-                <div className="hs-photo frame rv-img"><img {...responsive(TYPE_IMAGES[i], "(min-width: 1020px) 30vw, 80vw")} alt="" loading="lazy" /><span className="hs-no display" aria-hidden="true">{e.no}</span></div>
-                <p className="caption">{e.en}</p>
-                <h3 className="display mt-3 text-[clamp(26px,2.6vw,40px)]">{e.title}</h3>
-                <p className="mt-5 text-sm leading-[2] text-white/65">{e.body}</p>
-              </li>
-            ))}
-            <li className="hs-card hs-end">
-              <Link href={path(lang, "events")} className="link-arrow">{t.common.more} <span>→</span></Link>
-            </li>
-          </ol>
+      {/* programme: one large photo per event type, the neighbours at the sides */}
+      <section className="programme">
+        <div className="programme-head">
+          <p className="kicker kicker-center rv">Programme</p>
+          <h2 className="display sec-title rv mt-5" style={d(".1s")}>{h.programmeTitle}</h2>
+          <p className="rv mx-auto mt-6 max-w-xl text-white/70" style={d(".2s")}>{t.events.hero.lead}</p>
         </div>
+        <div className="rv" style={d(".3s")}>
+          <ProgrammeCarousel items={t.events.types.map((e, i) => ({ no: e.no, title: e.title, en: e.en, image: TYPE_IMAGES[i] }))} prev={lang === "ja" ? "前へ" : "Previous"} next={lang === "ja" ? "次へ" : "Next"} />
+        </div>
+        <p className="programme-more rv">
+          <Link href={path(lang, "events")} className="link-arrow">{t.common.more} <span>→</span></Link>
+        </p>
       </section>
 
       {/* relaunch: the date, full screen */}

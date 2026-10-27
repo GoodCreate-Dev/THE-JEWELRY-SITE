@@ -236,10 +236,6 @@ html[lang="ja"] .statement-text { font-size: clamp(30px, 4.4vw, 70px); line-heig
 .figure-value small { margin-left: 8px; font-size: .22em; color: var(--color-mute); -webkit-text-stroke: 0; }
 
 /* programme: horizontal scroll (Motion.tsx sizes the section and moves the track) */
-.hscroll { position: relative; background: var(--color-coal); }
-.hscroll-stick { position: sticky; top: 0; display: flex; flex-direction: column; justify-content: center; gap: 48px; min-height: 100vh; min-height: 100svh; padding: 120px 0 70px; overflow: hidden; }
-.hscroll-head { padding: 0 var(--pad); }
-.hscroll-track { display: flex; gap: clamp(20px, 2.5vw, 40px); padding: 0 var(--pad); will-change: transform; }
 .hs-card { position: relative; flex: 0 0 clamp(280px, 30vw, 440px); min-height: clamp(340px, 46vh, 460px); padding: clamp(28px, 3vw, 44px); border: 1px solid rgba(184, 199, 220, .16); background: linear-gradient(160deg, rgba(238, 241, 246, .04), transparent 60%); overflow: hidden; transition: border-color .6s; }
 .hs-card:hover { border-color: rgba(184, 199, 220, .45); }
 .hs-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 1px; background: var(--iri); transform: scaleX(0); transform-origin: left; transition: transform .9s var(--ease); }
@@ -247,9 +243,6 @@ html[lang="ja"] .statement-text { font-size: clamp(30px, 4.4vw, 70px); line-heig
 .hs-no { display: block; margin-bottom: 40px; font-size: clamp(70px, 8vw, 120px); line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(238, 241, 246, .4); }
 .hs-end { display: grid; place-items: center; flex-basis: clamp(200px, 18vw, 280px); background: none; }
 @media (max-width: 1020px) {
-  .hscroll-stick { position: static; min-height: 0; padding: 100px 0 80px; }
-  .hscroll-track { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .hscroll-track::-webkit-scrollbar { display: none; }
   .hs-card { scroll-snap-align: start; flex-basis: 80vw; }
 }
 
@@ -415,6 +408,36 @@ html[lang="ja"] .page-hero h1 { font-size: clamp(42px, 7vw, 116px); line-height:
 .sec-title { font-size: clamp(38px, 5.2vw, 84px); letter-spacing: -.005em; }
 html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
 .split { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(30px, 6vw, 120px); }
+
+/* ---------- Home programme carousel (ProgrammeCarousel) ----------
+   Square slots side by side; the track is centred on slot --i. The middle photo is full
+   size, the others are scaled down, which also makes the gaps between them. */
+.programme { padding: clamp(100px, 12vw, 180px) 0 clamp(80px, 10vw, 140px); background: var(--color-coal); overflow: hidden; }
+.programme-head { padding: 0 var(--pad); text-align: center; margin-bottom: clamp(50px, 6vw, 90px); }
+.kicker-center { justify-content: center; }
+.programme-more { margin-top: clamp(40px, 5vw, 70px); text-align: center; }
+.pc { --s: min(62vw, 82vh, 860px); position: relative; touch-action: pan-y; user-select: none; }
+.pc-track { position: relative; left: 50%; display: flex; width: max-content; transform: translateX(calc(-1 * (var(--i) + .5) * var(--s))); transition: transform .6s var(--ease); }
+.pc-track.still, .pc-track.still .pc-slide, .pc-track.still .pc-text { transition: none; }
+.pc-slot { flex: 0 0 var(--s); height: var(--s); }
+.pc-slide { position: relative; display: grid; place-items: center; width: 100%; height: 100%; padding: 0; border: 0; overflow: hidden; background: var(--color-black); color: var(--color-white); cursor: pointer; transform: scale(.75); transition: transform .6s var(--ease); }
+.pc-slot.on .pc-slide { transform: none; cursor: default; }
+.pc-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.pc-slide::after { content: ""; position: absolute; inset: 0; background: rgba(5, 7, 13, .6); transition: background .6s; }
+.pc-slot.on .pc-slide::after { background: rgba(5, 7, 13, .38); }
+.pc-text { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0 8%; text-align: center; opacity: 0; transition: opacity .5s; }
+.pc-slot.on .pc-text { opacity: 1; transition-delay: .25s; }
+.pc-title { font-size: clamp(30px, 4vw, 64px); line-height: 1.15; text-shadow: 0 4px 30px rgba(5, 7, 13, .5); }
+.pc-arrow { position: absolute; top: calc(var(--s) / 2); z-index: 2; width: 44px; height: 44px; translate: 0 -50%; border: 0; background: none; cursor: pointer; }
+.pc-arrow::before { content: ""; position: absolute; inset: 12px; border-left: 1px solid var(--color-white); border-bottom: 1px solid var(--color-white); transition: transform .3s; }
+.pc-prev { left: clamp(10px, 3vw, 40px); } .pc-prev::before { transform: rotate(45deg); }
+.pc-next { right: clamp(10px, 3vw, 40px); } .pc-next::before { transform: rotate(-135deg); }
+.pc-prev:hover::before { transform: translateX(-4px) rotate(45deg); } .pc-next:hover::before { transform: translateX(4px) rotate(-135deg); }
+.pc-dots { display: flex; justify-content: center; gap: 8px; margin-top: 28px; }
+.pc-dots i { width: 22px; height: 2px; background: rgba(238, 241, 246, .2); transition: background .4s, width .4s; }
+.pc-dots i.on { width: 40px; background: var(--color-white); }
+@media (max-width: 767px) { .pc { --s: 78vw; } .pc-slide { transform: scale(.9); } .pc-arrow { display: none; } }
+@media (prefers-reduced-motion: reduce) { .pc-track, .pc-slide { transition: none; } }
 
 /* ---------- Home spaces cards (SpacesCards) ----------
    Desktop: hover/focus widens one card and reveals its text; others narrow and hide titles. */
