@@ -117,26 +117,23 @@ html[lang="ja"] .btn { letter-spacing: .16em; }
 .js:not(.intro-seen) main .rv, .js:not(.intro-seen) main .rv-img { transition-delay: calc(var(--d, 0s) + 2.4s); }
 
 /* ---------- curtain opening (once per visit) ----------
-   Logo shines in with the dome's LED colours, an iridescent seam glows down the middle,
-   then the black splits into two halves that slide left and right to reveal the page. */
+   Restrained: the logo fades in, a soft silver light passes over it, then the black
+   parts into two halves that slide left and right to reveal the page. */
 .intro { display: none; }
 .js:not(.intro-seen) .intro { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; pointer-events: none; animation: introOut .3s linear 3.5s forwards; }
 .intro::before, .intro::after { content: ""; position: absolute; top: 0; bottom: 0; width: 50.5%; background: var(--color-black); }
 .intro::before { left: 0; animation: curtainLeft 1.6s cubic-bezier(.76, 0, .24, 1) 1.9s forwards; }
 .intro::after { right: 0; animation: curtainRight 1.6s cubic-bezier(.76, 0, .24, 1) 1.9s forwards; }
-.intro-seam { position: absolute; z-index: 1; left: 50%; top: 0; bottom: 0; width: 1px; translate: -50% 0; background: linear-gradient(180deg, transparent, #5fe3d4 25%, #a98bff 50%, #ff8fcf 75%, transparent); box-shadow: 0 0 18px 2px rgba(169, 139, 255, .7); transform: scaleY(0); animation: seamIn 1s var(--ease) 1.2s forwards, seamOut .6s ease-out 2s forwards; }
 .intro-mark { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 22px; animation: introMarkOut 1s var(--ease) 1.9s forwards; }
 .intro-logo { position: relative; width: 104px; aspect-ratio: 701.78 / 613.1; }
 .intro-logo .logo { position: absolute; inset: 0; width: 100%; }
-.intro-logo .logo:first-child { opacity: 0; animation: introLogo 1.4s var(--ease) .2s forwards; }
-.intro-logo .shine { background: linear-gradient(100deg, transparent 30%, #5fe3d4 40%, #a98bff 50%, #ff8fcf 60%, transparent 70%) 150% 0 / 300% 100% no-repeat; animation: introShine 1.3s ease-in-out .8s forwards; }
-@keyframes introLogo { from { opacity: 0; transform: scale(.92); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+.intro-logo .logo:first-child { background: #b4bdcb; opacity: 0; animation: introLogo 1.4s var(--ease) .2s forwards; }
+.intro-logo .shine { background: linear-gradient(100deg, transparent 38%, rgba(255, 255, 255, 0) 42%, #ffffff 50%, rgba(255, 255, 255, 0) 58%, transparent 62%) 150% 0 / 300% 100% no-repeat; animation: introShine 1.3s ease-in-out .8s forwards; }
+@keyframes introLogo { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes introShine { to { background-position: -50% 0; } }
-@keyframes introMarkOut { to { opacity: 0; transform: scale(1.15); filter: blur(4px); } }
+@keyframes introMarkOut { to { opacity: 0; transform: scale(1.04); } }
 @keyframes curtainLeft { to { transform: translateX(-100%); } }
 @keyframes curtainRight { to { transform: translateX(100%); } }
-@keyframes seamIn { to { transform: scaleY(1); } }
-@keyframes seamOut { to { opacity: 0; width: 60px; filter: blur(20px); } }
 @keyframes introOut { to { opacity: 0; visibility: hidden; } }
 
 /* ---------- page change: thin gold line (animated by Motion.tsx) ---------- */

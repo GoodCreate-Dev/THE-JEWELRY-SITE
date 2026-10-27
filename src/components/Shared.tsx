@@ -16,11 +16,10 @@ export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; chi
   );
 }
 
-/** Curtain opening, once per visit: the logo shines in, then the black splits left and right to reveal the page (CSS). */
+/** Curtain opening, once per visit: the logo fades in, a soft silver light passes over it, then the black parts left and right (CSS). */
 export function Intro() {
   return (
     <div className="intro" aria-hidden="true">
-      <span className="intro-seam" />
       <div className="intro-mark">
         <span className="intro-logo"><span className="logo" /><span className="logo shine" /></span>
       </div>
