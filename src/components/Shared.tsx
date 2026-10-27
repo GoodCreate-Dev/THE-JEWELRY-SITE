@@ -16,12 +16,13 @@ export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; chi
   );
 }
 
-/** Black screen with the white logo and a gold line, shown once per visit (CSS hides it after). */
+/** Dome opening, once per visit: the logo shines in, then an iridescent ring opens to reveal the page (CSS). */
 export function Intro() {
   return (
     <div className="intro" aria-hidden="true">
+      <span className="intro-ring" />
       <div className="intro-mark">
-        <span className="logo" />
+        <span className="intro-logo"><span className="logo" /><span className="logo shine" /></span>
         <span className="intro-line" />
       </div>
     </div>
