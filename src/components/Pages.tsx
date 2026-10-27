@@ -6,7 +6,7 @@ import { ContactForm } from "./ContactForm";
 import { feed, type FeedItem } from "@/lib/feed";
 import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
-import { SpacesIndex } from "./SpacesIndex";
+import { SpacesCards } from "./SpacesCards";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
@@ -133,7 +133,7 @@ export function HomePage({ lang }: { lang: Lang }) {
           </div>
           <p className="rv max-w-md text-white/70" style={d(".2s")}>{h.spacesLead}</p>
         </div>
-        <SpacesIndex lang={lang} />
+        <SpacesCards lang={lang} />
       </section>
 
       {/* lights on: scrolling turns the dark dome into its full colour illumination */}
