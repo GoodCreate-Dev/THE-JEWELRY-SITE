@@ -62,6 +62,12 @@ export function Motion() {
     };
 
     let id = requestAnimationFrame(function tick(t) {
+      // The page behind the full-screen menu must not scroll (Lenis ignores body overflow).
+      const menuOpen = document.documentElement.classList.contains("menu-open");
+      if (menuOpen !== lenis.isStopped) {
+        if (menuOpen) lenis.stop();
+        else lenis.start();
+      }
       lenis.raf(t);
       scrollEffects();
       id = requestAnimationFrame(tick);

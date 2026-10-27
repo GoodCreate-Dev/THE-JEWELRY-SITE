@@ -141,8 +141,8 @@ export function IgPostDetail({ lang }: { lang: Lang }) {
     });
   }, []);
   useEffect(() => {
-    if (typeof state === "object") document.title = `${state.title}｜THE JEWELRY`;
-  }, [state]);
+    if (typeof state === "object") document.title = `${state.title}${lang === "ja" ? "｜" : " | "}THE JEWELRY`;
+  }, [state, lang]);
   useRevealNew(ref, state);
 
   if (state === "loading") return <section className="min-h-[70vh]" aria-busy="true" />;

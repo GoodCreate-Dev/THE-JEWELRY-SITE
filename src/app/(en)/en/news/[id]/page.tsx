@@ -8,7 +8,7 @@ export const generateStaticParams = feedIds;
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const item = feedItem("en", (await params).id);
-  return { title: item ? `${item.title}｜THE JEWELRY` : "THE JEWELRY", description: item?.desc.slice(0, 120), robots: { index: false } };
+  return { title: item ? `${item.title} | THE JEWELRY` : "THE JEWELRY", description: item?.desc.slice(0, 120), robots: { index: false } };
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
