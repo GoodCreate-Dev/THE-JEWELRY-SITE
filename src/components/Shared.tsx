@@ -23,7 +23,6 @@ export function Intro() {
       <span className="intro-seam" />
       <div className="intro-mark">
         <span className="intro-logo"><span className="logo" /><span className="logo shine" /></span>
-        <span className="intro-line" />
       </div>
     </div>
   );

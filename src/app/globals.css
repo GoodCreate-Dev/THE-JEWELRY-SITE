@@ -130,10 +130,8 @@ html[lang="ja"] .btn { letter-spacing: .16em; }
 .intro-logo .logo { position: absolute; inset: 0; width: 100%; }
 .intro-logo .logo:first-child { opacity: 0; animation: introLogo 1.4s var(--ease) .2s forwards; }
 .intro-logo .shine { background: linear-gradient(100deg, transparent 30%, #5fe3d4 40%, #a98bff 50%, #ff8fcf 60%, transparent 70%) 150% 0 / 300% 100% no-repeat; animation: introShine 1.3s ease-in-out .8s forwards; }
-.intro-line { width: 120px; height: 1px; background: var(--iri); transform: scaleX(0); animation: introLine 1.2s var(--ease) .7s forwards; }
 @keyframes introLogo { from { opacity: 0; transform: scale(.92); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes introShine { to { background-position: -50% 0; } }
-@keyframes introLine { to { transform: scaleX(1); } }
 @keyframes introMarkOut { to { opacity: 0; transform: scale(1.15); filter: blur(4px); } }
 @keyframes curtainLeft { to { transform: translateX(-100%); } }
 @keyframes curtainRight { to { transform: translateX(100%); } }
