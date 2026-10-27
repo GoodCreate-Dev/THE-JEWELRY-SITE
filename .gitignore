@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Written by the Instagram fetch job (CI or the server's fetch.php), never committed
 /public/instagram/
+
+# Sakura upload package (node scripts/build-sakura.mjs)
+/deploy/
