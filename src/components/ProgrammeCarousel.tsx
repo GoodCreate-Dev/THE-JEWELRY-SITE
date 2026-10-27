@@ -1,21 +1,28 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { responsive } from "@/lib/img";
 
 type Item = { no: string; title: string; en: string; image: string };
+
+const AUTO_MS = 5000;
 
 /**
  * Home programme: one large square photo in the middle with the event name over it, the
  * neighbours shrunk at the sides. Arrows, a click on a side photo, or a swipe move it, and it
  * loops endlessly (three copies of the list; it jumps back to the middle copy unseen).
+ * It also moves on by itself every few seconds while on screen, pausing under the pointer
+ * or keyboard focus; any manual move restarts the wait.
  */
 export function ProgrammeCarousel({ items, prev, next }: { items: Item[]; prev: string; next: string }) {
   const n = items.length;
   const [i, setI] = useState(n);
   const [animate, setAnimate] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [visible, setVisible] = useState(false);
   const startX = useRef<number | null>(null);
+  const box = useRef<HTMLDivElement>(null);
   const loop = [...items, ...items, ...items];
   const current = ((i % n) + n) % n;
 
@@ -25,6 +32,22 @@ export function ProgrammeCarousel({ items, prev, next }: { items: Item[]; prev: 
     setAnimate(!still);
     setI(still ? (((to % n) + n) % n) + n : to);
   };
+  useEffect(() => {
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.3 });
+    if (box.current) io.observe(box.current);
+    return () => io.disconnect();
+  }, []);
+
+  // Re-armed on every move (i changes), so a click or swipe gives the visitor a full wait.
+  useEffect(() => {
+    if (paused || !visible || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setTimeout(() => {
+      setAnimate(true);
+      setI((v) => v + 1);
+    }, AUTO_MS);
+    return () => clearTimeout(id);
+  }, [i, paused, visible]);
+
   // After sliding into the first or last copy, jump to the same photo in the middle copy.
   const settle = () => {
     if (i >= n && i < 2 * n) return;
@@ -34,7 +57,12 @@ export function ProgrammeCarousel({ items, prev, next }: { items: Item[]; prev: 
 
   return (
     <div
+      ref={box}
       className="pc"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
       onPointerDown={(e) => (startX.current = e.clientX)}
       onPointerUp={(e) => {
         if (startX.current === null) return;
