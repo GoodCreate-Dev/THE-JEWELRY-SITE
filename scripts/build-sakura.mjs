@@ -65,7 +65,7 @@ writeFileSync(
 RewriteEngine On
 # Not for the 404 page itself (Apache fetches it internally; Sakura marks every request as
 # internal, so REDIRECT_STATUS cannot tell them apart).
-RewriteCond %{REQUEST_URI} !^/404\.html$
+RewriteCond %{REQUEST_URI} !^/404\\.html$
 RewriteCond %{HTTP:X-Sakura-Forwarded-For} ^$
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 </IfModule>
