@@ -395,6 +395,18 @@ html[lang="ja"] .page-hero h1 { font-size: clamp(42px, 7vw, 116px); line-height:
 html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
 .split { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(30px, 6vw, 120px); }
 
+/* ---------- Home hero film (HeroFilm) ----------
+   Shot k fades in at k*7s, holds, and dissolves out while the next one arrives; the living
+   still underneath is the first shot. Each shot drifts and zooms the whole time it shows. */
+.hero-film { position: absolute; inset: 0; }
+.hero-shot { position: absolute; inset: 0; overflow: hidden; opacity: 0; animation: heroShot 28s linear calc(var(--k) * 7s) infinite both; }
+.hero-shot:nth-child(2) { --dx: -3%; }
+.hero-shot:nth-child(3) { --dx: 2.5%; --dy: -2%; }
+.hero-img .hero-shot img { width: 100%; height: 100%; object-fit: cover; transform: none; animation: heroShotMove 28s linear calc(var(--k) * 7s) infinite both; }
+@keyframes heroShot { 0% { opacity: 0; } 9% { opacity: 1; } 25% { opacity: 1; } 34% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes heroShotMove { 0% { transform: scale(1.06) translate(0, 0); } 34% { transform: scale(1.18) translate(var(--dx, 2%), var(--dy, 1.5%)); } 100% { transform: scale(1.18) translate(var(--dx, 2%), var(--dy, 1.5%)); } }
+@media (prefers-reduced-motion: reduce) { .hero-film { display: none; } }
+
 /* ---------- Home programme carousel (ProgrammeCarousel) ----------
    Square slots side by side; the track is centred on slot --i. The middle photo is full
    size, the others are scaled down, which also makes the gaps between them. */

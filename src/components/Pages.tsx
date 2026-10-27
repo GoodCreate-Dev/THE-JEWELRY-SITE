@@ -68,6 +68,25 @@ function LitText({ text, word }: { text: string; word: string }) {
   );
 }
 
+/**
+ * Further hero shots that dissolve in over the living still, one after another, each with a
+ * slow camera move, so the hero plays like one continuous film rather than a slideshow.
+ * CSS only (.hero-film): every shot shares one 28s cycle, started 7s apart.
+ */
+const HERO_SHOTS = ["ai-aerial-color", "ai-promenade", "ai-aerial-gold"];
+
+function HeroFilm() {
+  return (
+    <div className="hero-film" aria-hidden="true">
+      {HERO_SHOTS.map((n, k) => (
+        <div key={n} className="hero-shot" style={{ "--k": k + 1 } as React.CSSProperties}>
+          <img {...responsive(asset(`/images/${n}.jpg`))} alt="" decoding="async" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
   const h = t.home;
@@ -77,6 +96,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       <section className="hero hero-v2" data-hero>
         <div className="hero-img">
           <HeroLive src={asset("/images/ai-front.jpg")} />
+          <HeroFilm />
         </div>
         <div className="hero-veil" />
         <div className="hero-inner hero-drift">
