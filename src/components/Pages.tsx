@@ -8,6 +8,8 @@ import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
 import { SpacesCards } from "./SpacesCards";
 import { ProgrammeCarousel } from "./ProgrammeCarousel";
+import { EventsHero } from "./EventsHero";
+import { PhotoCarousel } from "./PhotoCarousel";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
@@ -66,9 +68,6 @@ function LitText({ text, word }: { text: string; word: string }) {
     </>
   );
 }
-
-/** Photos for the event types (same order as the content). */
-const TYPE_IMAGES = ["real-gold-walkway", "real-rainbow-lounge", "ai-aerial-gold", "ai-promenade"].map((n) => asset(`/images/${n}.jpg`));
 
 export function HomePage({ lang }: { lang: Lang }) {
   const t = content[lang];
@@ -160,7 +159,7 @@ export function HomePage({ lang }: { lang: Lang }) {
           <p className="rv mx-auto mt-6 max-w-xl text-white/70" style={d(".2s")}>{t.events.hero.lead}</p>
         </div>
         <div className="rv" style={d(".3s")}>
-          <ProgrammeCarousel items={t.events.types.map((e, i) => ({ no: e.no, title: e.title, en: e.en, image: TYPE_IMAGES[i] }))} prev={lang === "ja" ? "前へ" : "Previous"} next={lang === "ja" ? "次へ" : "Next"} />
+          <ProgrammeCarousel items={t.events.types.map((e) => ({ no: e.no, title: e.title, en: e.en, image: e.images[0] }))} prev={lang === "ja" ? "前へ" : "Previous"} next={lang === "ja" ? "次へ" : "Next"} />
         </div>
         <p className="programme-more rv">
           <Link href={path(lang, "events")} className="link-arrow">{t.common.more} <span>→</span></Link>
@@ -263,23 +262,70 @@ export function SpacesPage({ lang }: { lang: Lang }) {
 
 /* ======================= EVENTS ======================= */
 export function EventsPage({ lang }: { lang: Lang }) {
-  const e = content[lang].events;
+  const t = content[lang];
+  const e = t.events;
+  const arrows = { prev: lang === "ja" ? "前へ" : "Previous", next: lang === "ja" ? "次へ" : "Next" };
   return (
     <Shell lang={lang} page="events">
-      <PageHero hero={e.hero} video={asset("/videos/hero.mp4")} index="04" />
-      <Marquee words={content.en.events.types.map((x) => x.title)} />
-      <section className="sec">
-        <div className="type-grid">
-          {e.types.map((ty, i) => (
-            <article key={ty.no} className="hs-card rv" style={d(`${i * 0.08}s`)}>
-              <div className="hs-photo frame rv-img"><img {...responsive(TYPE_IMAGES[i], "(min-width: 1020px) 45vw, 100vw")} alt="" loading="lazy" /><span className="hs-no display" aria-hidden="true">{ty.no}</span></div>
-              <p className="caption">{ty.en}</p>
-              <h2 className="display mt-3 text-[clamp(26px,2.6vw,40px)]">{ty.title}</h2>
-              <p className="mt-5 text-sm leading-[2] text-white/65">{ty.body}</p>
-            </article>
-          ))}
+      <EventsHero kicker={e.hero.kicker} title={e.hero.title} slides={e.types.map((ty) => ({ title: ty.title, en: ty.en, image: ty.images[0] }))} {...arrows} />
+
+      {/* intro and enquiry */}
+      <section className="sec ev-intro">
+        <h2 className="display ev-intro-title rv">{e.intro.title}</h2>
+        <div className="rv" style={d(".1s")}>
+          <p className="text-white/70">{e.intro.body}</p>
+          <Link href={path(lang, "contact")} className="btn btn-line mt-8">{e.intro.cta} →</Link>
         </div>
       </section>
+
+      {/* one block per event type: photo carousel, text, facts that fold open */}
+      <section className="ev-types">
+        <h2 className="display sec-title rv px-[var(--pad)]">{e.typesTitle}</h2>
+        {e.types.map((ty) => (
+          <article key={ty.no} className="ev-type">
+            <div className="rv"><PhotoCarousel images={ty.images} label={`${ty.no} — ${ty.en}`} {...arrows} /></div>
+            <div className="ev-type-body">
+              <div className="rv">
+                <p className="caption">{ty.no} — {ty.en}</p>
+                <h3 className="display ev-type-title">{ty.title}</h3>
+                <p className="mt-6 leading-[2.1] text-white/75">{ty.body}</p>
+                <p className="mt-4 leading-[2.1] text-white/60">{ty.more}</p>
+              </div>
+              <div className="ev-facts rv" style={d(".1s")}>
+                {ty.facts.map((f, k) => (
+                  <details key={f.label} open={k === 0}>
+                    <summary>{f.label}</summary>
+                    <p>{f.value}</p>
+                  </details>
+                ))}
+                <p className="mt-6 text-xs text-white/45">{t.common.pending}</p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      {/* spaces: photo cards with a caption underneath */}
+      <section className="sec ev-spaces">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+          <h2 className="display sec-title rv">{e.spacesTitle}</h2>
+          <Link href={path(lang, "spaces")} className="link-arrow rv">{t.common.more} <span>→</span></Link>
+        </div>
+        <ul className="ev-space-grid">
+          {t.spaces.spaces.map((sp, i) => (
+            <li key={sp.no} className="rv" style={d(`${i * 0.08}s`)}>
+              <Link href={path(lang, "spaces")} className="ev-space group">
+                <span className="frame block aspect-[3/4]"><img {...responsive(sp.image, "(min-width: 768px) 33vw, 100vw")} alt="" loading="lazy" /></span>
+                <span className="mt-4 flex items-baseline justify-between gap-4">
+                  <span className="display text-2xl transition-colors group-hover:text-accent-hi">{sp.name}</span>
+                  <span className="caption">{sp.capacity}{t.common.guests}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <FeedSection lang={lang} manual={feed(lang, "event")} kind="event" />
       <section className="sec flow aura">
         <div className="flow-head">
