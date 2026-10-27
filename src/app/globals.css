@@ -425,21 +425,7 @@ html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
 @media (max-width: 767px) { .pc { --s: 78vw; } .pc-slide { transform: scale(.9); } .pc-arrow { display: none; } }
 @media (prefers-reduced-motion: reduce) { .pc-track, .pc-slide { transition: none; } }
 
-/* ---------- Events page (EventsHero, PhotoCarousel, facts) ---------- */
-.ev-hero { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: var(--color-black); }
-.ev-hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s var(--ease); }
-.ev-hero-slide.on { opacity: 1; }
-.ev-hero-slide img { width: 100%; height: 100%; object-fit: cover; scale: 1.08; transition: scale 7s linear; }
-.ev-hero-slide.on img { scale: 1; }
-.ev-hero-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 7, 13, .55), rgba(5, 7, 13, .25) 40%, rgba(5, 7, 13, .7)); }
-.ev-hero-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 0 var(--pad); text-align: center; }
-.ev-hero-names { display: grid; }
-.ev-hero-name { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; gap: 16px; font-size: clamp(40px, 7vw, 120px); line-height: 1.05; opacity: 0; transform: translateY(24px); transition: opacity .8s, transform 1.2s var(--ease); }
-.ev-hero-name.on { opacity: 1; transform: none; transition-delay: .3s; }
-html[lang="ja"] .ev-hero-name { font-size: clamp(34px, 5.4vw, 88px); }
-.ev-hero-prev { left: clamp(10px, 3vw, 40px); top: 50%; } .ev-hero-prev::before { transform: rotate(45deg); }
-.ev-hero-next { right: clamp(10px, 3vw, 40px); top: 50%; } .ev-hero-next::before { transform: rotate(-135deg); }
-.ev-hero-count { position: absolute; left: 50%; bottom: 40px; translate: -50% 0; }
+/* ---------- Events page (PhotoCarousel, facts) ---------- */
 .ev-intro { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(30px, 6vw, 120px); align-items: end; }
 .ev-intro-title { font-size: clamp(30px, 3.6vw, 56px); line-height: 1.3; }
 html[lang="ja"] .ev-intro-title { font-size: clamp(24px, 2.6vw, 40px); line-height: 1.6; }
@@ -475,9 +461,8 @@ html[lang="ja"] .ev-intro-title { font-size: clamp(24px, 2.6vw, 40px); line-heig
 @media (max-width: 767px) {
   .phc { --w: 86vw; --g: 10px; }
   .ev-space-grid { grid-template-columns: 1fr; }
-  .ev-hero .pc-arrow { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { .ev-hero-slide, .ev-hero-slide img, .ev-hero-name, .phc-track { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .phc-track { transition: none; } }
 
 /* ---------- Home spaces cards (SpacesCards) ----------
    Desktop: hover/focus widens one card and reveals its text; others narrow and hide titles. */

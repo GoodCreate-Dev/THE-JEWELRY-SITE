@@ -8,7 +8,6 @@ import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
 import { SpacesCards } from "./SpacesCards";
 import { ProgrammeCarousel } from "./ProgrammeCarousel";
-import { EventsHero } from "./EventsHero";
 import { PhotoCarousel } from "./PhotoCarousel";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
@@ -267,7 +266,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
   const arrows = { prev: lang === "ja" ? "前へ" : "Previous", next: lang === "ja" ? "次へ" : "Next" };
   return (
     <Shell lang={lang} page="events">
-      <EventsHero kicker={e.hero.kicker} title={e.hero.title} slides={e.types.map((ty) => ({ title: ty.title, en: ty.en, image: ty.images[0] }))} {...arrows} />
+      <PageHero hero={e.hero} index="04" />
 
       {/* intro and enquiry */}
       <section className="sec ev-intro">
