@@ -50,6 +50,8 @@ writeFileSync(
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
+# Not for Apache's own internal requests (the 404 page), only for visitors on http://
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{HTTP:X-Sakura-Forwarded-For} ^$
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 </IfModule>

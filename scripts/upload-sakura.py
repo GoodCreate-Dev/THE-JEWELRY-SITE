@@ -2,14 +2,18 @@
 Uploads deploy/sakura/www/ (made by scripts/build-sakura.mjs) into the Sakura server's www
 folder over FTP with TLS. Asks for the server password when run; it is kept in memory only.
 
-    python scripts/upload-sakura.py
+    python scripts/upload-sakura.py              # everything that changed since the last upload
+    python scripts/upload-sakura.py .htaccess    # only the files named
 
-Files already on the server with the same size are skipped, so a run that was cut off can
-simply be started again. If the server drops the connection, the script reconnects and retries.
-Server copies of instagram/posts.json and instagram/config.php are kept (the server owns them).
+A fingerprint of every uploaded file is kept in deploy/sakura/uploaded.json, so later runs
+(or a run that was cut off) send only new or changed files. If the server drops the
+connection, the script reconnects and retries. Server copies of instagram/posts.json and
+instagram/config.php are never overwritten once they exist (the server owns them).
 """
 import ftplib
 import getpass
+import hashlib
+import json
 import os
 import sys
 import time
@@ -17,7 +21,9 @@ import time
 HOST = "the-jewelry.sakura.ne.jp"
 USER = "the-jewelry"
 REMOTE = "www"
-LOCAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "deploy", "sakura", "www")
+DEPLOY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "deploy", "sakura")
+LOCAL = os.path.join(DEPLOY, "www")
+MANIFEST = os.path.join(DEPLOY, "uploaded.json")
 
 # Files the server owns once it is running; uploaded only if missing there.
 KEEP_ON_SERVER = {"instagram/posts.json", "instagram/config.php"}
@@ -28,6 +34,7 @@ class Uploader:
     def __init__(self, password):
         self.password = password
         self.ftp = None
+        self.dirs = set()
 
     def connect(self):
         if self.ftp:
@@ -52,21 +59,28 @@ class Uploader:
                 time.sleep(3 * attempt)
                 self.connect()
 
-    def remote_size(self, path):
+    def exists(self, path):
         def size(ftp):
             try:
-                return ftp.size(path)
+                ftp.size(path)
+                return True
             except ftplib.error_perm:
-                return None  # not there yet
+                return False
         return self.run(size)
 
-    def mkdir(self, path):
-        def mkd(ftp):
-            try:
-                ftp.mkd(path)
-            except ftplib.error_perm:
-                pass  # already there
-        self.run(mkd)
+    def mkdirs(self, folder):
+        parts = folder.split("/")
+        for i in range(1, len(parts) + 1):
+            d = "/".join(parts[:i])
+            if d in self.dirs:
+                continue
+            def mkd(ftp):
+                try:
+                    ftp.mkd(d)
+                except ftplib.error_perm:
+                    pass  # already there
+            self.run(mkd)
+            self.dirs.add(d)
 
     def upload(self, local, path):
         def stor(ftp):
@@ -75,31 +89,56 @@ class Uploader:
         self.run(stor)
 
 
+def fingerprint(path):
+    with open(path, "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()
+
+
 def main():
     if not os.path.isfile(os.path.join(LOCAL, "index.html")):
         sys.exit("deploy/sakura/www is missing: run  node scripts/build-sakura.mjs  first.")
+    only = {a.replace("\\", "/").lstrip("/") for a in sys.argv[1:]}
+    done = {}
+    if os.path.isfile(MANIFEST):
+        with open(MANIFEST, encoding="utf-8") as fh:
+            done = json.load(fh)
+
+    todo = []
+    for folder, _dirs, files in os.walk(LOCAL):
+        rel = os.path.relpath(folder, LOCAL).replace("\\", "/")
+        for name in files:
+            path = name if rel == "." else f"{rel}/{name}"
+            if only and path not in only:
+                continue
+            local = os.path.join(folder, name)
+            fp = fingerprint(local)
+            if not only and done.get(path) == fp:
+                continue
+            todo.append((path, local, fp))
+    if only and len(todo) != len(only):
+        sys.exit(f"Not in the package: {sorted(only - {p for p, _, _ in todo})}")
+    if not todo:
+        print("Nothing changed since the last upload.")
+        return
+    print(f"{len(todo)} file(s) to upload.")
+
     up = Uploader(getpass.getpass(f"FTP password for {USER}@{HOST}: "))
     up.connect()
     print("Connected.")
-
-    sent = skipped = 0
-    for folder, _dirs, files in os.walk(LOCAL):
-        rel = os.path.relpath(folder, LOCAL).replace("\\", "/")
-        target = REMOTE if rel == "." else f"{REMOTE}/{rel}"
-        if rel != ".":
-            up.mkdir(target)
-        for name in files:
-            path = name if rel == "." else f"{rel}/{name}"
-            local = os.path.join(folder, name)
-            remote = up.remote_size(f"{target}/{name}")
-            if remote is not None and (path in KEEP_ON_SERVER or remote == os.path.getsize(local)):
-                skipped += 1
-                continue
-            up.upload(local, f"{target}/{name}")
-            sent += 1
+    for path, local, fp in todo:
+        target = f"{REMOTE}/{path}"
+        if "/" in path:
+            up.mkdirs(target.rsplit("/", 1)[0])
+        if path in KEEP_ON_SERVER and up.exists(target):
+            print(f"keep  {path} (server copy)")
+        else:
+            up.upload(local, target)
             print(f"up    {path}")
+        done[path] = fp
+        with open(MANIFEST, "w", encoding="utf-8") as fh:
+            json.dump(done, fh, indent=0)
     up.ftp.quit()
-    print(f"\nDone: {sent} uploaded, {skipped} already up to date, on {HOST}/{REMOTE}.")
+    print(f"\nDone: {len(todo)} file(s) on {HOST}/{REMOTE}.")
 
 
 if __name__ == "__main__":
