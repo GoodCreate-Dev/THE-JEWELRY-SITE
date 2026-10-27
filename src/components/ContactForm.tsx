@@ -3,13 +3,45 @@
 import { useState, type FormEvent } from "react";
 import { content, PRIVACY_URL, type Lang } from "@/content/site";
 
-// Web3Forms delivers the enquiry by email. The access key is public by design (it only lets
-// this form send to the address it was created for); without it sending reports a failure.
+// On the Sakura server the enquiry goes to its own contact.php (server/contact/), which emails
+// it; the build sets NEXT_PUBLIC_CONTACT_ENDPOINT for that. Elsewhere (the GitHub demo, no PHP)
+// Web3Forms emails it: its access key is public by design. Without either, sending reports a failure.
+const ENDPOINT = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ?? "";
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
+
+/** Sends the fields to contact.php or Web3Forms; both answer JSON with `success`. */
+function send(v: Record<string, string>, type: string, lang: Lang) {
+  if (ENDPOINT) {
+    return fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ type, company: v.company, name: v.name, email: v.email, tel: v.tel, date: v.date, guests: v.guests, message: v.message, lang }),
+    });
+  }
+  return fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      access_key: ACCESS_KEY,
+      subject: `【THE JEWELRY】お問い合わせ / Enquiry: ${type} — ${v.company}`,
+      from_name: "THE JEWELRY Website",
+      email: v.email, // used as the reply-to address
+      "種別 / Type": type,
+      "会社名・団体名 / Company": v.company,
+      "お名前 / Name": v.name,
+      "メール / Email": v.email,
+      "電話番号 / Phone": v.tel || "-",
+      "希望時期 / Preferred timing": v.date || "-",
+      "想定人数 / Expected guests": v.guests || "-",
+      "内容 / Message": v.message,
+      "言語 / Site language": lang === "ja" ? "日本語" : "English",
+    }),
+  });
+}
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
-/** Enquiry form: validates, then emails the enquiry through Web3Forms. */
+/** Enquiry form: validates, then emails the enquiry (contact.php on Sakura, else Web3Forms). */
 export function ContactForm({ lang }: { lang: Lang }) {
   const f = content[lang].contact.form;
   const [type, setType] = useState(f.types[0]);
@@ -22,7 +54,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       form.reportValidity();
       return;
     }
-    if (!ACCESS_KEY) {
+    if (!ENDPOINT && !ACCESS_KEY) {
       setStatus("failed");
       return;
     }
@@ -30,25 +62,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
     if (v.botcheck) return; // honeypot filled in: a bot
     setStatus("sending");
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: ACCESS_KEY,
-          subject: `【THE JEWELRY】お問い合わせ / Enquiry: ${type} — ${v.company}`,
-          from_name: "THE JEWELRY Website",
-          email: v.email, // used as the reply-to address
-          "種別 / Type": type,
-          "会社名・団体名 / Company": v.company,
-          "お名前 / Name": v.name,
-          "メール / Email": v.email,
-          "電話番号 / Phone": v.tel || "-",
-          "希望時期 / Preferred timing": v.date || "-",
-          "想定人数 / Expected guests": v.guests || "-",
-          "内容 / Message": v.message,
-          "言語 / Site language": lang === "ja" ? "日本語" : "English",
-        }),
-      });
+      const res = await send(v, type, lang);
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.success) throw new Error(data.message ?? res.statusText);
       form.reset();

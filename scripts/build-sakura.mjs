@@ -3,12 +3,13 @@
  * deploy/sakura/www/ (upload its contents into the server's www folder):
  *   - static export served from the domain root (no GitHub sub-path)
  *   - instagram/ with the PHP fetch scripts (config.php needs the token on the server)
+ *   - api/contact.php, which emails the contact form; the address comes from
+ *     deploy/sakura/contact.json  {"to": "name@example.com"}  (not in git)
  *   - .htaccess: HTTPS redirect and the site's own 404 page
  * Usage:  node scripts/build-sakura.mjs [https://the-jewelry.sakura.ne.jp]
- * Web3Forms key: set NEXT_PUBLIC_WEB3FORMS_KEY before running, or the form reports a failure.
  */
 import { execSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const siteUrl = process.argv[2] ?? "https://the-jewelry.sakura.ne.jp";
@@ -28,7 +29,7 @@ function copyDir(from, to) {
 execSync("npx next build", {
   cwd: root,
   stdio: "inherit",
-  env: { ...process.env, GITHUB_PAGES: "1", PAGES_BASE_PATH: "", SITE_URL: siteUrl },
+  env: { ...process.env, GITHUB_PAGES: "1", PAGES_BASE_PATH: "", SITE_URL: siteUrl, NEXT_PUBLIC_CONTACT_ENDPOINT: "/api/contact.php" },
 });
 
 rmSync(www, { recursive: true, force: true });
@@ -42,6 +43,18 @@ rmSync(ig, { recursive: true, force: true });
 mkdirSync(ig, { recursive: true });
 for (const f of ["config.php", "fetch.php", "refresh.php", ".htaccess"]) copyFileSync(path.join(root, "server", "instagram", f), path.join(ig, f));
 writeFileSync(path.join(ig, "posts.json"), "[]\n");
+
+// Contact form mailer, with the receiving address written into its config.
+const api = path.join(www, "api");
+mkdirSync(api, { recursive: true });
+for (const f of ["contact.php", ".htaccess"]) copyFileSync(path.join(root, "server", "contact", f), path.join(api, f));
+const settings = path.join(root, "deploy", "sakura", "contact.json");
+const to = existsSync(settings) ? JSON.parse(readFileSync(settings, "utf8")).to : "";
+if (!/^[^\s@'"]+@[^\s@'"]+\.[^\s@'"]+$/.test(to ?? "")) console.warn("\nWARNING: no valid address in deploy/sakura/contact.json - the form will report a failure.");
+writeFileSync(
+  path.join(api, "config.php"),
+  readFileSync(path.join(root, "server", "contact", "config.php"), "utf8").replace("'PASTE_EMAIL_HERE'", `'${to || "PASTE_EMAIL_HERE"}'`),
+);
 
 // Sakura sits behind a proxy: plain-HTTP requests arrive without X-Sakura-Forwarded-For.
 writeFileSync(
