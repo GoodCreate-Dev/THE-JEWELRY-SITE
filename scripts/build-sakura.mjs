@@ -36,6 +36,26 @@ rmSync(www, { recursive: true, force: true });
 mkdirSync(path.dirname(www), { recursive: true });
 copyDir(path.join(root, "out"), www);
 
+// Upload only the photos and videos the pages use: drop every file in images/ and videos/
+// whose name no page, script or stylesheet mentions (unused photos, and the original JPGs
+// that only exist to make the WebP sizes).
+function listFiles(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? listFiles(path.join(dir, e.name)) : [path.join(dir, e.name)]));
+}
+const refs = listFiles(www)
+  .filter((f) => /\.(html|js|css|json|txt|xml|webmanifest)$/.test(f))
+  .map((f) => readFileSync(f, "utf8"))
+  .join("\n");
+let pruned = 0;
+for (const dir of ["images", "videos"].map((d) => path.join(www, d)).filter(existsSync)) {
+  for (const f of listFiles(dir)) {
+    if (refs.includes(path.basename(f))) continue;
+    rmSync(f);
+    pruned++;
+  }
+}
+console.log(`Left out ${pruned} unused photo/video file(s).`);
+
 // Instagram: PHP scripts only. posts.json / images/ are written on the server by fetch.php;
 // an empty list is shipped so the first visit before the first cron run is not a 404.
 const ig = path.join(www, "instagram");
