@@ -155,6 +155,8 @@ export function HomePage({ lang }: { lang: Lang }) {
         <SpacesCards lang={lang} />
       </section>
 
+      <FeedSection lang={lang} manual={feed(lang)} limit={3} />
+
       {/* lights on: scrolling turns the dark dome into its full colour illumination */}
       <section className="lights" data-lights>
         <div className="lights-stick">
@@ -204,8 +206,6 @@ export function HomePage({ lang }: { lang: Lang }) {
           <Link href={path(lang, "visit")} className="link-arrow rv mt-10" style={d(".3s")}>{t.common.more} <span>→</span></Link>
         </div>
       </section>
-
-      <FeedSection lang={lang} manual={feed(lang)} limit={3} />
 
       <ContactBand lang={lang} />
     </Shell>
