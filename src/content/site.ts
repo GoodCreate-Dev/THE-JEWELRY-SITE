@@ -196,11 +196,11 @@ const ja: Content = {
     contactBody: "主催者さま・出展者さまからのご相談は、フォームまたは公式InstagramのDMで承ります。",
   },
   about: {
-    hero: { kicker: "About", title: "施設について", lead: "博物館として生まれた、光のドーム。", image: IMG("ai-aerial-gold.jpg") },
+    hero: { kicker: "About", title: "施設について", lead: "博物館として生まれた、光のドーム。", image: IMG("about-hero.jpg") },
     chapters: [
-      { no: "I", title: "博物館として生まれた建築", body: "THE JEWELRY は、建築上は博物館として誕生したドーム型の展示施設です。展示のために設計された空間は、作品や商品を美しく見せ、訪れる人の記憶に残る体験をつくります。", image: IMG("dome-3.jpg") },
-      { no: "II", title: "光をまとうドーム", body: "日が沈むと、ドームはゆっくりと輝きはじめます。ライトアップによる演出は、展示やレセプションに、ここでしか生まれない特別な雰囲気をもたらします。", image: IMG("dome-2.jpg") },
-      { no: "III", title: "世界へひらかれた大阪ベイエリア", body: "大阪IRをはじめ、数々のエンターテイメントが予定されている大阪ベイエリア。THE JEWELRYは、このエリアを盛り上げるイベント会場＆ミュージアムです。国内外から人が集まるこの場所で、新しい表現と出会いが始まります。", image: IMG("dome-5.jpg") },
+      { no: "I", title: "博物館として生まれた建築", body: "THE JEWELRY は、建築上は博物館として誕生したドーム型の展示施設です。展示のために設計された空間は、作品や商品を美しく見せ、訪れる人の記憶に残る体験をつくります。", image: IMG("about-arch.jpg") },
+      { no: "II", title: "光をまとうドーム", body: "日が沈むと、ドームはゆっくりと輝きはじめます。ライトアップによる演出は、展示やレセプションに、ここでしか生まれない特別な雰囲気をもたらします。", image: IMG("about-light.jpg") },
+      { no: "III", title: "世界へひらかれた大阪ベイエリア", body: "大阪IRをはじめ、数々のエンターテイメントが予定されている大阪ベイエリア。THE JEWELRYは、このエリアを盛り上げるイベント会場＆ミュージアムです。国内外から人が集まるこの場所で、新しい表現と出会いが始まります。", image: IMG("about-bay.jpg") },
     ],
     quote: "表現と出会いのための、新しい舞台へ。",
   },
@@ -429,11 +429,11 @@ const en: Content = {
     contactBody: "Organisers and exhibitors can reach us through the form or by Instagram DM.",
   },
   about: {
-    hero: { kicker: "About", title: "About", lead: "A dome of light, born as a museum.", image: IMG("ai-aerial-gold.jpg") },
+    hero: { kicker: "About", title: "About", lead: "A dome of light, born as a museum.", image: IMG("about-hero.jpg") },
     chapters: [
-      { no: "I", title: "Architecture built as a museum", body: "THE JEWELRY is a dome-shaped exhibition hall registered as a museum. Designed for display, its spaces present works and products at their best and create experiences people remember.", image: IMG("dome-3.jpg") },
-      { no: "II", title: "A dome wrapped in light", body: "As the sun sets, the dome slowly begins to glow. The illumination gives exhibitions and receptions an atmosphere found nowhere else.", image: IMG("dome-2.jpg") },
-      { no: "III", title: "Osaka Bay, open to the world", body: "The Osaka Bay Area is where Osaka IR and many other entertainment projects are planned. THE JEWELRY is an event venue and museum bringing this area to life, a place where people from Japan and abroad meet new expression.", image: IMG("dome-5.jpg") },
+      { no: "I", title: "Architecture built as a museum", body: "THE JEWELRY is a dome-shaped exhibition hall registered as a museum. Designed for display, its spaces present works and products at their best and create experiences people remember.", image: IMG("about-arch.jpg") },
+      { no: "II", title: "A dome wrapped in light", body: "As the sun sets, the dome slowly begins to glow. The illumination gives exhibitions and receptions an atmosphere found nowhere else.", image: IMG("about-light.jpg") },
+      { no: "III", title: "Osaka Bay, open to the world", body: "The Osaka Bay Area is where Osaka IR and many other entertainment projects are planned. THE JEWELRY is an event venue and museum bringing this area to life, a place where people from Japan and abroad meet new expression.", image: IMG("about-bay.jpg") },
     ],
     quote: "A new stage for expression and encounters.",
   },

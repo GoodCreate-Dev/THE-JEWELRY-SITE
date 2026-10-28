@@ -231,7 +231,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
           </div>
         </article>
       ))}
-      <WindowFilm kicker="Vision" title={a.quote} image={asset("/images/dome-3.jpg")} />
+      <WindowFilm kicker="Vision" title={a.quote} image={asset("/images/about-vision.jpg")} />
       <ContactBand lang={lang} />
     </Shell>
   );
