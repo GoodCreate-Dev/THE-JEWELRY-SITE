@@ -363,9 +363,9 @@ html[lang="ja"] .plate-title h2 { font-size: clamp(38px, 6vw, 96px); line-height
 html[lang="ja"] .contact-band-title { font-size: clamp(32px, 5vw, 80px); line-height: 1.4; }
 .site-foot { padding: 90px var(--pad) 36px; border-top: 1px solid rgba(184, 199, 220, .12); overflow: hidden; }
 .site-foot { container-type: inline-size; }
-/* Same English serif and spacing in both languages; sized to the footer width so it never overflows. */
+/* Same English face and spacing in both languages; sized to the footer width (Manrope light: ~7.5em wide) so it fills it without overflowing. */
 .foot-word, html[lang="ja"] .foot-word { font-family: var(--font-en), sans-serif; font-weight: 300; letter-spacing: -.02em; line-height: 1; padding-bottom: .12em; }
-.foot-word { margin: clamp(30px, 5vw, 70px) 0 clamp(20px, 3vw, 40px); font-size: 15.9cqw; white-space: nowrap; text-align: center; color: transparent; -webkit-text-stroke: 1px rgba(238, 241, 246, .22); background: var(--iri); -webkit-background-clip: text; background-clip: text; background-size: 200% 100%; animation: shimmer 18s ease-in-out infinite; opacity: .55; }
+.foot-word { margin: clamp(30px, 5vw, 70px) 0 clamp(20px, 3vw, 40px); font-size: 13cqw; white-space: nowrap; text-align: center; color: transparent; -webkit-text-stroke: 1px rgba(238, 241, 246, .22); background: var(--iri); -webkit-background-clip: text; background-clip: text; background-size: 200% 100%; animation: shimmer 18s ease-in-out infinite; opacity: .55; }
 
 /* ---------- living hero still (HeroLive) ---------- */
 /* Box with the photo's own proportions (2048×1366), sized to cover the hero, so masks line up. */
@@ -759,3 +759,6 @@ html[lang="ja"] .pv-name { font-size: clamp(26px, 3.6vw, 52px); letter-spacing: 
 .page-veil.in .pv-line { width: 140px; transition: width .8s var(--ease) .35s; }
 @media (prefers-reduced-motion: reduce) { .page-veil { display: none; } }
 
+
+/* footer wordmark: same wide tracking in both languages; text-indent balances the space letter-spacing leaves after the last letter, so the word sits exactly centred */
+html .site-foot .foot-word.display { letter-spacing: .12em; text-indent: .12em; }

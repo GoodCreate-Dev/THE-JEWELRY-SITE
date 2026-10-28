@@ -107,6 +107,9 @@ export function Motion() {
       list.forEach((s, k) => {
         if (s.el.getBoundingClientRect().top < vh * 0.5) i = k;
       });
+      // Hidden over the hero and once the footer comes up (it would sit on the footer logo).
+      const foot = document.querySelector(".site-foot");
+      if (foot && foot.getBoundingClientRect().top < vh - 40) i = -1;
       const key = i > 0 ? `${i}` : "";
       if (key === lastIndex || !index.current) return;
       lastIndex = key;
