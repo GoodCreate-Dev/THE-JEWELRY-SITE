@@ -762,3 +762,12 @@ html[lang="ja"] .pv-name { font-size: clamp(26px, 3.6vw, 52px); letter-spacing: 
 
 /* footer wordmark: same wide tracking in both languages; text-indent balances the space letter-spacing leaves after the last letter, so the word sits exactly centred */
 html .site-foot .foot-word.display { letter-spacing: .12em; text-indent: .12em; }
+
+/* scroll index set vertically in the empty left margin (centred in --pad), so it never sits on page text */
+.scroll-index { left: calc(var(--pad) - min(var(--pad) / 2, 40px)); bottom: 40px; writing-mode: vertical-rl; translate: -50% 8px; gap: 4px; }
+.scroll-index.on { translate: -50% 0; }
+.scroll-index span { margin: 14px 0 0; padding: 30px 0 0; }
+.scroll-index span::before { left: 50%; top: 0; width: 1px; height: 20px; }
+
+/* extra-large screens: content keeps a 1760px measure, centred (full-bleed photos stay full width) */
+@media (min-width: 1921px) { :root { --pad: max(72px, calc((100vw - 1760px) / 2)); } }
