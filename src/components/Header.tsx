@@ -6,10 +6,21 @@ import { useEffect, useState } from "react";
 import { asset, content, path, PAGES, type Lang, type PageKey } from "@/content/site";
 import { responsive } from "@/lib/img";
 
-/** Photo shown beside each page name in the full-screen menu. */
+/**
+ * Photo shown beside each page name in the full-screen menu (a tall frame). Pages whose wide
+ * hero crops badly there get their own photo; the rest use the page hero.
+ */
+const MENU_IMAGES: Partial<Record<PageKey, string>> = {
+  about: "about-vision",
+  spaces: "space-dome",
+  events: "prog-reception",
+  news: "news-open",
+};
+
 function menuImage(lang: Lang, p: PageKey) {
   if (p === "home") return asset("/images/hero-night.jpg");
-  return content[lang][p].hero.image;
+  const own = MENU_IMAGES[p];
+  return own ? asset(`/images/${own}.jpg`) : content[lang][p].hero.image;
 }
 
 /**
