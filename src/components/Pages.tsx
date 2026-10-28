@@ -397,7 +397,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
           </ul>
         </div>
       </section>
-      <WindowFilm kicker="Osaka Bay" title={v.window.title} body={v.window.body} image={asset("/images/ai-aerial-gold.jpg")} />
+      <WindowFilm kicker="Osaka Bay" title={v.window.title} body={v.window.body} image={asset("/images/visit-bay.jpg")} />
       <section className="grid md:grid-cols-2">
         <div className="map-frame">
           <iframe title="Map" src={MAP_EMBED} loading="lazy" className="h-full min-h-[460px] w-full border-0" />

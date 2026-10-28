@@ -284,7 +284,7 @@ const ja: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪ベイエリアを盛り上げる、イベント会場＆ミュージアム。", image: IMG("ai-promenade.jpg") },
+    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪ベイエリアを盛り上げる、イベント会場＆ミュージアム。", image: IMG("visit-hero.jpg") },
     hoursTitle: "開館時間",
     hours: "催事・展示の開催時に開館",
     hoursNote: "開館日・時間は、各催事のお知らせをご確認ください。",
@@ -517,7 +517,7 @@ const en: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "Plan your visit", lead: "An event venue and museum bringing the Osaka Bay Area to life.", image: IMG("ai-promenade.jpg") },
+    hero: { kicker: "Visit", title: "Plan your visit", lead: "An event venue and museum bringing the Osaka Bay Area to life.", image: IMG("visit-hero.jpg") },
     hoursTitle: "Opening hours",
     hours: "Open during events and exhibitions",
     hoursNote: "Please check each event’s announcement for dates and times.",
