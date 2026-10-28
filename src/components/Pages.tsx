@@ -73,7 +73,7 @@ function LitText({ text, word }: { text: string; word: string }) {
  * slow camera move, so the hero plays like one continuous film rather than a slideshow.
  * CSS only (.hero-film): every shot shares one 28s cycle, started 7s apart.
  */
-const HERO_SHOTS = ["hero-teal", "hero-violet", "hero-rose"];
+const HERO_SHOTS = ["hero-blue", "hero-violet", "hero-rose"];
 
 function HeroFilm() {
   return (
