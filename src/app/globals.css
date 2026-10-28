@@ -378,7 +378,7 @@ html[lang="ja"] .contact-band-title { font-size: clamp(32px, 5vw, 80px); line-he
 .hero-img .hero-live img.hero-live-led { animation: ledShift 16s ease-in-out infinite alternate; }
 /* twinkling lights in the sky */
 .hero-live i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px 2px rgba(214, 236, 255, .55); opacity: 0; animation: twinkle 6s ease-in-out infinite; }
-@keyframes heroDrift { from { transform: scale(1.07) translate(1%, .5%); } to { transform: scale(1.02) translate(-.8%, -.4%); } }
+@keyframes heroDrift { from { transform: scale(1.04) translate(.6%, .3%); } to { transform: scale(1.01) translate(-.5%, -.3%); } }
 @keyframes ledShift { 0% { filter: saturate(.9) contrast(1.05) hue-rotate(0deg); } 50% { filter: saturate(1.15) contrast(1.05) hue-rotate(-50deg); } 100% { filter: saturate(1) contrast(1.05) hue-rotate(40deg); } }
 @keyframes twinkle { 0%, 100% { opacity: 0; scale: .5; } 50% { opacity: .9; scale: 1; } }
 @media (max-width: 768px) { .hero-live-water { filter: none; } }
@@ -407,12 +407,14 @@ html[lang="ja"] .sec-title { font-size: clamp(28px, 3.4vw, 52px); }
    still underneath is the first shot. Each shot drifts and zooms the whole time it shows. */
 .hero-film { position: absolute; inset: 0; }
 .hero-shot { position: absolute; inset: 0; overflow: hidden; opacity: 0; animation: heroShot 28s linear calc(var(--k) * 7s) infinite both; }
-.hero-shot:nth-child(2) { --dx: -3%; }
-.hero-shot:nth-child(3) { --dx: 2.5%; --dy: -2%; }
+.hero-shot:nth-child(2) { --dx: -1.6%; }
+.hero-shot:nth-child(3) { --dx: 1.4%; --dy: -1%; }
 .hero-img .hero-shot img { width: 100%; height: 100%; object-fit: cover; transform: none; animation: heroShotMove 28s linear calc(var(--k) * 7s) infinite both; }
 @keyframes heroShot { 0% { opacity: 0; } 9% { opacity: 1; } 25% { opacity: 1; } 34% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes heroShotMove { 0% { transform: scale(1.06) translate(0, 0); } 34% { transform: scale(1.18) translate(var(--dx, 2%), var(--dy, 1.5%)); } 100% { transform: scale(1.18) translate(var(--dx, 2%), var(--dy, 1.5%)); } }
+@keyframes heroShotMove { 0% { transform: scale(1.02) translate(0, 0); } 34% { transform: scale(1.08) translate(var(--dx, 1.2%), var(--dy, .8%)); } 100% { transform: scale(1.08) translate(var(--dx, 1.2%), var(--dy, .8%)); } }
 @media (prefers-reduced-motion: reduce) { .hero-film { display: none; } }
+/* home hero photos at full colour (the general hero filter mutes them) */
+.hero-v2 .hero-img img { filter: none; }
 
 /* ---------- Home programme carousel (ProgrammeCarousel) ----------
    Square slots side by side; the track is centred on slot --i. The middle photo is full
