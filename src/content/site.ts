@@ -340,7 +340,7 @@ const ja: Content = {
     follow: "Instagramをフォロー",
   },
   contact: {
-    hero: { kicker: "Contact", title: "お問い合わせ", lead: "催事・展示のご相談をお待ちしています。", image: IMG("dome-1.jpg") },
+    hero: { kicker: "Contact", title: "お問い合わせ", lead: "催事・展示のご相談をお待ちしています。", image: IMG("contact-hero.jpg") },
     intro: "主催者さま・出展者さまからのご相談を承ります。日程や内容が未定でもお気軽にご連絡ください。担当者よりご連絡いたします。",
     dmTitle: "InstagramのDMでも",
     dmBody: "公式Instagramのダイレクトメッセージでも、ご相談を受け付けています。",
@@ -573,7 +573,7 @@ const en: Content = {
     follow: "Follow on Instagram",
   },
   contact: {
-    hero: { kicker: "Contact", title: "Contact", lead: "We look forward to hearing about your event.", image: IMG("dome-1.jpg") },
+    hero: { kicker: "Contact", title: "Contact", lead: "We look forward to hearing about your event.", image: IMG("contact-hero.jpg") },
     intro: "We welcome enquiries from organisers and exhibitors, even if your dates or details are not fixed yet. Our team will get back to you.",
     dmTitle: "Or message us on Instagram",
     dmBody: "We also accept enquiries by direct message on our official Instagram.",
