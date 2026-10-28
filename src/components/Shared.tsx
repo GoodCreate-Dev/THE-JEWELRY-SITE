@@ -16,13 +16,27 @@ export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; chi
   );
 }
 
-/** Curtain opening, once per visit: the logo fades in, a soft silver light passes over it, then the black parts left and right (CSS). */
+/**
+ * Opening, once per visit (CSS): the logo fades in and a soft silver light passes over it,
+ * a hairline draws out beneath it with the place name, then the black parts left and right.
+ */
 export function Intro() {
   return (
     <div className="intro" aria-hidden="true">
       <div className="intro-mark">
         <span className="intro-logo"><span className="logo" /><span className="logo shine" /></span>
+        <span className="intro-line" />
+        <span className="intro-cap">Museum &amp; Event Space · Osaka Bay</span>
       </div>
+    </div>
+  );
+}
+
+/** Cover for page changes: closes over the old page, then lifts away from the new one (Motion.tsx). */
+export function PageCover() {
+  return (
+    <div className="page-cover" aria-hidden="true">
+      <span className="logo" />
     </div>
   );
 }
@@ -57,7 +71,7 @@ export function PageHero({ hero, video, index }: { hero: { kicker: string; title
   return (
     <section className="page-hero" data-hero>
       <div className="hero-img">
-        {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="auto" aria-hidden="true" /> : <img {...responsive(hero.image)} alt="" />}
+        {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <img {...responsive(hero.image)} alt="" fetchPriority="high" />}
       </div>
       <div className="hero-veil" />
       <div className="page-hero-inner hero-drift">
@@ -95,7 +109,7 @@ export function WindowFilm({ kicker, title, body, video, image }: { kicker: stri
     <section className="window" data-window>
       <div className="window-stick">
         <div className="window-media">
-          {video ? <video src={video} poster={image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <img {...responsive(image)} alt="" />}
+          {video ? <video src={video} poster={image} autoPlay muted loop playsInline preload="none" aria-hidden="true" /> : <img {...responsive(image)} alt="" loading="lazy" />}
         </div>
         <div className="window-text">
           <p className="kicker">{kicker}</p>

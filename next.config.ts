@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   cacheComponents: !pages,
   partialPrefetching: !pages,
   trailingSlash: true,
+  // Styles arrive inside the HTML, so the first paint does not wait for a stylesheet request.
+  experimental: { inlineCss: true },
   ...(pages && { output: "export", basePath, images: { unoptimized: true } }),
   // Absolute origin for link-share tags; set SITE_URL for the production domain.
   env: { NEXT_PUBLIC_BASE_PATH: basePath, SITE_URL: process.env.SITE_URL ?? (pages ? "https://anamul009.github.io" : "http://localhost:3001") },

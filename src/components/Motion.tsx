@@ -1,7 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
@@ -17,17 +17,117 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  *   --wp on [data-window]  0 → 1 as the window section opens to full screen
  *   --lp on [data-lights]  0 → 1 as the dome "switches on" (home)
  *   .frame img             slow parallax
+ *
+ * Also draws the scroll details: a thin progress line at the top and, on wide screens, the
+ * current section's number and name (from its `.kicker`) in the bottom-left corner; and a
+ * small "View" circle that follows the pointer over photo cards that open a page.
  */
+const VIEW_TARGETS = "a:has(.frame), .space-card";
+
 export function Motion() {
   const pathname = usePathname();
-  const firstPage = useRef(true);
+  const router = useRouter();
+  const covered = useRef(false);
+  const progress = useRef<HTMLDivElement>(null);
+  const index = useRef<HTMLDivElement>(null);
+  const view = useRef<HTMLDivElement>(null);
+  const sections = useRef<{ el: HTMLElement; name: string }[]>([]);
+
+  // "View" circle: eases after the pointer, shown only over photo cards (mouse only).
+  useEffect(() => {
+    const el = view.current;
+    if (!el || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    let x = 0, y = 0, cx = 0, cy = 0, id = 0;
+    const move = () => {
+      cx += (x - cx) * 0.2;
+      cy += (y - cy) * 0.2;
+      el.style.translate = `${cx.toFixed(1)}px ${cy.toFixed(1)}px`;
+      id = Math.abs(x - cx) + Math.abs(y - cy) > 0.5 ? requestAnimationFrame(move) : 0;
+    };
+    const onMove = (e: PointerEvent) => {
+      [x, y] = [e.clientX, e.clientY];
+      if (!el.classList.contains("on")) [cx, cy] = [x, y];
+      el.classList.toggle("on", !!(e.target as Element).closest?.(VIEW_TARGETS));
+      if (!id) id = requestAnimationFrame(move);
+    };
+    const onLeave = () => el.classList.remove("on");
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+    };
+  }, []);
+
+  // Sections named by their kicker, for the corner index; read again on every page.
+  useEffect(() => {
+    sections.current = [...document.querySelectorAll<HTMLElement>("main > *")].flatMap((el) => {
+      const k = el.querySelector(".kicker");
+      if (!k) return [];
+      const name = [...k.childNodes].filter((n) => !(n instanceof Element && n.classList.contains("page-index"))).map((n) => n.textContent).join("").trim();
+      return name ? [{ el, name }] : [];
+    });
+  }, [pathname]);
+
+  // Page change: a click on a link to another page of the site first closes the cover
+  // (.page-cover rises from the bottom), then navigates; the effect below lifts it away.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const cover = document.querySelector<HTMLElement>(".page-cover");
+    if (!cover) return;
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element).closest?.("a");
+      if (!a || a.target || a.hasAttribute("download")) return;
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin || url.pathname === location.pathname || /\.\w+$/.test(url.pathname)) return;
+      e.preventDefault();
+      covered.current = true;
+      cover.classList.remove("lift");
+      cover.classList.add("close");
+      window.setTimeout(() => router.push(url.pathname + url.search + url.hash), 650);
+      // Never leave the page covered if the navigation does not happen.
+      window.setTimeout(() => {
+        if (covered.current) {
+          covered.current = false;
+          cover.classList.replace("close", "lift");
+        }
+      }, 5000);
+    };
+    // Capture phase: runs before Next's <Link> handler, which then sees defaultPrevented and stands down.
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [router]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true, anchors: true });
 
+    let lastIndex = "";
+    const scrollDetails = (vh: number) => {
+      const max = document.documentElement.scrollHeight - vh;
+      progress.current?.style.setProperty("transform", `scaleX(${max > 0 ? clamp01(window.scrollY / max).toFixed(4) : 0})`);
+      const list = sections.current;
+      let i = -1;
+      list.forEach((s, k) => {
+        if (s.el.getBoundingClientRect().top < vh * 0.5) i = k;
+      });
+      const key = i > 0 ? `${i}` : "";
+      if (key === lastIndex || !index.current) return;
+      lastIndex = key;
+      index.current.classList.toggle("on", i > 0);
+      if (i > 0) {
+        const pad = (n: number) => String(n).padStart(2, "0");
+        index.current.querySelector("b")!.textContent = pad(i + 1);
+        index.current.querySelector("em")!.textContent = pad(list.length);
+        index.current.querySelector("span")!.textContent = list[i].name;
+      }
+    };
+
     const scrollEffects = () => {
       const vh = window.innerHeight;
+      scrollDetails(vh);
       document.querySelectorAll<HTMLElement>("[data-hero]").forEach((el) => {
         const r = el.getBoundingClientRect();
         el.style.setProperty("--hp", clamp01(-r.top / r.height).toFixed(4));
@@ -97,28 +197,29 @@ export function Motion() {
       if (el.getBoundingClientRect().top < window.innerHeight) timers.push(window.setTimeout(() => show(el), 80));
       else io.observe(el);
     });
-    timers.push(window.setTimeout(() => els.forEach(show), 4000));
+    timers.push(window.setTimeout(() => els.forEach(show), 4400));
     // After the first-visit logo intro, later page changes reveal without its extra delay.
-    timers.push(window.setTimeout(() => document.documentElement.classList.add("intro-seen"), 3900));
+    timers.push(window.setTimeout(() => document.documentElement.classList.add("intro-seen"), 4300));
     document.querySelector("main")?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: "cubic-bezier(.2,.7,.1,1)" });
-    // Between pages (not on first load, where the logo intro plays): a thin gold line sweeps across.
-    if (!firstPage.current && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const sweep = document.querySelector(".page-sweep") ?? document.body.appendChild(Object.assign(document.createElement("div"), { className: "page-sweep" }));
-      sweep.animate(
-        [
-          { transform: "scaleX(0)", transformOrigin: "left", opacity: 1 },
-          { transform: "scaleX(1)", transformOrigin: "left", opacity: 1, offset: 0.55 },
-          { transform: "scaleX(1)", transformOrigin: "right", opacity: 0 },
-        ],
-        { duration: 1200, easing: "cubic-bezier(.2,.7,.1,1)" },
-      );
+    // Arrived from a covered page change: lift the cover off the new page.
+    if (covered.current) {
+      covered.current = false;
+      const cover = document.querySelector(".page-cover");
+      timers.push(window.setTimeout(() => cover?.classList.replace("close", "lift"), 120));
     }
-    firstPage.current = false;
     return () => {
       io.disconnect();
       timers.forEach(clearTimeout);
     };
   }, [pathname]);
 
-  return null;
+  return (
+    <>
+      <div ref={progress} className="scroll-progress" aria-hidden="true" />
+      <div ref={index} className="scroll-index" aria-hidden="true">
+        <b /> / <em /><span />
+      </div>
+      <div ref={view} className="view-cursor" aria-hidden="true"><span>View</span></div>
+    </>
+  );
 }

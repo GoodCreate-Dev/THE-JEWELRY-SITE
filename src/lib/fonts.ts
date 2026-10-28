@@ -5,6 +5,6 @@ export const manrope = Manrope({ subsets: ["latin"], weight: ["300", "400", "500
 
 // Japanese: Noto Sans JP for headings and text.
 // Large font: not preloaded, Next.js serves the needed slices on demand.
-export const notoSans = Noto_Sans_JP({ weight: ["300", "400", "500"], variable: "--font-jp", display: "swap", preload: false });
+export const notoSans = Noto_Sans_JP({ weight: ["400", "500"], variable: "--font-jp", display: "swap", preload: false });
 
 export const fontVars = `${manrope.variable} ${notoSans.variable}`;

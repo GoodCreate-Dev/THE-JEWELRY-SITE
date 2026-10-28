@@ -36,7 +36,7 @@ function HeroLive({ src }: { src: string }) {
           <feDisplacementMap in="SourceGraphic" scale="6" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </svg>
-      <img {...responsive(src)} alt="" />
+      <img {...responsive(src)} alt="" fetchPriority="high" />
       <div className="hero-live-water"><img {...responsive(src)} alt="" /></div>
       <div className="hero-live-water hero-live-reflection"><img {...responsive(src)} alt="" className="hero-live-led" /></div>
       <div className="hero-live-dome"><img {...responsive(src)} alt="" className="hero-live-led" /></div>
@@ -80,7 +80,7 @@ function HeroFilm() {
     <div className="hero-film" aria-hidden="true">
       {HERO_SHOTS.map((n, k) => (
         <div key={n} className="hero-shot" style={{ "--k": k + 1 } as React.CSSProperties}>
-          <img {...responsive(asset(`/images/${n}.jpg`))} alt="" decoding="async" />
+          <img {...responsive(asset(`/images/${n}.jpg`))} alt="" decoding="async" fetchPriority="low" />
         </div>
       ))}
     </div>
@@ -161,7 +161,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* lights on: scrolling turns the dark dome into its full colour illumination */}
       <section className="lights" data-lights>
         <div className="lights-stick">
-          <img {...responsive(asset("/images/lights-dusk.jpg"))} alt="" className="lights-img" />
+          <img {...responsive(asset("/images/lights-dusk.jpg"))} alt="" className="lights-img" loading="lazy" />
           <div className="lights-text">
             <p className="kicker">{h.window.kicker}</p>
             <h2 className="display sec-title mt-5">
