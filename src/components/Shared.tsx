@@ -100,7 +100,7 @@ export function WindowFilm({ kicker, title, body, video, image }: { kicker: stri
         <div className="window-text">
           <p className="kicker">{kicker}</p>
           <h2 className="display sec-title mt-5">{title}</h2>
-          {body && <p className="mx-auto mt-6 max-w-xl text-white/80">{body}</p>}
+          {body && <p className="mx-auto mt-6 max-w-xl text-white/85">{body}</p>}
         </div>
       </div>
     </section>
@@ -126,7 +126,7 @@ export function ContactBand({ lang }: { lang: Lang }) {
       <h2 className="display contact-band-title rv mt-8" style={{ "--d": ".1s" } as React.CSSProperties}>
         {t.home.contactTitle}
       </h2>
-      <p className="rv mx-auto mt-8 max-w-xl text-white/70" style={{ "--d": ".2s" } as React.CSSProperties}>{t.home.contactBody}</p>
+      <p className="rv mx-auto mt-8 max-w-xl text-white/85" style={{ "--d": ".2s" } as React.CSSProperties}>{t.home.contactBody}</p>
       <div className="rv mt-12 flex flex-wrap justify-center gap-4" style={{ "--d": ".3s" } as React.CSSProperties}>
         <Link href={path(lang, "contact")} className="btn btn-accent">{t.nav.cta}</Link>
         <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line">Instagram DM</a>
@@ -143,15 +143,15 @@ function Footer({ lang }: { lang: Lang }) {
       <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <p className="kicker">THE JEWELRY</p>
-          <p className="mt-6 text-sm text-white/70">{t.footer.address}</p>
+          <p className="mt-6 text-sm text-white/85">{t.footer.address}</p>
           <p className="caption mt-1">{t.footer.tagline}</p>
         </div>
-        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-[13px] text-white/70" aria-label="Footer">
+        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-[13px] text-white/85" aria-label="Footer">
           {PAGES.map((p) => (
             <Link key={p} href={path(lang, p)} className="transition hover:text-white">{t.nav.labels[p]}</Link>
           ))}
         </nav>
-        <div className="flex flex-col gap-2 text-[13px] text-white/70">
+        <div className="flex flex-col gap-2 text-[13px] text-white/85">
           <a href={IG_URL} target="_blank" rel="noopener" className="hover:text-white">Instagram ↗</a>
           <a href={COMPANY_URL} target="_blank" rel="noopener" className="hover:text-white">{t.footer.company} ↗</a>
           <a href={PRIVACY_URL} target="_blank" rel="noopener" className="hover:text-white">{t.footer.privacy} ↗</a>

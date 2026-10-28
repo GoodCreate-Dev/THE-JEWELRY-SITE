@@ -49,9 +49,9 @@ function FeedCard({ lang, item, index }: { lang: Lang; item: FeedItem; index: nu
         <span className="feed-label">{n.labels[item.kind]}</span>
       </div>
       <div className="pt-5">
-        <time className="text-[11px] tracking-[.2em] text-white/45">{item.date}</time>
+        <time className="text-[11px] tracking-[.2em] text-white/85">{item.date}</time>
         <h3 className="display mt-2 line-clamp-2 text-[22px] leading-snug transition-colors duration-500 group-hover:text-accent-hi">{item.title}</h3>
-        <p className="mt-3 line-clamp-2 text-sm text-white/55">{item.desc}</p>
+        <p className="mt-3 line-clamp-2 text-sm text-white/85">{item.desc}</p>
         <span className="mt-4 inline-flex items-center gap-2 text-[11px] tracking-[.2em] text-accent/0 transition-colors duration-500 group-hover:text-accent">
           {n.readMore} <span>→</span>
         </span>
@@ -93,7 +93,7 @@ export function FeedSection({ lang, manual, kind, limit, all }: { lang: Lang; ma
         </div>
       )}
       {shown.length === 0 ? (
-        <p className="display rv py-10 text-center text-3xl text-white/60">{n.comingSoon}</p>
+        <p className="display rv py-10 text-center text-3xl text-white/85">{n.comingSoon}</p>
       ) : (
         <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((item, i) => (
@@ -115,7 +115,7 @@ export function FeedBody({ lang, item }: { lang: Lang; item: FeedItem }) {
   return (
     <section className="sec">
       <div className="mx-auto max-w-3xl">
-        <p className="rv whitespace-pre-line text-[17px] leading-[2.2] text-white/75">{item.desc}</p>
+        <p className="rv whitespace-pre-line text-[17px] leading-[2.2] text-white/85">{item.desc}</p>
         <Ornament className="rv my-14 max-w-xs" />
         {item.permalink && (
           <a href={item.permalink} target="_blank" rel="noopener" className="btn btn-line rv">{n.viewOnIg} ↗</a>
@@ -149,7 +149,7 @@ export function IgPostDetail({ lang }: { lang: Lang }) {
   if (state === "missing") {
     return (
       <section className="sec min-h-[70vh] pt-48 text-center">
-        <p className="display text-3xl text-white/70">{n.comingSoon}</p>
+        <p className="display text-3xl text-white/85">{n.comingSoon}</p>
         <Link href={path(lang, "news")} className="link-arrow mt-10">← {n.back}</Link>
       </section>
     );

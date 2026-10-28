@@ -128,7 +128,7 @@ export function HomePage({ lang }: { lang: Lang }) {
           <span aria-hidden="true"><LitText text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} /></span>
         </h2>
         <div className="statement-foot">
-          <p className="rv max-w-xl text-white/70" style={d(".15s")}>{h.statementBody}</p>
+          <p className="rv max-w-xl text-white/85" style={d(".15s")}>{h.statementBody}</p>
           <Link href={path(lang, "about")} className="link-arrow rv" style={d(".2s")}>{t.common.more} <span>→</span></Link>
         </div>
         <div className="figures">
@@ -150,7 +150,7 @@ export function HomePage({ lang }: { lang: Lang }) {
             <p className="kicker rv">Spaces</p>
             <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.spacesTitle}</h2>
           </div>
-          <p className="rv max-w-md text-white/70" style={d(".2s")}>{h.spacesLead}</p>
+          <p className="rv max-w-md text-white/85" style={d(".2s")}>{h.spacesLead}</p>
         </div>
         <SpacesCards lang={lang} />
       </section>
@@ -165,7 +165,7 @@ export function HomePage({ lang }: { lang: Lang }) {
               <span className="lights-before">{h.lights.before}</span>
               <span className="lights-after">{h.lights.after}</span>
             </h2>
-            <p className="lights-after mx-auto mt-6 max-w-xl text-white/80">{h.window.body}</p>
+            <p className="lights-after mx-auto mt-6 max-w-xl text-white/85">{h.window.body}</p>
           </div>
         </div>
       </section>
@@ -175,7 +175,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         <div className="programme-head">
           <p className="kicker kicker-center rv">Programme</p>
           <h2 className="display sec-title rv mt-5" style={d(".1s")}>{h.programmeTitle}</h2>
-          <p className="rv mx-auto mt-6 max-w-xl text-white/70" style={d(".2s")}>{t.events.hero.lead}</p>
+          <p className="rv mx-auto mt-6 max-w-xl text-white/85" style={d(".2s")}>{t.events.hero.lead}</p>
         </div>
         <div className="rv" style={d(".3s")}>
           <ProgrammeCarousel items={t.events.types.map((e) => ({ no: e.no, title: e.title, en: e.en, image: e.images[0] }))} prev={lang === "ja" ? "前へ" : "Previous"} next={lang === "ja" ? "次へ" : "Next"} />
@@ -190,7 +190,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         <p className="kicker rv">Re:Start</p>
         <p className="display relaunch-date rv" style={{ ...d(".1s"), backgroundImage: `url(${asset("/images/ai-aerial-color-1600.webp")})` }}>{h.relaunch.date}</p>
         <h2 className="display rv mt-6 text-[clamp(24px,2.6vw,40px)]" style={d(".2s")}>{h.relaunch.title}</h2>
-        <p className="rv mx-auto mt-6 max-w-xl text-white/70" style={d(".3s")}>{h.relaunch.body}</p>
+        <p className="rv mx-auto mt-6 max-w-xl text-white/85" style={d(".3s")}>{h.relaunch.body}</p>
         <Link href={path(lang, "contact")} className="btn btn-accent rv mt-10" style={d(".4s")}>{h.relaunch.cta} →</Link>
       </section>
 
@@ -200,7 +200,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         <div className="visit-text">
           <p className="kicker rv">Visit</p>
           <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.visitTitle}</h2>
-          <p className="rv mt-6 max-w-md text-white/70" style={d(".2s")}>{h.visitBody}</p>
+          <p className="rv mt-6 max-w-md text-white/85" style={d(".2s")}>{h.visitBody}</p>
           <Link href={path(lang, "visit")} className="link-arrow rv mt-10" style={d(".3s")}>{t.common.more} <span>→</span></Link>
         </div>
       </section>
@@ -227,7 +227,7 @@ export function AboutPage({ lang }: { lang: Lang }) {
           </div>
           <div className="chapter-text">
             <h2 className="display rv text-[clamp(30px,3.6vw,56px)] leading-tight">{c.title}</h2>
-            <p className="rv text-white/70" style={d(".12s")}>{c.body}</p>
+            <p className="rv text-white/85" style={d(".12s")}>{c.body}</p>
           </div>
         </article>
       ))}
@@ -258,7 +258,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
           <dl className="plate-specs">
             <div className="rv">
               <dt className="kicker">{s.capacityLabel}</dt>
-              <dd className="display mt-3 text-[clamp(30px,3vw,44px)]">{sp.capacity}<small className="ml-2 text-sm text-white/50">{t.common.guests}</small></dd>
+              <dd className="display mt-3 text-[clamp(30px,3vw,44px)]">{sp.capacity}<small className="ml-2 text-sm text-white/85">{t.common.guests}</small></dd>
             </div>
             <div className="rv" style={d(".1s")}>
               <dt className="kicker">{s.usesLabel}</dt>
@@ -268,7 +268,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
             </div>
             <div className="rv" style={d(".2s")}>
               <dt className="sr-only">{sp.name}</dt>
-              <dd className="text-white/70">{sp.body}</dd>
+              <dd className="text-white/85">{sp.body}</dd>
             </div>
           </dl>
         </section>
@@ -292,7 +292,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
       <section className="sec ev-intro">
         <h2 className="display ev-intro-title rv">{e.intro.title}</h2>
         <div className="rv" style={d(".1s")}>
-          <p className="text-white/70">{e.intro.body}</p>
+          <p className="text-white/85">{e.intro.body}</p>
           <Link href={path(lang, "contact")} className="btn btn-line mt-8">{e.intro.cta} →</Link>
         </div>
       </section>
@@ -307,8 +307,8 @@ export function EventsPage({ lang }: { lang: Lang }) {
               <div className="rv">
                 <p className="caption">{ty.no} — {ty.en}</p>
                 <h3 className="display ev-type-title">{ty.title}</h3>
-                <p className="mt-6 leading-[2.1] text-white/75">{ty.body}</p>
-                <p className="mt-4 leading-[2.1] text-white/60">{ty.more}</p>
+                <p className="mt-6 leading-[2.1] text-white/85">{ty.body}</p>
+                <p className="mt-4 leading-[2.1] text-white/85">{ty.more}</p>
               </div>
               <div className="ev-facts rv" style={d(".1s")}>
                 {ty.facts.map((f, k) => (
@@ -317,7 +317,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
                     <p>{f.value}</p>
                   </details>
                 ))}
-                <p className="mt-6 text-xs text-white/45">{t.common.pending}</p>
+                <p className="mt-6 text-xs text-white/85">{t.common.pending}</p>
               </div>
             </div>
           </article>
@@ -357,7 +357,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
               <span className="flow-no display">{f.no}</span>
               <div>
                 <h3 className="display text-[clamp(22px,2vw,30px)]">{f.title}</h3>
-                <p className="mt-3 text-sm leading-[2] text-white/65">{f.body}</p>
+                <p className="mt-3 text-sm leading-[2] text-white/85">{f.body}</p>
               </div>
             </li>
           ))}
@@ -380,13 +380,13 @@ export function VisitPage({ lang }: { lang: Lang }) {
         <div className="rv">
           <h2 className="kicker">{v.hoursTitle}</h2>
           <p className="display info-value">{v.hours}</p>
-          <p className="mt-4 text-sm text-white/60">{v.hoursNote}</p>
+          <p className="mt-4 text-sm text-white/85">{v.hoursNote}</p>
           <span className="chip mt-5 inline-block">{t.common.pending}</span>
         </div>
         <div className="rv" style={d(".1s")}>
           <h2 className="kicker">{v.addressTitle}</h2>
           <p className="display info-value">{v.address[0]}<br />{v.address[1]}</p>
-          <ul className="mt-6 text-sm text-white/65">{v.trains.map((x) => <li key={x} className="border-t border-white/10 py-3">{x}</li>)}</ul>
+          <ul className="mt-6 text-sm text-white/85">{v.trains.map((x) => <li key={x} className="border-t border-white/10 py-3">{x}</li>)}</ul>
         </div>
         <div className="rv" style={d(".2s")}>
           <h2 className="kicker">{v.timesTitle}</h2>
@@ -404,7 +404,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
         </div>
         <div className="sec bg-coal">
           <p className="kicker rv">{v.parkingTitle}</p>
-          <p className="rv mt-6 max-w-md text-white/75" style={d(".1s")}>{v.parking}</p>
+          <p className="rv mt-6 max-w-md text-white/85" style={d(".1s")}>{v.parking}</p>
           <a href={PARKING_URL} target="_blank" rel="noopener" className="btn btn-line rv mt-8" style={d(".2s")}>{v.parkingLink} ↗</a>
           <figure className="rv mt-10" style={d(".3s")}>
             <img src={asset("/images/parking-atc.png")} alt={v.parkingAtc} loading="lazy" className="w-full" />
@@ -500,7 +500,7 @@ export function ContactPage({ lang }: { lang: Lang }) {
           <p className="display rv text-[clamp(24px,2.4vw,34px)] leading-snug">{c.intro}</p>
           <div className="dm-card rv" style={d(".1s")}>
             <h2 className="display text-2xl">{c.dmTitle}</h2>
-            <p className="mt-3 text-sm text-white/65">{c.dmBody}</p>
+            <p className="mt-3 text-sm text-white/85">{c.dmBody}</p>
             <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line mt-6">Instagram DM ↗</a>
           </div>
         </aside>

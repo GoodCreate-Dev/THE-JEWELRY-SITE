@@ -74,8 +74,8 @@ export function ContactForm({ lang }: { lang: Lang }) {
   };
 
   const note = { idle: "", sending: f.sending, sent: f.sent, failed: f.failed }[status];
-  const input = "mt-2 block w-full border-0 border-b border-white/25 bg-transparent px-0 py-3 text-base text-white outline-none transition placeholder:text-white/30 focus:border-accent-hi";
-  const label = "block text-[11px] tracking-[.18em] text-white/55";
+  const input = "mt-2 block w-full border-0 border-b border-white/25 bg-transparent px-0 py-3 text-base text-white outline-none transition placeholder:text-white/50 focus:border-accent-hi";
+  const label = "block text-[11px] tracking-[.18em] text-white/85";
   const req = <span className="ml-2 text-accent">{f.required}</span>;
 
   return (
@@ -100,7 +100,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       <label className={`${label} md:col-span-2`}>{f.message}{req}<textarea name="message" rows={5} required className={`${input} resize-y`} /></label>
       {/* honeypot: hidden from people, bots fill it in */}
       <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-      <label className="flex items-center gap-3 text-sm text-white/70 md:col-span-2">
+      <label className="flex items-center gap-3 text-sm text-white/85 md:col-span-2">
         <input type="checkbox" required className="size-4 accent-white" />
         <span>{f.agree[0]}<a href={PRIVACY_URL} target="_blank" rel="noopener" className="underline underline-offset-4">{f.agree[1]}</a>{f.agree[2]}</span>
       </label>
