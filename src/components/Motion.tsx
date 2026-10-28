@@ -19,14 +19,11 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  *   .frame img             slow parallax
  *
  * Also draws the scroll details: a thin progress line at the top and, on wide screens, the
- * current section's number and name (from its `.kicker`) in the bottom-left corner; and a
- * small arrow circle that follows the pointer over photo cards that open a page.
+ * current section's number and name (from its `.kicker`) in the bottom-left corner.
  *
  * Page change: the screen frosts over like a glass pane and shows the destination's number
  * and name (read from the menu), the new page loads underneath, then the glass clears.
  */
-const VIEW_TARGETS = "a:has(.frame), .space-card";
-
 export function Motion() {
   const pathname = usePathname();
   const router = useRouter();
@@ -35,35 +32,7 @@ export function Motion() {
   const lenisRef = useRef<Lenis | null>(null);
   const progress = useRef<HTMLDivElement>(null);
   const index = useRef<HTMLDivElement>(null);
-  const view = useRef<HTMLDivElement>(null);
   const sections = useRef<{ el: HTMLElement; name: string }[]>([]);
-
-  // Arrow circle: eases after the pointer, shown only over photo cards (mouse only).
-  useEffect(() => {
-    const el = view.current;
-    if (!el || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    let x = 0, y = 0, cx = 0, cy = 0, id = 0;
-    const move = () => {
-      cx += (x - cx) * 0.2;
-      cy += (y - cy) * 0.2;
-      el.style.translate = `${cx.toFixed(1)}px ${cy.toFixed(1)}px`;
-      id = Math.abs(x - cx) + Math.abs(y - cy) > 0.5 ? requestAnimationFrame(move) : 0;
-    };
-    const onMove = (e: PointerEvent) => {
-      [x, y] = [e.clientX, e.clientY];
-      if (!el.classList.contains("on")) [cx, cy] = [x, y];
-      el.classList.toggle("on", !!(e.target as Element).closest?.(VIEW_TARGETS));
-      if (!id) id = requestAnimationFrame(move);
-    };
-    const onLeave = () => el.classList.remove("on");
-    window.addEventListener("pointermove", onMove, { passive: true });
-    document.documentElement.addEventListener("pointerleave", onLeave);
-    return () => {
-      cancelAnimationFrame(id);
-      window.removeEventListener("pointermove", onMove);
-      document.documentElement.removeEventListener("pointerleave", onLeave);
-    };
-  }, []);
 
   // Sections named by their kicker, for the corner index; read again on every page.
   useEffect(() => {
@@ -246,7 +215,6 @@ export function Motion() {
       <div ref={index} className="scroll-index" aria-hidden="true">
         <b /> / <em /><span />
       </div>
-      <div ref={view} className="view-cursor" aria-hidden="true"><span>→</span></div>
       <div ref={veil} className="page-veil" aria-hidden="true">
         <div className="pv-inner">
           <span className="logo" />

@@ -643,10 +643,6 @@ body::after { opacity: .035; }
 .feed-card h3 { transition: color .5s, transform .7s var(--ease); }
 .feed-card:hover h3 { transform: translateX(6px); }
 
-/* "View" circle following the pointer over photo cards (Motion.tsx) */
-.view-cursor { position: fixed; left: 0; top: 0; z-index: 70; pointer-events: none; }
-.view-cursor span { display: grid; place-items: center; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; border: 1px solid rgba(238, 241, 246, .6); background: rgba(13, 17, 27, .35); backdrop-filter: blur(6px); font-size: 10px; letter-spacing: .3em; text-indent: .3em; text-transform: uppercase; color: var(--color-white); scale: 0; opacity: 0; transition: scale .5s var(--ease), opacity .4s; }
-.view-cursor.on span { scale: 1; opacity: 1; }
 
 /* ---------- scroll details (Motion.tsx) ---------- */
 .scroll-progress { position: fixed; left: 0; right: 0; top: 0; z-index: 65; height: 2px; background: var(--iri); transform: scaleX(0); transform-origin: left; pointer-events: none; }
@@ -656,9 +652,8 @@ body::after { opacity: .035; }
 .scroll-index em { font-style: normal; }
 .scroll-index span { position: relative; margin-left: 18px; padding-left: 30px; text-transform: uppercase; }
 .scroll-index span::before { content: ""; position: absolute; left: 0; top: 50%; width: 20px; height: 1px; background: currentColor; }
-.menu-open .scroll-index, .menu-open .view-cursor { opacity: 0; }
+.menu-open .scroll-index { opacity: 0; }
 @media (max-width: 1020px) { .scroll-index { display: none; } }
-@media (hover: none) { .view-cursor { display: none; } }
 
 /* ---------- phone polish ---------- */
 * { -webkit-tap-highlight-color: transparent; }
@@ -764,7 +759,3 @@ html[lang="ja"] .pv-name { font-size: clamp(26px, 3.6vw, 52px); letter-spacing: 
 .page-veil.in .pv-line { width: 140px; transition: width .8s var(--ease) .35s; }
 @media (prefers-reduced-motion: reduce) { .page-veil { display: none; } }
 
-/* the circle over photo cards shows an arrow rather than a word */
-.view-cursor span { font-size: 22px; letter-spacing: 0; text-indent: 0; text-transform: none; font-weight: 300; }
-.view-cursor.on span { animation: viewNudge 1.6s var(--ease) .3s infinite; }
-@keyframes viewNudge { 0%, 100% { padding-left: 0; } 50% { padding-left: 8px; } }
