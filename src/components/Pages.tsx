@@ -73,7 +73,7 @@ function LitText({ text, word }: { text: string; word: string }) {
  * slow camera move, so the hero plays like one continuous film rather than a slideshow.
  * CSS only (.hero-film): every shot shares one 28s cycle, started 7s apart.
  */
-const HERO_SHOTS = ["hero-blue", "hero-violet", "hero-rose"];
+const HERO_SHOTS = ["hero-13", "hero-12", "hero-tunnel"];
 
 function HeroFilm() {
   return (
@@ -107,7 +107,8 @@ export function HomePage({ lang }: { lang: Lang }) {
             <span aria-hidden="true" className="iri-text"><SplitText text={h.title[1]} start={h.title[0].length + 2} /></span>
           </h1>
           <div className="hero-foot rv" style={d(".5s")}>
-            <p className="hero-lead">{h.lead}</p>
+            {/* Japanese hero shows the headline only */}
+            {lang !== "ja" && <p className="hero-lead">{h.lead}</p>}
             <div className="hero-actions">
               <Link href={path(lang, "contact")} className="btn btn-accent">{h.ctaPrimary}</Link>
               <Link href={path(lang, "spaces")} className="btn btn-line">{h.ctaSecondary}</Link>

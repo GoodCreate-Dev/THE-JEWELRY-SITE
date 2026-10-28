@@ -161,7 +161,7 @@ const ja: Content = {
   },
   home: {
     kicker: "Museum & Event Space ・ Osaka Bay",
-    title: ["ジュエリー、", "再起動。"],
+    title: ["ジュエリー", "再起動"],
     lead: "博物館として生まれたドームが、あなたの展示と催事のために、扉をひらきます。",
     ctaPrimary: "催事・展示のご相談",
     ctaSecondary: "スペースを見る",

@@ -220,7 +220,8 @@ html[lang="ja"] .hero h1 { font-size: clamp(40px, 6vw, 96px); }
 /* ---------- home v2 ("Midnight Jewel") ---------- */
 /* hero: text bottom-left, editorial */
 .hero-v2 { place-items: end start; text-align: left; }
-.hero-v2 .hero-veil { background: linear-gradient(90deg, rgba(13, 17, 27, .78), rgba(13, 17, 27, .25) 55%, rgba(13, 17, 27, .1)), linear-gradient(rgba(13, 17, 27, .5), transparent 30%, transparent 55%, var(--color-black)); }
+.hero-v2 .hero-veil { background: radial-gradient(48% 52% at 18% 68%, rgba(13, 17, 27, .6), transparent 75%), linear-gradient(90deg, rgba(13, 17, 27, .5), rgba(13, 17, 27, .1) 45%, transparent 70%), linear-gradient(rgba(13, 17, 27, .3), transparent 20%, transparent 72%, var(--color-black)); }
+.hero-v2 .hero-inner { text-shadow: 0 2px 24px rgba(13, 17, 27, .55); }
 .hero-v2 .hero-inner { align-items: flex-start; max-width: none; width: 100%; padding: 200px var(--pad) clamp(56px, 8vh, 96px); gap: 22px; }
 .hero-v2 h1 { font-size: clamp(54px, 9vw, 150px); line-height: .98; }
 html[lang="ja"] .hero-v2 h1 { font-size: clamp(44px, 7vw, 116px); line-height: 1.25; }
