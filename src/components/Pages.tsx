@@ -9,6 +9,7 @@ import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
 import { SpacesCards } from "./SpacesCards";
 import { ProgrammeCarousel } from "./ProgrammeCarousel";
 import { PhotoCarousel } from "./PhotoCarousel";
+import { HeroFilm } from "./HeroFilm";
 import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
@@ -65,25 +66,6 @@ function LitText({ text, word }: { text: string; word: string }) {
         ),
       )}
     </>
-  );
-}
-
-/**
- * Further hero shots that dissolve in over the living still, one after another, each with a
- * slow camera move, so the hero plays like one continuous film rather than a slideshow.
- * CSS only (.hero-film): every shot shares one 28s cycle, started 7s apart.
- */
-const HERO_SHOTS = ["hero-13", "hero-12", "hero-tunnel"];
-
-function HeroFilm() {
-  return (
-    <div className="hero-film" aria-hidden="true">
-      {HERO_SHOTS.map((n, k) => (
-        <div key={n} className="hero-shot" style={{ "--k": k + 1 } as React.CSSProperties}>
-          <img {...responsive(asset(`/images/${n}.jpg`))} alt="" decoding="async" fetchPriority="low" />
-        </div>
-      ))}
-    </div>
   );
 }
 
@@ -191,7 +173,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* relaunch: the date, full screen */}
       <section className="relaunch aura">
         <p className="kicker rv">Re:Start</p>
-        <p className="display relaunch-date rv" style={{ ...d(".1s"), backgroundImage: `url(${asset("/images/relaunch-led-1600.webp")})` }}>{h.relaunch.date}</p>
+        <p className="display relaunch-date rv" style={{ ...d(".1s"), "--photo": `url(${asset("/images/relaunch-led-1600.webp")})` } as React.CSSProperties}>{h.relaunch.date}</p>
         <h2 className="display rv mt-6 text-[clamp(24px,2.6vw,40px)]" style={d(".2s")}>{h.relaunch.title}</h2>
         <p className="rv mx-auto mt-6 max-w-xl text-white/85" style={d(".3s")}>{h.relaunch.body}</p>
         <Link href={path(lang, "contact")} className="btn btn-accent rv mt-10" style={d(".4s")}>{h.relaunch.cta} →</Link>
