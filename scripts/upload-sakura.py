@@ -4,6 +4,7 @@ folder over FTP with TLS. Asks for the server password when run; it is kept in m
 
     python scripts/upload-sakura.py              # everything that changed since the last upload
     python scripts/upload-sakura.py .htaccess    # only the files named
+    python scripts/upload-sakura.py --clean      # delete server photos/videos the site no longer uses
 
 A fingerprint of every uploaded file is kept in deploy/sakura/uploaded.json, so later runs
 (or a run that was cut off) send only new or changed files. If the server drops the
@@ -27,6 +28,9 @@ MANIFEST = os.path.join(DEPLOY, "uploaded.json")
 
 # Files the server owns once it is running; uploaded only if missing there.
 KEEP_ON_SERVER = {"instagram/posts.json", "instagram/config.php"}
+# Folders --clean tidies: files there that are not in the package are removed from the server.
+# (instagram/images is written by the server itself and is never touched.)
+CLEAN_DIRS = ["images", "videos"]
 RETRIES = 6
 
 
@@ -94,9 +98,51 @@ def fingerprint(path):
         return hashlib.sha256(fh.read()).hexdigest()
 
 
+def clean(done):
+    """Lists server files in CLEAN_DIRS that the package no longer has, and deletes them after a yes."""
+    up = Uploader(getpass.getpass(f"FTP password for {USER}@{HOST}: "))
+    up.connect()
+    print("Connected.")
+    extra = []
+    for d in CLEAN_DIRS:
+        def listing(ftp):
+            try:
+                return [(n, f.get("type")) for n, f in ftp.mlsd(f"{REMOTE}/{d}")]
+            except ftplib.error_perm:
+                return []
+        for name, kind in up.run(listing):
+            if kind == "file" and not os.path.isfile(os.path.join(LOCAL, d, name)):
+                extra.append(f"{d}/{name}")
+    if not extra:
+        print("Server is clean: no unused photos or videos.")
+        up.ftp.quit()
+        return
+    for path in sorted(extra):
+        print(f"unused  {path}")
+    if input(f"\nDelete these {len(extra)} file(s) from the server? Type yes: ").strip().lower() != "yes":
+        print("Nothing deleted.")
+        up.ftp.quit()
+        return
+    for path in sorted(extra):
+        up.run(lambda ftp: ftp.delete(f"{REMOTE}/{path}"))
+        done.pop(path, None)
+        print(f"del   {path}")
+    with open(MANIFEST, "w", encoding="utf-8") as fh:
+        json.dump(done, fh, indent=0)
+    up.ftp.quit()
+    print(f"\nDone: {len(extra)} unused file(s) removed from {HOST}/{REMOTE}.")
+
+
 def main():
     if not os.path.isfile(os.path.join(LOCAL, "index.html")):
         sys.exit("deploy/sakura/www is missing: run  node scripts/build-sakura.mjs  first.")
+    if sys.argv[1:] == ["--clean"]:
+        done = {}
+        if os.path.isfile(MANIFEST):
+            with open(MANIFEST, encoding="utf-8") as fh:
+                done = json.load(fh)
+        clean(done)
+        return
     only = {a.replace("\\", "/").lstrip("/") for a in sys.argv[1:]}
     done = {}
     if os.path.isfile(MANIFEST):
