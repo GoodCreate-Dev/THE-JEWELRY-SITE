@@ -144,7 +144,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       <Marquee words={["Museum", "Exhibitions", "Events", "Osaka Bay"]} />
 
       {/* spaces */}
-      <section className="sec aura !pt-[clamp(60px,8vw,120px)] !pb-[clamp(40px,5vw,80px)]">
+      <section className="sec aura !pt-[clamp(60px,8vw,120px)] !pb-[clamp(60px,8vw,120px)]">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-8">
           <div>
             <p className="kicker rv">Spaces</p>
@@ -155,7 +155,7 @@ export function HomePage({ lang }: { lang: Lang }) {
         <SpacesCards lang={lang} />
       </section>
 
-      <FeedSection lang={lang} manual={feed(lang)} limit={3} className="!pt-[clamp(40px,5vw,80px)]" />
+      <FeedSection lang={lang} manual={feed(lang)} limit={3} className="!pt-[clamp(60px,8vw,120px)]" />
 
       {/* lights on: scrolling turns the dark dome into its full colour illumination */}
       <section className="lights" data-lights>
