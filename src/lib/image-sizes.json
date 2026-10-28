@@ -91,5 +91,20 @@
   "real-rainbow-walkway": [
     800,
     1024
+  ],
+  "space-dome": [
+    800,
+    1600,
+    2400
+  ],
+  "space-hall": [
+    800,
+    1600,
+    2400
+  ],
+  "space-outer": [
+    800,
+    1600,
+    2048
   ]
 }
