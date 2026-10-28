@@ -325,8 +325,8 @@ const ja: Content = {
   news: {
     hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("dome-2.jpg") },
     items: [
-      { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("ai-front.jpg") },
-      { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("real-rainbow-walkway.jpg") },
+      { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("news-open.jpg") },
+      { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("news-renewal.jpg") },
     ],
     feedTitle: "お知らせ・イベント",
     eventsTitle: "開催情報",
@@ -558,8 +558,8 @@ const en: Content = {
   news: {
     hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("dome-2.jpg") },
     items: [
-      { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("ai-front.jpg") },
-      { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("real-rainbow-walkway.jpg") },
+      { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("news-open.jpg") },
+      { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("news-renewal.jpg") },
     ],
     feedTitle: "News & Events",
     eventsTitle: "What’s on",
