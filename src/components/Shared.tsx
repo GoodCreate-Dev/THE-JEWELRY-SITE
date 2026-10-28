@@ -32,15 +32,6 @@ export function Intro() {
   );
 }
 
-/** Cover for page changes: closes over the old page, then lifts away from the new one (Motion.tsx). */
-export function PageCover() {
-  return (
-    <div className="page-cover" aria-hidden="true">
-      <span className="logo" />
-    </div>
-  );
-}
-
 /**
  * Text split into letters that rise in one after another (CSS `.letters`).
  * Words stay unbroken; `start` offsets the letter count so several lines run on in sequence.

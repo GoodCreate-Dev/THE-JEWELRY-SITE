@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { Motion } from "@/components/Motion";
-import { Intro, PageCover } from "@/components/Shared";
+import { Intro } from "@/components/Shared";
 import { asset } from "@/content/site";
 import { fontVars } from "@/lib/fonts";
 import { share } from "@/lib/meta";
@@ -23,7 +23,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <Intro />
         {children}
-        <PageCover />
         <Motion />
       </body>
     </html>
