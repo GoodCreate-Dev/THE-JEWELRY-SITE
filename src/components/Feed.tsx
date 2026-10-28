@@ -64,7 +64,7 @@ function FeedCard({ lang, item, index }: { lang: Lang; item: FeedItem; index: nu
  * News & Events grid: manual news (from the page) plus tagged Instagram posts. Home shows the
  * latest few, the News page all, the Events page only event posts ("coming soon" if none).
  */
-export function FeedSection({ lang, manual, kind, limit, all }: { lang: Lang; manual: FeedItem[]; kind?: FeedKind; limit?: number; all?: boolean }) {
+export function FeedSection({ lang, manual, kind, limit, all, className = "" }: { lang: Lang; manual: FeedItem[]; kind?: FeedKind; limit?: number; all?: boolean; className?: string }) {
   const n = content[lang].news;
   const [ig, setIg] = useState<FeedItem[]>([]);
   const ref = useRef<HTMLElement>(null);
@@ -80,7 +80,7 @@ export function FeedSection({ lang, manual, kind, limit, all }: { lang: Lang; ma
   const items = [...manual, ...ig].sort((a, b) => dateKey(b.date) - dateKey(a.date));
   const shown = limit ? items.slice(0, limit) : items;
   return (
-    <section ref={ref} className="sec aura">
+    <section ref={ref} className={`sec aura ${className}`}>
       {!all && (
         <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
           <div>
