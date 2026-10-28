@@ -33,7 +33,7 @@ function HeroLive({ src }: { src: string }) {
           <feTurbulence type="fractalNoise" baseFrequency="0.002 0.06" numOctaves="2" seed="7">
             <animate attributeName="baseFrequency" dur="14s" values="0.002 0.06;0.0026 0.078;0.002 0.06" repeatCount="indefinite" />
           </feTurbulence>
-          <feDisplacementMap in="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="G" />
+          <feDisplacementMap in="SourceGraphic" scale="6" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </svg>
       <img {...responsive(src)} alt="" />

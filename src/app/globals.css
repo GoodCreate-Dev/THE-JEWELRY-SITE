@@ -370,10 +370,10 @@ html[lang="ja"] .contact-band-title { font-size: clamp(32px, 5vw, 80px); line-he
 .hero-live { --w: max(100cqw, calc(100cqh * 1.4993)); position: absolute; top: 50%; left: clamp(calc(100cqw - var(--w)), calc(50cqw - var(--w) * .51), 0px); width: var(--w); height: max(100cqh, calc(100cqw / 1.4993)); translate: 0 -50%; animation: heroDrift 28s ease-in-out infinite alternate; }
 .hero-live img, .hero-live > div { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero-img .hero-live img { object-fit: fill; transform: none; animation: none; }
-/* water: the open basin between the promenade and the far shore ripples */
-.hero-live-water { filter: url(#hero-water); -webkit-mask-image: radial-gradient(ellipse 44% 15% at 62% 67%, #000 55%, transparent 100%); mask-image: radial-gradient(ellipse 44% 15% at 62% 67%, #000 55%, transparent 100%); }
+/* water: only open water ripples (the sea right of the dome); the dome's base ring and the promenade stay still */
+.hero-live-water { filter: url(#hero-water); -webkit-mask-image: radial-gradient(ellipse 17% 8% at 84% 64%, #000 45%, transparent 100%); mask-image: radial-gradient(ellipse 17% 8% at 84% 64%, #000 45%, transparent 100%); }
 /* LED colours slowly shift on the glass and in its reflection */
-.hero-live-reflection { -webkit-mask-image: radial-gradient(ellipse 19% 10% at 51% 71%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 19% 10% at 51% 71%, #000 50%, transparent 100%); }
+.hero-live-reflection { -webkit-mask-image: radial-gradient(ellipse 16% 7% at 51% 73%, #000 45%, transparent 100%); mask-image: radial-gradient(ellipse 16% 7% at 51% 73%, #000 45%, transparent 100%); }
 .hero-live-dome { -webkit-mask-image: radial-gradient(ellipse 19% 16% at 51% 45%, #000 72%, transparent 100%); mask-image: radial-gradient(ellipse 19% 16% at 51% 45%, #000 72%, transparent 100%); }
 .hero-img .hero-live img.hero-live-led { animation: ledShift 16s ease-in-out infinite alternate; }
 /* twinkling lights in the sky */
