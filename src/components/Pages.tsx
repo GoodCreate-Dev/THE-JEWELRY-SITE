@@ -273,7 +273,7 @@ export function SpacesPage({ lang }: { lang: Lang }) {
           </dl>
         </section>
       ))}
-      <WindowFilm kicker="Combination" title={s.combineTitle} body={s.combineBody} image={asset("/images/dome-1.jpg")} />
+      <WindowFilm kicker="Combination" title={s.combineTitle} body={s.combineBody} image={asset("/images/spaces-combine.jpg")} />
       <ContactBand lang={lang} />
     </Shell>
   );

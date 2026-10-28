@@ -205,7 +205,7 @@ const ja: Content = {
     quote: "表現と出会いのための、新しい舞台へ。",
   },
   spaces: {
-    hero: { kicker: "Spaces", title: "スペース", lead: "目的と規模にあわせて選べる、三つの空間。", image: IMG("dome-3.jpg") },
+    hero: { kicker: "Spaces", title: "スペース", lead: "目的と規模にあわせて選べる、三つの空間。", image: IMG("spaces-hero.jpg") },
     usesLabel: "主な用途",
     capacityLabel: "収容人数",
     spaces: [
@@ -438,7 +438,7 @@ const en: Content = {
     quote: "A new stage for expression and encounters.",
   },
   spaces: {
-    hero: { kicker: "Spaces", title: "Spaces", lead: "Three spaces for every scale and purpose.", image: IMG("dome-3.jpg") },
+    hero: { kicker: "Spaces", title: "Spaces", lead: "Three spaces for every scale and purpose.", image: IMG("spaces-hero.jpg") },
     usesLabel: "Ideal for",
     capacityLabel: "Capacity",
     spaces: [
