@@ -28,6 +28,7 @@ export function Motion() {
   const pathname = usePathname();
   const router = useRouter();
   const covered = useRef(false);
+  const lenisRef = useRef<Lenis | null>(null);
   const progress = useRef<HTMLDivElement>(null);
   const index = useRef<HTMLDivElement>(null);
   const view = useRef<HTMLDivElement>(null);
@@ -72,16 +73,27 @@ export function Motion() {
 
   // Page change: a click on a link to another page of the site first closes the cover
   // (.page-cover rises from the bottom), then navigates; the effect below lifts it away.
+  // A link to the page already open (e.g. Home in the menu while on Home) goes back to its top.
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cover = document.querySelector<HTMLElement>(".page-cover");
-    if (!cover) return;
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = (e.target as Element).closest?.("a");
       if (!a || a.target || a.hasAttribute("download")) return;
       const url = new URL(a.href, location.href);
-      if (url.origin !== location.origin || url.pathname === location.pathname || /\.\w+$/.test(url.pathname)) return;
+      if (url.origin !== location.origin || /\.\w+$/.test(url.pathname)) return;
+      if (url.pathname === location.pathname) {
+        if (url.hash) return;
+        // From the open menu: jump while it fades out; otherwise glide up.
+        const fromMenu = document.documentElement.classList.contains("menu-open");
+        window.setTimeout(() => {
+          if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: fromMenu || reduced, force: true });
+          else window.scrollTo({ top: 0, behavior: fromMenu || reduced ? "instant" : "smooth" });
+        }, fromMenu ? 60 : 0);
+        return;
+      }
+      if (reduced || !cover) return;
       e.preventDefault();
       covered.current = true;
       cover.classList.remove("lift");
@@ -103,6 +115,7 @@ export function Motion() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true, anchors: true });
+    lenisRef.current = lenis;
 
     let lastIndex = "";
     const scrollDetails = (vh: number) => {
@@ -176,6 +189,7 @@ export function Motion() {
     return () => {
       cancelAnimationFrame(id);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
 
