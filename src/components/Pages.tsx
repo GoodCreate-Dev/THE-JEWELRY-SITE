@@ -286,7 +286,7 @@ export function EventsPage({ lang }: { lang: Lang }) {
   const arrows = { prev: lang === "ja" ? "前へ" : "Previous", next: lang === "ja" ? "次へ" : "Next" };
   return (
     <Shell lang={lang} page="events">
-      <PageHero hero={e.hero} index="04" />
+      <PageHero hero={e.hero} video={asset("/videos/events-hero.mp4")} index="04" />
 
       {/* intro and enquiry */}
       <section className="sec ev-intro">

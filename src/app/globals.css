@@ -381,6 +381,8 @@ html[lang="ja"] .contact-band-title { font-size: clamp(32px, 5vw, 80px); line-he
 /* ---------- page hero (sub pages) ---------- */
 .page-hero { position: relative; min-height: 88svh; display: flex; align-items: flex-end; overflow: hidden; }
 .page-hero .hero-img img { animation: pageDrift 26s ease-in-out infinite alternate; }
+/* Events hero film: the dome sits left of centre, so narrow screens crop towards it */
+.page-hero .hero-img video { object-position: 30% 50%; }
 @keyframes pageDrift { from { transform: scale(1.12) translate(1%, .6%); } to { transform: scale(1.03) translate(-1%, -.4%); } }
 .page-hero .hero-veil { background: linear-gradient(90deg, rgba(5, 7, 13, .7), rgba(5, 7, 13, .15) 60%), linear-gradient(rgba(5, 7, 13, .55), transparent 35%, rgba(5, 7, 13, .35) 60%, var(--color-black)); }
 .page-hero-inner { position: relative; width: 100%; padding: 200px var(--pad) clamp(48px, 7vh, 80px); display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
