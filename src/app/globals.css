@@ -15,7 +15,7 @@
   --color-accent-lo: #5d7392;
   --color-mute: #b4bccb;
   --font-display: var(--font-en), var(--font-jp), sans-serif;
-  --font-mincho: var(--font-jp), var(--font-en), serif;
+  --font-mincho: var(--font-jp), var(--font-en), sans-serif;
   --font-sans: var(--font-en), var(--font-jp), system-ui, sans-serif;
 }
 
