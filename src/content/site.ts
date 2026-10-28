@@ -65,7 +65,7 @@ export type Content = {
     hero: Hero;
     intro: { title: string; body: string; cta: string };
     typesTitle: string;
-    types: { no: string; title: string; en: string; body: string; more: string; images: string[]; facts: { label: string; value: string }[] }[];
+    types: { no: string; title: string; en: string; body: string; more: string; card: string; images: string[]; facts: { label: string; value: string }[] }[];
     spacesTitle: string;
     flowTitle: string;
     flow: { no: string; title: string; body: string }[];
@@ -217,7 +217,7 @@ const ja: Content = {
     combineBody: "ドームでの展示と外周部でのレセプションなど、複数の空間を組み合わせたご利用も可能です。内容に合わせてご提案いたします。",
   },
   events: {
-    hero: { kicker: "Exhibitions & Events", title: "催事・展示", lead: "ミュージアムとしての空間で、表現を、特別な体験に。", image: IMG("f-concert.jpg") },
+    hero: { kicker: "Exhibitions & Events", title: "催事・展示", lead: "ミュージアムとしての空間で、表現を、特別な体験に。", image: IMG("ev-hero.jpg") },
     intro: {
       title: "ミュージアムとして生まれた、催事と展示の舞台。",
       body: "光のドーム、海へひらけた屋外空間、落ち着いたエントランス館内。展覧会から大規模な催事まで、内容に合わせて空間をご提案します。",
@@ -229,7 +229,8 @@ const ja: Content = {
         no: "01", title: "展覧会・アート展示", en: "Exhibitions",
         body: "企画展、アートインスタレーション、写真展。ミュージアムとして設計された空間を活かした展示に。",
         more: "施設の象徴である円形のドームは、光の演出とともに没入型の展示に。小規模な展示には、落ち着いたエントランス館内もご利用いただけます。",
-        images: [IMG("prog-exhibitions.jpg"), IMG("ai-aerial-color.jpg"), IMG("dome-3.jpg")],
+        card: IMG("prog-exhibitions.jpg"),
+        images: [IMG("prog-exhibitions.jpg"), IMG("ev-sail.jpg"), IMG("ev-dome.jpg")],
         facts: [
           { label: "おすすめの空間", value: "ドーム／エントランス館内" },
           { label: "収容人数", value: "ドーム 3,000名／エントランス館内 300名" },
@@ -240,7 +241,8 @@ const ja: Content = {
         no: "02", title: "ブランドイベント", en: "Brand events",
         body: "新作発表会、ポップアップ、メディア向け内覧会。ブランドの世界観を、印象に残る舞台で。",
         more: "ドームでの発表会と、エントランス館内での記者発表など、複数の空間を組み合わせたご利用も可能です。",
-        images: [IMG("prog-brand.jpg"), IMG("f-stage.jpg"), IMG("ai-front.jpg")],
+        card: IMG("prog-brand.jpg"),
+        images: [IMG("prog-brand.jpg"), IMG("ev-hall.jpg"), IMG("ev-sign.jpg")],
         facts: [
           { label: "おすすめの空間", value: "ドーム／エントランス館内" },
           { label: "収容人数", value: "ドーム 3,000名／エントランス館内 300名" },
@@ -251,7 +253,8 @@ const ja: Content = {
         no: "03", title: "レセプション・パーティー", en: "Receptions",
         body: "周年記念、企業パーティー、ガラディナー。ライトアップされた夜のドームを貸切で。",
         more: "夜景を背景にした特別な一夜に。少人数のレセプションには、エントランス館内もご利用いただけます。",
-        images: [IMG("prog-reception.jpg"), IMG("real-rainbow-garden.jpg"), IMG("f-dusk.jpg")],
+        card: IMG("prog-reception.jpg"),
+        images: [IMG("prog-reception.jpg"), IMG("ev-sunset-lounge.jpg"), IMG("ev-evening.jpg")],
         facts: [
           { label: "おすすめの空間", value: "ドーム／エントランス館内" },
           { label: "収容人数", value: "ドーム 3,000名／エントランス館内 300名" },
@@ -262,7 +265,8 @@ const ja: Content = {
         no: "04", title: "催事・マーケット", en: "Fairs & markets",
         body: "物産展、見本市、マルシェ。最大10,000名規模の屋外空間に対応します。",
         more: "海へひらけた広大な外周部は、大規模な催事やフェスティバル、野外展示に。ドームと組み合わせたご利用も可能です。",
-        images: [IMG("prog-festival.jpg"), IMG("real-rainbow-walkway.jpg"), IMG("real-blue-trees.jpg")],
+        card: IMG("prog-festival.jpg"),
+        images: [IMG("ev-sunset.jpg"), IMG("ev-dusk-gold.jpg"), IMG("ev-dusk.jpg")],
         facts: [
           { label: "おすすめの空間", value: "外周部／ドーム" },
           { label: "収容人数", value: "外周部 10,000名／ドーム 3,000名" },
@@ -446,7 +450,7 @@ const en: Content = {
     combineBody: "Spaces can be combined, for example an exhibition in the Dome with a reception in the Outer Area. We will propose the best layout for your event.",
   },
   events: {
-    hero: { kicker: "Exhibitions & Events", title: "Exhibitions & Events", lead: "Turn your work into an unforgettable experience, in a space built as a museum.", image: IMG("f-concert.jpg") },
+    hero: { kicker: "Exhibitions & Events", title: "Exhibitions & Events", lead: "Turn your work into an unforgettable experience, in a space built as a museum.", image: IMG("ev-hero.jpg") },
     intro: {
       title: "Built as a museum, made for events and exhibitions.",
       body: "A dome of light, a vast open-air space facing the sea and a calm Entrance Hall. From exhibitions to large-scale events, we will propose the right space for your event.",
@@ -458,7 +462,8 @@ const en: Content = {
         no: "01", title: "Exhibitions", en: "Art & culture",
         body: "Curated shows, art installations and photography exhibitions, in a space designed as a museum.",
         more: "Our signature circular Dome, with its lighting effects, suits immersive exhibitions. For smaller shows, the calm Entrance Hall is also available.",
-        images: [IMG("prog-exhibitions.jpg"), IMG("ai-aerial-color.jpg"), IMG("dome-3.jpg")],
+        card: IMG("prog-exhibitions.jpg"),
+        images: [IMG("prog-exhibitions.jpg"), IMG("ev-sail.jpg"), IMG("ev-dome.jpg")],
         facts: [
           { label: "Suggested spaces", value: "The Dome / Entrance Hall" },
           { label: "Capacity", value: "The Dome 3,000 / Entrance Hall 300" },
@@ -469,7 +474,8 @@ const en: Content = {
         no: "02", title: "Brand events", en: "Launches & pop-ups",
         body: "Product launches, pop-up stores and press previews: your brand’s world on a stage people remember.",
         more: "Spaces can be combined, for example a launch in the Dome with a press event in the Entrance Hall.",
-        images: [IMG("prog-brand.jpg"), IMG("f-stage.jpg"), IMG("ai-front.jpg")],
+        card: IMG("prog-brand.jpg"),
+        images: [IMG("prog-brand.jpg"), IMG("ev-hall.jpg"), IMG("ev-sign.jpg")],
         facts: [
           { label: "Suggested spaces", value: "The Dome / Entrance Hall" },
           { label: "Capacity", value: "The Dome 3,000 / Entrance Hall 300" },
@@ -480,7 +486,8 @@ const en: Content = {
         no: "03", title: "Receptions", en: "Parties & galas",
         body: "Anniversaries, corporate parties and gala dinners, with the illuminated dome to yourselves at night.",
         more: "A special night with the bay view as a backdrop. For smaller receptions, the Entrance Hall is also available.",
-        images: [IMG("prog-reception.jpg"), IMG("real-rainbow-garden.jpg"), IMG("f-dusk.jpg")],
+        card: IMG("prog-reception.jpg"),
+        images: [IMG("prog-reception.jpg"), IMG("ev-sunset-lounge.jpg"), IMG("ev-evening.jpg")],
         facts: [
           { label: "Suggested spaces", value: "The Dome / Entrance Hall" },
           { label: "Capacity", value: "The Dome 3,000 / Entrance Hall 300" },
@@ -491,7 +498,8 @@ const en: Content = {
         no: "04", title: "Fairs & markets", en: "Large-scale events",
         body: "Regional fairs, trade shows and markets, with outdoor space for up to 10,000 guests.",
         more: "The vast Outer Area facing the sea suits large-scale events, festivals and outdoor exhibitions, and can be combined with the Dome.",
-        images: [IMG("prog-festival.jpg"), IMG("real-rainbow-walkway.jpg"), IMG("real-blue-trees.jpg")],
+        card: IMG("prog-festival.jpg"),
+        images: [IMG("ev-sunset.jpg"), IMG("ev-dusk-gold.jpg"), IMG("ev-dusk.jpg")],
         facts: [
           { label: "Suggested spaces", value: "Outer Area / The Dome" },
           { label: "Capacity", value: "Outer Area 10,000 / The Dome 3,000" },

@@ -178,7 +178,7 @@ export function HomePage({ lang }: { lang: Lang }) {
           <p className="rv mx-auto mt-6 max-w-xl text-white/85" style={d(".2s")}>{t.events.hero.lead}</p>
         </div>
         <div className="rv" style={d(".3s")}>
-          <ProgrammeCarousel items={t.events.types.map((e) => ({ no: e.no, title: e.title, en: e.en, image: e.images[0] }))} prev={lang === "ja" ? "前へ" : "Previous"} next={lang === "ja" ? "次へ" : "Next"} />
+          <ProgrammeCarousel items={t.events.types.map((e) => ({ no: e.no, title: e.title, en: e.en, image: e.card }))} prev={lang === "ja" ? "前へ" : "Previous"} next={lang === "ja" ? "次へ" : "Next"} />
         </div>
         <p className="programme-more rv">
           <Link href={path(lang, "events")} className="link-arrow">{t.common.more} <span>→</span></Link>
