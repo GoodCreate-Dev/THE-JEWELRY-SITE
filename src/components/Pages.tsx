@@ -73,7 +73,7 @@ function LitText({ text, word }: { text: string; word: string }) {
  * slow camera move, so the hero plays like one continuous film rather than a slideshow.
  * CSS only (.hero-film): every shot shares one 28s cycle, started 7s apart.
  */
-const HERO_SHOTS = ["ai-aerial-color", "ai-promenade", "ai-aerial-gold"];
+const HERO_SHOTS = ["about-hero", "ev-dusk-gold", "home-sunset"];
 
 function HeroFilm() {
   return (
@@ -95,7 +95,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* hero: editorial, text anchored bottom-left over the living still */}
       <section className="hero hero-v2" data-hero>
         <div className="hero-img">
-          <HeroLive src={asset("/images/ai-front.jpg")} />
+          <HeroLive src={asset("/images/hero-night.jpg")} />
           <HeroFilm />
         </div>
         <div className="hero-veil" />
@@ -120,9 +120,9 @@ export function HomePage({ lang }: { lang: Lang }) {
 
       {/* statement: one large sentence, the key phrase in the dome's colours */}
       <section className="sec statement aura">
-        <div className="collage-item c1 frame" data-speed="0.18" aria-hidden="true"><img {...responsive(asset("/images/ai-aerial-gold.jpg"), "22vw")} alt="" loading="lazy" /></div>
-        <div className="collage-item c2 frame" data-speed="0.32" aria-hidden="true"><img {...responsive(asset("/images/real-blue-trees.jpg"), "16vw")} alt="" loading="lazy" /></div>
-        <div className="collage-item c3 frame" data-speed="0.1" aria-hidden="true"><img {...responsive(asset("/images/real-rainbow-garden.jpg"), "14vw")} alt="" loading="lazy" /></div>
+        <div className="collage-item c1 frame" data-speed="0.18" aria-hidden="true"><img {...responsive(asset("/images/story-ship.jpg"), "22vw")} alt="" loading="lazy" /></div>
+        <div className="collage-item c2 frame" data-speed="0.32" aria-hidden="true"><img {...responsive(asset("/images/story-lattice.jpg"), "16vw")} alt="" loading="lazy" /></div>
+        <div className="collage-item c3 frame" data-speed="0.1" aria-hidden="true"><img {...responsive(asset("/images/story-violet.jpg"), "14vw")} alt="" loading="lazy" /></div>
         <p className="kicker rv">{h.statementLabel}</p>
         <h2 className="display statement-text mt-10" aria-label={h.statement}>
           <span aria-hidden="true"><LitText text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} /></span>
@@ -160,7 +160,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* lights on: scrolling turns the dark dome into its full colour illumination */}
       <section className="lights" data-lights>
         <div className="lights-stick">
-          <img {...responsive(asset("/images/ai-aerial-color.jpg"))} alt="" className="lights-img" />
+          <img {...responsive(asset("/images/lights-dusk.jpg"))} alt="" className="lights-img" />
           <div className="lights-text">
             <p className="kicker">{h.window.kicker}</p>
             <h2 className="display sec-title mt-5">
@@ -190,7 +190,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* relaunch: the date, full screen */}
       <section className="relaunch aura">
         <p className="kicker rv">Re:Start</p>
-        <p className="display relaunch-date rv" style={{ ...d(".1s"), backgroundImage: `url(${asset("/images/ai-aerial-color-1600.webp")})` }}>{h.relaunch.date}</p>
+        <p className="display relaunch-date rv" style={{ ...d(".1s"), backgroundImage: `url(${asset("/images/relaunch-led-1600.webp")})` }}>{h.relaunch.date}</p>
         <h2 className="display rv mt-6 text-[clamp(24px,2.6vw,40px)]" style={d(".2s")}>{h.relaunch.title}</h2>
         <p className="rv mx-auto mt-6 max-w-xl text-white/85" style={d(".3s")}>{h.relaunch.body}</p>
         <Link href={path(lang, "contact")} className="btn btn-accent rv mt-10" style={d(".4s")}>{h.relaunch.cta} →</Link>
@@ -198,7 +198,7 @@ export function HomePage({ lang }: { lang: Lang }) {
 
       {/* visit: one row, photo and text */}
       <section className="visit-row">
-        <div className="frame rv-img visit-photo"><img {...responsive(asset("/images/ai-promenade.jpg"), "(min-width: 1024px) 50vw, 100vw")} alt="" loading="lazy" /></div>
+        <div className="frame rv-img visit-photo"><img {...responsive(asset("/images/visit-entrance.jpg"), "(min-width: 1024px) 50vw, 100vw")} alt="" loading="lazy" /></div>
         <div className="visit-text">
           <p className="kicker rv">Visit</p>
           <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.visitTitle}</h2>

@@ -323,7 +323,7 @@ const ja: Content = {
     routeEnd: { station: "コスモスクエア駅", walk: "徒歩 約10分", note: "コスモスクエア駅から夢洲駅（大阪IR予定地）へは1駅・約5分です。" },
   },
   news: {
-    hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("dome-2.jpg") },
+    hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("news-hero.jpg") },
     items: [
       { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("news-open.jpg") },
       { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("news-renewal.jpg") },
@@ -556,7 +556,7 @@ const en: Content = {
     routeEnd: { station: "Cosmosquare Sta.", walk: "approx. 10 min walk", note: "Yumeshima Station (planned site of Osaka IR) is one stop, about 5 minutes, from Cosmosquare." },
   },
   news: {
-    hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("dome-2.jpg") },
+    hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("news-hero.jpg") },
     items: [
       { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("news-open.jpg") },
       { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("news-renewal.jpg") },

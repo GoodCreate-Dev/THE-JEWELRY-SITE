@@ -8,7 +8,7 @@ import { responsive } from "@/lib/img";
 
 /** Photo shown beside each page name in the full-screen menu. */
 function menuImage(lang: Lang, p: PageKey) {
-  if (p === "home") return asset("/images/ai-front.jpg");
+  if (p === "home") return asset("/images/hero-night.jpg");
   return content[lang][p].hero.image;
 }
 

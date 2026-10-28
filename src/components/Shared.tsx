@@ -121,7 +121,7 @@ export function ContactBand({ lang }: { lang: Lang }) {
   const t = content[lang];
   return (
     <section className="contact-band">
-      <img {...responsive(asset("/images/ai-front.jpg"))} alt="" className="contact-band-bg" loading="lazy" />
+      <img {...responsive(asset("/images/band-dusk.jpg"))} alt="" className="contact-band-bg" loading="lazy" />
       <p className="kicker rv">Contact</p>
       <h2 className="display contact-band-title rv mt-8" style={{ "--d": ".1s" } as React.CSSProperties}>
         {t.home.contactTitle}
