@@ -10,13 +10,13 @@ const AUTO_MS = 3000;
  * Wide photo carousel for one event type: the current photo in the middle, the previous and
  * next ones peeking at the edges, a label and "1 / 3" counter underneath. Endless like the
  * home programme carousel (three copies; it jumps back to the middle copy unseen).
- * Like the programme, it moves on by itself while on screen and pauses under the pointer or focus.
+ * It moves on by itself every few seconds while on screen (no pause under the pointer: the
+ * photos are so wide the pointer nearly always rests on one); any manual move restarts the wait.
  */
 export function PhotoCarousel({ images, label, prev, next }: { images: string[]; label: string; prev: string; next: string }) {
   const n = images.length;
   const [i, setI] = useState(n);
   const [animate, setAnimate] = useState(true);
-  const [paused, setPaused] = useState(false);
   const [visible, setVisible] = useState(false);
   const startX = useRef<number | null>(null);
   const box = useRef<HTMLDivElement>(null);
@@ -36,13 +36,13 @@ export function PhotoCarousel({ images, label, prev, next }: { images: string[];
 
   // Re-armed on every move (i changes), so a click or swipe gives the visitor a full wait.
   useEffect(() => {
-    if (paused || !visible || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!visible || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = window.setTimeout(() => {
       setAnimate(true);
       setI((v) => v + 1);
     }, AUTO_MS);
     return () => clearTimeout(id);
-  }, [i, paused, visible]);
+  }, [i, visible]);
 
   const settle = () => {
     if (i >= n && i < 2 * n) return;
@@ -54,10 +54,6 @@ export function PhotoCarousel({ images, label, prev, next }: { images: string[];
     <div
       ref={box}
       className="phc"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
       onPointerDown={(e) => (startX.current = e.clientX)}
       onPointerUp={(e) => {
         if (startX.current === null) return;

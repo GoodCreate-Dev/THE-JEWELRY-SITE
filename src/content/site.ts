@@ -217,7 +217,7 @@ const ja: Content = {
     combineBody: "ドームでの展示と外周部でのレセプションなど、複数の空間を組み合わせたご利用も可能です。内容に合わせてご提案いたします。",
   },
   events: {
-    hero: { kicker: "Exhibitions & Events", title: "催事・展示", lead: "ミュージアムとしての空間で、表現を、特別な体験に。", image: IMG("ev-hero.jpg") },
+    hero: { kicker: "Exhibitions & Events", title: "催事・展示", lead: "ミュージアムとしての空間で、表現を、特別な体験に。", image: IMG("f-concert.jpg") },
     intro: {
       title: "ミュージアムとして生まれた、催事と展示の舞台。",
       body: "光のドーム、海へひらけた屋外空間、落ち着いたエントランス館内。展覧会から大規模な催事まで、内容に合わせて空間をご提案します。",
@@ -450,7 +450,7 @@ const en: Content = {
     combineBody: "Spaces can be combined, for example an exhibition in the Dome with a reception in the Outer Area. We will propose the best layout for your event.",
   },
   events: {
-    hero: { kicker: "Exhibitions & Events", title: "Exhibitions & Events", lead: "Turn your work into an unforgettable experience, in a space built as a museum.", image: IMG("ev-hero.jpg") },
+    hero: { kicker: "Exhibitions & Events", title: "Exhibitions & Events", lead: "Turn your work into an unforgettable experience, in a space built as a museum.", image: IMG("f-concert.jpg") },
     intro: {
       title: "Built as a museum, made for events and exhibitions.",
       body: "A dome of light, a vast open-air space facing the sea and a calm Entrance Hall. From exhibitions to large-scale events, we will propose the right space for your event.",
