@@ -103,16 +103,19 @@ export function HomePage({ lang }: { lang: Lang }) {
 
       {/* statement: one large sentence, the key phrase in the dome's colours */}
       <section className="sec statement aura">
-        <div className="collage-item c1 frame" data-speed="0.18" aria-hidden="true"><img {...responsive(asset("/images/story-ship.jpg"), "22vw")} alt="" loading="lazy" /></div>
-        <div className="collage-item c2 frame" data-speed="0.32" aria-hidden="true"><img {...responsive(asset("/images/story-lattice.jpg"), "16vw")} alt="" loading="lazy" /></div>
-        <div className="collage-item c3 frame" data-speed="0.1" aria-hidden="true"><img {...responsive(asset("/images/story-violet.jpg"), "14vw")} alt="" loading="lazy" /></div>
-        <p className="kicker rv">{h.statementLabel}</p>
-        <h2 className="display statement-text mt-10" aria-label={h.statement}>
-          <span aria-hidden="true"><LitText text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} /></span>
-        </h2>
-        <div className="statement-foot">
-          <p className="rv max-w-xl text-white/85" style={d(".15s")}>{h.statementBody}</p>
-          <Link href={path(lang, "about")} className="link-arrow rv" style={d(".2s")}>{t.common.more} <span>→</span></Link>
+        {/* the floating photos live in the text block's right-hand column, so they never reach the figures below */}
+        <div className="statement-main">
+          <div className="collage-item c1 frame" data-speed="0.12" aria-hidden="true"><img {...responsive(asset("/images/story-ship.jpg"), "18vw")} alt="" loading="lazy" /></div>
+          <div className="collage-item c2 frame" data-speed="0.2" aria-hidden="true"><img {...responsive(asset("/images/story-lattice.jpg"), "12vw")} alt="" loading="lazy" /></div>
+          <div className="collage-item c3 frame" data-speed="0.08" aria-hidden="true"><img {...responsive(asset("/images/story-violet.jpg"), "10vw")} alt="" loading="lazy" /></div>
+          <p className="kicker rv">{h.statementLabel}</p>
+          <h2 className="display statement-text mt-10" aria-label={h.statement}>
+            <span aria-hidden="true"><LitText text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} /></span>
+          </h2>
+          <div className="statement-foot">
+            <p className="rv max-w-xl text-white/85" style={d(".15s")}>{h.statementBody}</p>
+            <Link href={path(lang, "about")} className="link-arrow rv" style={d(".2s")}>{t.common.more} <span>→</span></Link>
+          </div>
         </div>
         <div className="figures">
           {h.figures.map((f, i) => (

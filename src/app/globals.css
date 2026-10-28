@@ -727,3 +727,22 @@ body::after { opacity: .035; }
 /* the glowing-dome photo inside the date loads only once the date scrolls into view (.in) */
 .relaunch-date.in { background-image: var(--photo); }
 html:not(.js) .relaunch-date { background-image: var(--photo); }
+
+/* ---------- statement: floating photos kept in the right-hand column of the text block ----------
+   Text and the Discover link stay in the left ~62%; the three photos sit in the right column
+   of .statement-main, so even with their scroll drift they never cover text or the figures. */
+.statement-main { position: relative; }
+@media (min-width: 1021px) {
+  .statement-text { max-width: min(980px, 62%); }
+  .statement-foot { max-width: 62%; }
+  .statement-main { min-height: calc(min(17vw, 300px) * 1.25 + min(10vw, 170px) * 1.33 + 140px); padding-bottom: 40px; }
+  .collage-item.c1 { right: 0; top: 0; width: min(17vw, 300px); aspect-ratio: 4 / 5; }
+  .collage-item.c2 { right: calc(min(17vw, 300px) + 2.5vw); top: 34%; width: min(11vw, 190px); aspect-ratio: 1; }
+  .collage-item.c3 { right: 4vw; top: auto; bottom: 90px; width: min(10vw, 170px); aspect-ratio: 3 / 4; }
+}
+
+/* outlined numerals redrawn as soft filled platinum (an outline on this font shows inner overlap lines) */
+.figure-value, .plate-cap { -webkit-text-stroke: 0; font-weight: 300; background: linear-gradient(180deg, rgba(238, 241, 246, .95), rgba(184, 199, 220, .45)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.plate-cap { background: linear-gradient(180deg, rgba(238, 241, 246, .55), rgba(184, 199, 220, .15)); -webkit-background-clip: text; background-clip: text; }
+.figure-value small { -webkit-text-fill-color: var(--color-mute); }
+.foot-word { -webkit-text-stroke: 0; }
