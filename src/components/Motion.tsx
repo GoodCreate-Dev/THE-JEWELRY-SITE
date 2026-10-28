@@ -22,9 +22,8 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  * current section's number and name (from its `.kicker`) in the bottom-left corner; and a
  * small "View" circle that follows the pointer over photo cards that open a page.
  *
- * Page change ("dome iris"): a dark circle grows from the clicked point and shows the
- * destination's number and name (read from the menu), the new page loads underneath, then
- * the circle closes into the centre to reveal it.
+ * Page change: the screen frosts over like a glass pane and shows the destination's number
+ * and name (read from the menu), the new page loads underneath, then the glass clears.
  */
 const VIEW_TARGETS = "a:has(.frame), .space-card";
 
@@ -77,7 +76,7 @@ export function Motion() {
   }, [pathname]);
 
   // Link clicks: the page already open goes back to its top (e.g. Home in the menu while on
-  // Home); another page of the site opens through the dome iris.
+  // Home); another page of the site opens through the glass pane.
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const toTop = (instant: boolean) => {
@@ -107,10 +106,8 @@ export function Motion() {
       const item = document.querySelector(`.menu-links a[href="${url.pathname}"]`);
       v.querySelector(".pv-no")!.textContent = item?.querySelector(".menu-no")?.textContent ?? "";
       v.querySelector(".pv-name")!.textContent = item?.querySelector(".menu-name")?.textContent ?? "";
-      v.style.setProperty("--x", `${e.clientX || innerWidth / 2}px`);
-      v.style.setProperty("--y", `${e.clientY || innerHeight / 2}px`);
       v.classList.remove("out");
-      void v.offsetWidth; // restart from the closed circle
+      void v.offsetWidth; // restart from clear glass
       v.classList.add("in");
       veiled.current = true;
       window.setTimeout(() => router.push(url.pathname + url.search + url.hash), 620);
@@ -230,7 +227,7 @@ export function Motion() {
     // After the first-visit logo intro, later page changes reveal without its extra delay.
     timers.push(window.setTimeout(() => document.documentElement.classList.add("intro-seen"), 4300));
     document.querySelector("main")?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: "cubic-bezier(.2,.7,.1,1)" });
-    // Arrived through the dome iris: hold the title a moment, then close the circle into the centre.
+    // Arrived through the glass pane: hold the title a moment, then let the glass clear.
     if (veiled.current) {
       veiled.current = false;
       const v = veil.current;

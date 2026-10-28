@@ -738,31 +738,28 @@ html:not(.js) .relaunch-date { background-image: var(--photo); }
 .figure-value small { -webkit-text-fill-color: var(--color-mute); }
 .foot-word { -webkit-text-stroke: 0; }
 
-/* ---------- page change: dome iris (Motion.tsx) ----------
-   .in: a dark circle grows from the clicked point (--x, --y) and the destination's number
-   and name rise in; .out: the circle closes into the centre, revealing the new page. */
-.page-veil { position: fixed; inset: 0; z-index: 88; display: grid; place-items: center; pointer-events: none; visibility: hidden; background: radial-gradient(55% 55% at 50% 45%, rgba(111, 168, 255, .1), transparent 70%), radial-gradient(40% 40% at 70% 80%, rgba(169, 139, 255, .08), transparent 70%), var(--color-coal); clip-path: circle(0 at var(--x, 50%) var(--y, 50%)); }
-.page-veil.in { visibility: visible; pointer-events: auto; clip-path: circle(150% at var(--x, 50%) var(--y, 50%)); transition: clip-path .62s cubic-bezier(.7, 0, .2, 1); }
-.page-veil.out { visibility: visible; clip-path: circle(0 at 50% 50%); transition: clip-path .8s cubic-bezier(.7, 0, .2, 1); }
-.pv-inner { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+/* ---------- page change: a full-screen glass pane (Motion.tsx) ----------
+   .in: the page frosts over as the blur builds, with the dome's diamond lattice etched faintly
+   on the glass, a soft light sliding across, and the destination's number and name rising in;
+   .out: the glass clears to show the new page. */
+.page-veil { position: fixed; inset: 0; z-index: 88; display: grid; place-items: center; pointer-events: none; visibility: hidden; opacity: 0; background: radial-gradient(55% 55% at 50% 45%, rgba(111, 168, 255, .12), transparent 70%), linear-gradient(160deg, rgba(30, 40, 60, .55), rgba(13, 17, 27, .7)); -webkit-backdrop-filter: blur(0) saturate(1) brightness(1); backdrop-filter: blur(0) saturate(1) brightness(1); }
+.page-veil.in, .page-veil.out { visibility: visible; -webkit-backdrop-filter: blur(26px) saturate(1.5) brightness(.8); backdrop-filter: blur(26px) saturate(1.5) brightness(.8); }
+.page-veil.in { pointer-events: auto; opacity: 1; transition: opacity .5s var(--ease), backdrop-filter .6s var(--ease), -webkit-backdrop-filter .6s var(--ease); }
+.page-veil.out { opacity: 0; transition: opacity .75s var(--ease) .05s; }
+.page-veil::before, .page-veil::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.page-veil::before { opacity: .55; background: repeating-linear-gradient(60deg, transparent 0 63px, rgba(230, 237, 247, .07) 63px 64px), repeating-linear-gradient(-60deg, transparent 0 63px, rgba(230, 237, 247, .07) 63px 64px); -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 85%); mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 85%); }
+.page-veil::after { background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .1) 48%, rgba(190, 220, 255, .06) 52%, transparent 65%) 140% 0 / 250% 100% no-repeat; }
+.page-veil.in::after { background-position: -40% 0; transition: background-position 1.3s var(--ease) .1s; }
+.pv-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 .pv-inner > * { opacity: 0; translate: 0 14px; transition: opacity .25s, translate .25s; }
 .page-veil.in .pv-inner > * { opacity: 1; translate: 0 0; transition: opacity .5s var(--ease), translate .7s var(--ease); }
 .page-veil.in .logo { transition-delay: .2s; } .page-veil.in .pv-no { transition-delay: .28s; } .page-veil.in .pv-name { transition-delay: .34s; }
+.page-veil.out .pv-inner > * { transition-duration: .3s; }
 .pv-inner .logo { width: 34px; margin-bottom: 10px; }
 .pv-no { font-size: 11px; letter-spacing: .4em; text-indent: .4em; color: transparent; background: var(--iri); -webkit-background-clip: text; background-clip: text; }
-.pv-name { font-size: clamp(30px, 4.6vw, 64px); line-height: 1.2; }
+.pv-name { font-size: clamp(30px, 4.6vw, 64px); line-height: 1.2; text-shadow: 0 2px 30px rgba(13, 17, 27, .5); }
 html[lang="ja"] .pv-name { font-size: clamp(26px, 3.6vw, 52px); letter-spacing: .16em; font-feature-settings: "palt"; }
 .pv-name:empty, .pv-no:empty { display: none; }
 .pv-line { width: 0; height: 1px; margin-top: 8px; background: linear-gradient(90deg, transparent, var(--color-accent-hi), transparent); opacity: 1 !important; translate: none !important; }
 .page-veil.in .pv-line { width: 140px; transition: width .8s var(--ease) .35s; }
 @media (prefers-reduced-motion: reduce) { .page-veil { display: none; } }
-
-/* dome iris as frosted glass: the page behind blurs through a cool tint, the dome's diamond
-   lattice is etched faintly on the glass, and a soft light slides across while it is open */
-.page-veil { background: radial-gradient(55% 55% at 50% 45%, rgba(111, 168, 255, .12), transparent 70%), linear-gradient(160deg, rgba(30, 40, 60, .55), rgba(13, 17, 27, .7)); -webkit-backdrop-filter: blur(26px) saturate(1.5) brightness(.8); backdrop-filter: blur(26px) saturate(1.5) brightness(.8); }
-.page-veil::before, .page-veil::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
-.page-veil::before { opacity: .55; background: repeating-linear-gradient(60deg, transparent 0 63px, rgba(230, 237, 247, .07) 63px 64px), repeating-linear-gradient(-60deg, transparent 0 63px, rgba(230, 237, 247, .07) 63px 64px); -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 85%); mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 85%); }
-.page-veil::after { background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .1) 48%, rgba(190, 220, 255, .06) 52%, transparent 65%) 140% 0 / 250% 100% no-repeat; }
-.page-veil.in::after { background-position: -40% 0; transition: background-position 1.3s var(--ease) .1s; }
-.pv-inner { position: relative; z-index: 1; }
-.pv-name { text-shadow: 0 2px 30px rgba(13, 17, 27, .5); }
