@@ -69,6 +69,26 @@
     1600,
     1920
   ],
+  "prog-brand": [
+    800,
+    1600,
+    2400
+  ],
+  "prog-exhibitions": [
+    800,
+    1600,
+    2400
+  ],
+  "prog-festival": [
+    800,
+    1600,
+    1800
+  ],
+  "prog-reception": [
+    800,
+    1600,
+    2400
+  ],
   "real-aerial-entrance": [
     800,
     1024
