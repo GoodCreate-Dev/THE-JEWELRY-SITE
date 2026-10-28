@@ -763,3 +763,8 @@ html[lang="ja"] .pv-name { font-size: clamp(26px, 3.6vw, 52px); letter-spacing: 
 .pv-line { width: 0; height: 1px; margin-top: 8px; background: linear-gradient(90deg, transparent, var(--color-accent-hi), transparent); opacity: 1 !important; translate: none !important; }
 .page-veil.in .pv-line { width: 140px; transition: width .8s var(--ease) .35s; }
 @media (prefers-reduced-motion: reduce) { .page-veil { display: none; } }
+
+/* the circle over photo cards shows an arrow rather than a word */
+.view-cursor span { font-size: 22px; letter-spacing: 0; text-indent: 0; text-transform: none; font-weight: 300; }
+.view-cursor.on span { animation: viewNudge 1.6s var(--ease) .3s infinite; }
+@keyframes viewNudge { 0%, 100% { padding-left: 0; } 50% { padding-left: 8px; } }

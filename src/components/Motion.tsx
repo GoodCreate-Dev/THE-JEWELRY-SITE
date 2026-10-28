@@ -20,7 +20,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  *
  * Also draws the scroll details: a thin progress line at the top and, on wide screens, the
  * current section's number and name (from its `.kicker`) in the bottom-left corner; and a
- * small "View" circle that follows the pointer over photo cards that open a page.
+ * small arrow circle that follows the pointer over photo cards that open a page.
  *
  * Page change: the screen frosts over like a glass pane and shows the destination's number
  * and name (read from the menu), the new page loads underneath, then the glass clears.
@@ -38,7 +38,7 @@ export function Motion() {
   const view = useRef<HTMLDivElement>(null);
   const sections = useRef<{ el: HTMLElement; name: string }[]>([]);
 
-  // "View" circle: eases after the pointer, shown only over photo cards (mouse only).
+  // Arrow circle: eases after the pointer, shown only over photo cards (mouse only).
   useEffect(() => {
     const el = view.current;
     if (!el || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
@@ -246,7 +246,7 @@ export function Motion() {
       <div ref={index} className="scroll-index" aria-hidden="true">
         <b /> / <em /><span />
       </div>
-      <div ref={view} className="view-cursor" aria-hidden="true"><span>View</span></div>
+      <div ref={view} className="view-cursor" aria-hidden="true"><span>→</span></div>
       <div ref={veil} className="page-veil" aria-hidden="true">
         <div className="pv-inner">
           <span className="logo" />
