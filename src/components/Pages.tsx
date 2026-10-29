@@ -10,7 +10,7 @@ import { SpacesCards } from "./SpacesCards";
 import { ProgrammeCarousel } from "./ProgrammeCarousel";
 import { PhotoCarousel } from "./PhotoCarousel";
 import { HeroFilm } from "./HeroFilm";
-import { ContactBand, Marquee, PageHero, Shell, SplitText, WindowFilm } from "./Shared";
+import { ContactBand, Marquee, PageHero, Shell, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
 
@@ -82,15 +82,12 @@ export function HomePage({ lang }: { lang: Lang }) {
         </div>
         <div className="hero-veil" />
         <div className="hero-inner hero-drift">
-          <span className="logo rv w-[clamp(136px,13vw,200px)]" />
-          <p className="kicker rv" style={d(".15s")}>{h.kicker}</p>
-          <h1 className="display rv letters" style={d(".3s")} aria-label={h.title.join(" ")}>
-            <span aria-hidden="true"><SplitText text={h.title[0]} /></span>
-            <span aria-hidden="true" className="iri-text"><SplitText text={h.title[1]} start={h.title[0].length + 2} /></span>
+          {/* logo and tagline only, the logo in the dome's colours */}
+          <h1 className="rv m-0" aria-label="THE JEWELRY">
+            <span className="logo logo-iri hero-logo" aria-hidden="true" />
           </h1>
-          <div className="hero-foot rv" style={d(".5s")}>
-            {/* Japanese hero shows the headline only */}
-            {lang !== "ja" && <p className="hero-lead">{h.lead}</p>}
+          <p className="hero-tagline rv" style={d(".2s")}>{h.kicker}</p>
+          <div className="hero-foot rv" style={d(".4s")}>
             <div className="hero-actions">
               <Link href={path(lang, "contact")} className="btn btn-accent">{h.ctaPrimary}</Link>
               <Link href={path(lang, "spaces")} className="btn btn-line">{h.ctaSecondary}</Link>
