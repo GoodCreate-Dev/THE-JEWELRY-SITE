@@ -99,7 +99,7 @@ export function Motion() {
     lenisRef.current = lenis;
 
     let lastIndex = "";
-    const scrollDetails = (vh: number) => {
+    const scrollDetails = (vh: number, foot: Element | null) => {
       const max = document.documentElement.scrollHeight - vh;
       progress.current?.style.setProperty("transform", `scaleX(${max > 0 ? clamp01(window.scrollY / max).toFixed(4) : 0})`);
       const list = sections.current;
@@ -108,7 +108,6 @@ export function Motion() {
         if (s.el.getBoundingClientRect().top < vh * 0.5) i = k;
       });
       // Hidden over the hero and once the footer comes up (it would sit on the footer logo).
-      const foot = document.querySelector(".site-foot");
       if (foot && foot.getBoundingClientRect().top < vh - 40) i = -1;
       const key = i > 0 ? `${i}` : "";
       if (key === lastIndex || !index.current) return;
@@ -122,35 +121,55 @@ export function Motion() {
       }
     };
 
+    // Elements the scroll effects move, found once and again only when the page content
+    // changes (new page, Instagram posts arriving), not on every frame.
+    let els: {
+      hero: HTMLElement[]; win: HTMLElement[]; lights: HTMLElement[];
+      words: HTMLElement[]; speed: HTMLElement[]; frames: HTMLImageElement[]; foot: Element | null;
+    } | null = null;
+    const all = <T extends Element>(q: string) => [...document.querySelectorAll<T>(q)];
+    const mo = new MutationObserver(() => (els = null));
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    let lastY = -1;
+    let lastVh = -1;
     const scrollEffects = () => {
       const vh = window.innerHeight;
-      scrollDetails(vh);
-      document.querySelectorAll<HTMLElement>("[data-hero]").forEach((el) => {
+      // Nothing moved and nothing changed: skip the frame (most frames while reading).
+      if (els && window.scrollY === lastY && vh === lastVh) return;
+      lastY = window.scrollY;
+      lastVh = vh;
+      els ??= {
+        hero: all("[data-hero]"), win: all("[data-window]"), lights: all("[data-lights]"),
+        words: all(".lw"), speed: all("[data-speed]"), frames: all(".frame img"), foot: document.querySelector(".site-foot"),
+      };
+      scrollDetails(vh, els.foot);
+      els.hero.forEach((el) => {
         const r = el.getBoundingClientRect();
         el.style.setProperty("--hp", clamp01(-r.top / r.height).toFixed(4));
       });
-      document.querySelectorAll<HTMLElement>("[data-window]").forEach((el) => {
+      els.win.forEach((el) => {
         const r = el.getBoundingClientRect();
         // opens over the first 70% of the travel, then holds while the text reads
         el.style.setProperty("--wp", clamp01(-r.top / ((r.height - vh) * 0.7)).toFixed(4));
       });
-      document.querySelectorAll<HTMLElement>("[data-lights]").forEach((el) => {
+      els.lights.forEach((el) => {
         const r = el.getBoundingClientRect();
         el.style.setProperty("--lp", clamp01(-r.top / ((r.height - vh) * 0.8)).toFixed(4));
       });
       // Statement words light up one by one as they pass 62% of the screen height.
-      document.querySelectorAll<HTMLElement>(".lw").forEach((w) => {
+      els.words.forEach((w) => {
         w.classList.toggle("lit", w.getBoundingClientRect().top < vh * 0.62);
       });
       // Floating photos drift at their own speed (data-speed: fraction of the scroll).
-      document.querySelectorAll<HTMLElement>("[data-speed]").forEach((el) => {
+      els.speed.forEach((el) => {
         const r = el.parentElement!.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) return;
         // Small, capped drift so a photo never leaves its own section.
         const shift = Math.max(-90, Math.min(90, (r.top + r.height / 2 - vh / 2) * -Number(el.dataset.speed)));
         el.style.translate = `0 ${shift.toFixed(1)}px`;
       });
-      document.querySelectorAll<HTMLImageElement>(".frame img").forEach((img) => {
+      els.frames.forEach((img) => {
         const r = img.parentElement!.getBoundingClientRect();
         if (r.bottom < 0 || r.top > vh) return;
         const p = (r.top + r.height / 2 - vh / 2) / vh; // -1 … 1 across the screen
@@ -172,6 +191,7 @@ export function Motion() {
 
     return () => {
       cancelAnimationFrame(id);
+      mo.disconnect();
       lenis.destroy();
       lenisRef.current = null;
     };

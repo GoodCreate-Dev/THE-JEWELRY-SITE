@@ -4,7 +4,7 @@ import { Motion } from "@/components/Motion";
 import { Intro } from "@/components/Shared";
 import { asset } from "@/content/site";
 import { fontVars } from "@/lib/fonts";
-import { share } from "@/lib/meta";
+import { share, venueJsonLd } from "@/lib/meta";
 
 // Root layout for the Japanese site. The inline script marks JS as available
 // before paint, so fade-ins start hidden only when the script that reveals them can run.
@@ -21,6 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: INIT }} />
       </head>
       <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(venueJsonLd("ja")).replace(/</g, "\\u003c") }} />
         <Intro />
         {children}
         <Motion />

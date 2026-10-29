@@ -6,13 +6,16 @@
  *   - api/contact.php, which emails the contact form; the address comes from
  *     deploy/sakura/contact.json  {"to": "name@example.com"}  (not in git)
  *   - .htaccess: HTTPS redirect and the site's own 404 page
- * Usage:  node scripts/build-sakura.mjs [https://the-jewelry.sakura.ne.jp]
+ * Usage:  node scripts/build-sakura.mjs [https://the-jewelry.sakura.ne.jp] [--index]
+ *   --index  lets search engines index the site (use at launch, with the real domain)
  */
 import { execSync } from "node:child_process";
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-const siteUrl = process.argv[2] ?? "https://the-jewelry.sakura.ne.jp";
+const args = process.argv.slice(2);
+const siteUrl = args.find((a) => !a.startsWith("--")) ?? "https://the-jewelry.sakura.ne.jp";
+const siteIndex = args.includes("--index") ? "1" : "";
 const root = path.resolve(import.meta.dirname, "..");
 const www = path.join(root, "deploy", "sakura", "www");
 
@@ -29,12 +32,41 @@ function copyDir(from, to) {
 execSync("npx next build", {
   cwd: root,
   stdio: "inherit",
-  env: { ...process.env, GITHUB_PAGES: "1", PAGES_BASE_PATH: "", SITE_URL: siteUrl, NEXT_PUBLIC_CONTACT_ENDPOINT: "/api/contact.php" },
+  env: { ...process.env, GITHUB_PAGES: "1", PAGES_BASE_PATH: "", SITE_URL: siteUrl, SITE_INDEX: siteIndex, NEXT_PUBLIC_CONTACT_ENDPOINT: "/api/contact.php" },
 });
 
 rmSync(www, { recursive: true, force: true });
 mkdirSync(path.dirname(www), { recursive: true });
 copyDir(path.join(root, "out"), www);
+
+// robots.txt and sitemap.xml (written here: Next cannot export them while Cache Components is on).
+// The sitemap lists every Japanese page that has an English twin, with hreflang links between them.
+// Crawling stays open so search engines can read each page's noindex before launch.
+{
+  const pages = [];
+  const walk = (dir, rel) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (!e.isDirectory() || /^(_|en$|404$|images$|videos$|post$)/.test(e.name)) continue;
+      const r = `${rel}${e.name}/`;
+      if (existsSync(path.join(dir, e.name, "index.html"))) pages.push(r);
+      walk(path.join(dir, e.name), r);
+    }
+  };
+  pages.push("/");
+  walk(www, "/");
+  const url = (p) => siteUrl + p;
+  const entry = (loc, ja, en) =>
+    `<url><loc>${url(loc)}</loc><xhtml:link rel="alternate" hreflang="ja" href="${url(ja)}"/><xhtml:link rel="alternate" hreflang="en" href="${url(en)}"/></url>`;
+  const urls = pages
+    .filter((p) => existsSync(path.join(www, "en", p, "index.html")))
+    .flatMap((p) => [entry(p, p, `/en${p}`), entry(`/en${p}`, p, `/en${p}`)]);
+  const xmlns = 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"';
+  writeFileSync(path.join(www, "sitemap.xml"), ['<?xml version="1.0" encoding="UTF-8"?>', `<urlset ${xmlns}>`, ...urls, "</urlset>", ""].join("\n"));
+  writeFileSync(
+    path.join(www, "robots.txt"),
+    ["User-agent: *", "Allow: /", "Disallow: /api/", "Disallow: /instagram/", "", `Sitemap: ${url("/sitemap.xml")}`, ""].join("\n"),
+  );
+}
 
 // Upload only the photos and videos the pages use: drop every file in images/ and videos/
 // whose name no page, script or stylesheet mentions (unused photos, and the original JPGs
