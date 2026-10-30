@@ -18,23 +18,28 @@ function send(v: Record<string, string>, type: string, lang: Lang) {
       body: JSON.stringify({ type, company: v.company, name: v.name, email: v.email, tel: v.tel, date: v.date, guests: v.guests, message: v.message, lang }),
     });
   }
+  // The venue team reads these in Japanese: one label per line, in form order, and the optional
+  // fields only when filled in. `replyto` is not listed in the email; Reply goes to the visitor.
+  const fields: [string, string][] = [
+    ["お問い合わせ種別", type],
+    ["会社名・団体名", v.company],
+    ["お名前", v.name],
+    ["メールアドレス", v.email],
+    ["電話番号", v.tel],
+    ["ご希望時期", v.date],
+    ["想定人数", v.guests],
+    ["ご相談内容", v.message],
+    ["送信元ページ", lang === "ja" ? "日本語サイト" : "英語サイト (English)"],
+  ];
   return fetch("https://api.web3forms.com/submit", {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
       access_key: ACCESS_KEY,
-      subject: `【THE JEWELRY】お問い合わせ / Enquiry: ${type} — ${v.company}`,
-      from_name: "THE JEWELRY Website",
-      email: v.email, // used as the reply-to address
-      "種別 / Type": type,
-      "会社名・団体名 / Company": v.company,
-      "お名前 / Name": v.name,
-      "メール / Email": v.email,
-      "電話番号 / Phone": v.tel || "-",
-      "希望時期 / Preferred timing": v.date || "-",
-      "想定人数 / Expected guests": v.guests || "-",
-      "内容 / Message": v.message,
-      "言語 / Site language": lang === "ja" ? "日本語" : "English",
+      subject: `【THE JEWELRY】お問い合わせ（${type}）${v.company}様`,
+      from_name: "THE JEWELRY ウェブサイト",
+      replyto: v.email,
+      ...Object.fromEntries(fields.filter(([, value]) => value?.trim())),
     }),
   });
 }

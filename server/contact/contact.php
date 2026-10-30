@@ -136,7 +136,7 @@ TXT;
 // UTF-8 mail ('uni'): ISO-2022-JP cannot hold characters such as 髙, ①, ㈱ or "—".
 mb_language('uni');
 mb_internal_encoding('UTF-8');
-$subject = '【THE JEWELRY】お問い合わせ / Enquiry: ' . $dash($v['type']) . ' — ' . mb_strimwidth($v['company'], 0, 60, '…');
+$subject = '【THE JEWELRY】お問い合わせ（' . $dash($v['type']) . '）' . mb_strimwidth($v['company'], 0, 60, '…') . '様';
 $headers = implode("\r\n", [
     'From: ' . mb_encode_mimeheader(CONTACT_FROM_NAME) . ' <' . CONTACT_FROM . '>',
     'Reply-To: ' . $v['email'],
