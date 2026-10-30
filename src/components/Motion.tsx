@@ -3,6 +3,7 @@
 import Lenis from "lenis";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { BASE } from "@/content/site";
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
@@ -33,6 +34,14 @@ export function Motion() {
   const progress = useRef<HTMLDivElement>(null);
   const index = useRef<HTMLDivElement>(null);
   const sections = useRef<{ el: HTMLElement; name: string }[]>([]);
+
+  // `first-visit` (set before paint by the layout) makes the home page play its opening. After
+  // the first page change of the visit it has been seen: coming back home does not replay it.
+  const firstPath = useRef<string | null>(null);
+  useEffect(() => {
+    firstPath.current ??= pathname;
+    if (pathname !== firstPath.current) document.documentElement.classList.remove("first-visit");
+  }, [pathname]);
 
   // Sections named by their kicker, for the corner index; read again on every page.
   useEffect(() => {
@@ -79,7 +88,10 @@ export function Motion() {
       void v.offsetWidth; // restart from clear glass
       v.classList.add("in");
       veiled.current = true;
-      window.setTimeout(() => router.push(url.pathname + url.search + url.hash), 620);
+      // The link's address includes the sub-path the site may be served under (GitHub Pages);
+      // the router adds it again, so hand it the path without it.
+      const route = BASE && url.pathname.startsWith(BASE + "/") ? url.pathname.slice(BASE.length) : url.pathname;
+      window.setTimeout(() => router.push(route + url.search + url.hash), 620);
       // Never leave the page covered if the navigation does not happen.
       window.setTimeout(() => {
         if (veiled.current) {
@@ -219,6 +231,15 @@ export function Motion() {
     // After the first-visit logo intro, later page changes reveal without its extra delay.
     timers.push(window.setTimeout(() => document.documentElement.classList.add("intro-seen"), 4300));
     document.querySelector("main")?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: "cubic-bezier(.2,.7,.1,1)" });
+    // Arrived with an anchor (e.g. /events/#receptions, /contact/#form): open the page at that
+    // section, under the fixed header. Again once the scenes have measured themselves.
+    const toAnchor = () => {
+      const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (!target) return;
+      if (lenisRef.current) lenisRef.current.scrollTo(target, { immediate: true, force: true }); // the section's scroll-margin keeps it under the header
+      else target.scrollIntoView({ block: "start" });
+    };
+    timers.push(window.setTimeout(toAnchor, 60), window.setTimeout(toAnchor, 700));
     // Arrived through the glass pane: hold the title a moment, then let the glass clear.
     if (veiled.current) {
       veiled.current = false;

@@ -1,112 +1,78 @@
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
-import { Fragment, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { responsive } from "@/lib/img";
-import { asset, COMPANY_URL, content, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
+import { asset, COMPANY_URL, content, FORM_ID, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
+import { Cursor } from "./Cursor";
 import { Header } from "./Header";
+import { SceneMotion } from "./SceneMotion";
+import "./footer.css";
+import "./scenes.css";
+import "./inner.css";
 
 /** Every page: header, content, footer. */
 export function Shell({ lang, page, children }: { lang: Lang; page: PageKey; children: ReactNode }) {
   return (
     <>
+      <a href="#top" className="skip">{lang === "ja" ? "本文へ移動" : "Skip to content"}</a>
       <Header lang={lang} page={page} />
-      <main>{children}</main>
-      <Footer lang={lang} />
+      <main id="top" tabIndex={-1}>{children}</main>
+      <Cursor />
+      <SceneMotion />
+      <Footer lang={lang} page={page} />
     </>
   );
 }
 
 /**
- * Opening, once per visit (CSS): the logo fades in and a soft silver light passes over it,
- * a hairline draws out beneath it with the place name, then the black parts left and right.
+ * Header of every page but home: a full-bleed photo (or film) that pushes in slowly, the page
+ * number as a large gold outline, and the title rising letter by letter (SceneMotion split).
  */
-export function Intro() {
-  return (
-    <div className="intro" aria-hidden="true">
-      <div className="intro-mark">
-        <span className="intro-logo"><span className="logo" /><span className="logo shine" /></span>
-        <span className="intro-line" />
-        <span className="intro-cap">Museum &amp; Event Space · Osaka Bay</span>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Text split into letters that rise in one after another (CSS `.letters`).
- * Words stay unbroken; `start` offsets the letter count so several lines run on in sequence.
- */
-export function SplitText({ text, start = 0 }: { text: string; start?: number }) {
-  let i = start;
-  // Japanese has no spaces: each kana/kanji counts as its own "word" so long titles can wrap.
-  const words = text.split(/(\s+)/).flatMap((w) => w.split(/(?<=[　-ヿ㐀-鿿＀-￯])|(?=[　-ヿ㐀-鿿＀-￯])/).filter(Boolean));
-  return (
-    <>
-      {words.map((word, w) =>
-        /^\s+$/.test(word) ? (
-          " "
-        ) : (
-          <span key={w} className="word">
-            {[...word].map((ch, c) => (
-              <span key={c} className="ch" style={{ "--i": i++ } as React.CSSProperties}>{ch}</span>
-            ))}
-          </span>
-        ),
-      )}
-    </>
-  );
-}
-
-/** Large photo (or film, when `video` is given) header used by every page except the home page. */
 export function PageHero({ hero, video, index }: { hero: { kicker: string; title: string; lead: string; image: string }; video?: string; index?: string }) {
   return (
-    <section className="page-hero" data-hero>
-      <div className="hero-img">
+    // Motion.tsx may set --hp on it before hydration
+    <section className="ph" data-hero suppressHydrationWarning>
+      <div className="ph-media">
         {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <img {...responsive(hero.image)} alt="" fetchPriority="high" />}
       </div>
-      <div className="hero-veil" />
-      <div className="page-hero-inner hero-drift">
-        <p className="kicker rv">{index && <span className="page-index">{index}</span>}{hero.kicker}</p>
-        <h1 className="display rv letters" aria-label={hero.title}>
-          <span aria-hidden="true"><SplitText text={hero.title} /></span>
-        </h1>
-        <p className="lead rv" style={{ "--d": ".24s" } as React.CSSProperties}>{hero.lead}</p>
+      <div className="ph-veil" />
+      {index && <span className="ph-index" aria-hidden="true">{index}</span>}
+      <div className="ph-inner">
+        <p className="kicker ph-kicker">{hero.kicker}</p>
+        <h1 className="display ph-title" data-split>{hero.title}</h1>
+        <i className="ph-line" aria-hidden="true" />
+        <p className="ph-lead">{hero.lead}</p>
       </div>
-      <p className="hero-meta" aria-hidden="true">34°38′N&nbsp;&nbsp;135°24′E<br />Osaka Bay</p>
+      <span className="ph-scroll" aria-hidden="true">Scroll</span>
     </section>
   );
 }
 
-/** Slow band of large outlined words drifting across the screen. */
+/** Large words drifting sideways as the page scrolls (SceneMotion moves .h-kinetic). */
 export function Marquee({ words }: { words: string[] }) {
   return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee-track">
-        {[0, 1].map((k) => (
-          <span key={k}>
-            {words.map((w) => (
-              <Fragment key={w}>{w} <i /> </Fragment>
-            ))}
-          </span>
-        ))}
+    <div className="h-kinetic" aria-hidden="true">
+      <div className="h-kinetic-track">
+        {[0, 1].map((k) => words.map((w) => <span key={`${k}-${w}`}>{w}<i /></span>))}
       </div>
     </div>
   );
 }
 
-/** Film (or photo) that opens from a framed window to full screen while scrolling, then shows the text. */
+/**
+ * A full-screen photo that opens out of a narrow window as it comes in, with one large line
+ * (and an optional sentence) set over it.
+ */
 export function WindowFilm({ kicker, title, body, video, image }: { kicker: string; title: string; body?: string; video?: string; image: string }) {
   return (
-    <section className="window" data-window>
-      <div className="window-stick">
-        <div className="window-media">
-          {video ? <video src={video} poster={image} autoPlay muted loop playsInline preload="none" aria-hidden="true" /> : <img {...responsive(image)} alt="" loading="lazy" />}
-        </div>
-        <div className="window-text">
-          <p className="kicker">{kicker}</p>
-          <h2 className="display sec-title mt-5">{title}</h2>
-          {body && <p className="mx-auto mt-6 max-w-xl text-white/85">{body}</p>}
-        </div>
+    <section className="qs">
+      <div className="qs-media">
+        {video ? <video src={video} poster={image} autoPlay muted loop playsInline preload="none" aria-hidden="true" /> : <img {...responsive(image)} alt="" loading="lazy" />}
+      </div>
+      <div className="qs-text">
+        <p className="kicker" data-reveal>{kicker}</p>
+        <h2 className="display qs-title" data-split>{title}</h2>
+        {body && <p className="h-body" data-reveal>{body}</p>}
       </div>
     </section>
   );
@@ -121,55 +87,88 @@ export function Ornament({ className = "" }: { className?: string }) {
   );
 }
 
-/** Full-screen invitation to enquire; ends most pages. */
-export function ContactBand({ lang }: { lang: Lang }) {
-  const t = content[lang];
+/**
+ * Full-width band: a photo on one side fading into the dark (it opens from its side and drifts
+ * as you scroll), text on the other with a large outlined number behind it. `rev` swaps sides;
+ * `children` adds details under the text (specs, facts, thumbnails); `focus` is the part of the
+ * photo to keep in view (CSS object-position), for subjects away from the centre.
+ */
+export function Band({ id, no, kicker, title, body, image, href, cta, rev, focus, children }: {
+  id?: string; no: string; kicker: string; title: ReactNode; body?: ReactNode; image: string; href?: string; cta?: string; rev?: boolean; focus?: string; children?: ReactNode;
+}) {
+  const photo = <img {...responsive(image, "(min-width: 1025px) 70vw, 100vw")} alt="" loading="lazy" style={focus ? { objectPosition: focus } : undefined} />;
   return (
-    <section className="contact-band">
-      <img {...responsive(asset("/images/band-dusk.jpg"))} alt="" className="contact-band-bg" loading="lazy" />
-      <p className="kicker rv">Contact</p>
-      <h2 className="display contact-band-title rv mt-8" style={{ "--d": ".1s" } as React.CSSProperties}>
-        {t.home.contactTitle}
-      </h2>
-      <p className="rv mx-auto mt-8 max-w-xl text-white/85" style={{ "--d": ".2s" } as React.CSSProperties}>{t.home.contactBody}</p>
-      <div className="rv mt-12 flex flex-wrap justify-center gap-4" style={{ "--d": ".3s" } as React.CSSProperties}>
-        <Link href={path(lang, "contact")} className="btn btn-accent">{t.nav.cta}</Link>
-        <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line">Instagram DM</a>
+    <section id={id} className={`bd${rev ? " bd-rev" : ""}`}>
+      {href ? <Link href={href} className="bd-img" data-cursor="view" tabIndex={-1} aria-hidden="true">{photo}</Link> : <div className="bd-img" aria-hidden="true">{photo}</div>}
+      <div className="bd-text">
+        <span className="bd-num" aria-hidden="true">{no}</span>
+        <p className="kicker" data-reveal>{kicker}</p>
+        <h2 className="display bd-title" data-split>{title}</h2>
+        {body && <div className="bd-body" data-reveal>{body}</div>}
+        {children}
+        {href && cta && <Link href={href} className="btn btn-line magnetic" data-reveal>{cta}<i className="btn-arrow" /></Link>}
       </div>
     </section>
   );
 }
 
-/** Footer: details and links, closed by the name set across the full width. */
-function Footer({ lang }: { lang: Lang }) {
+/** Closing scene of every page: the LED lattice moving behind an invitation to get in touch. */
+export function ContactBand({ lang }: { lang: Lang }) {
   const t = content[lang];
   return (
-    <footer className="site-foot">
-      <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
-          <p className="kicker">THE JEWELRY</p>
-          <p className="mt-6 text-sm text-white/85">{t.footer.address}</p>
-          <p className="caption mt-1">{t.footer.tagline}</p>
-        </div>
-        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-[13px] text-white/85" aria-label="Footer">
-          {PAGES.map((p) => (
-            <Link key={p} href={path(lang, p)} className="transition hover:text-white">{t.nav.labels[p]}</Link>
-          ))}
-        </nav>
-        <div className="flex flex-col gap-2 text-[13px] text-white/85">
-          <a href={IG_URL} target="_blank" rel="noopener" className="hover:text-white">Instagram ↗</a>
-          <a href={COMPANY_URL} target="_blank" rel="noopener" className="hover:text-white">{t.footer.company} ↗</a>
-          <a href={PRIVACY_URL} target="_blank" rel="noopener" className="hover:text-white">{t.footer.privacy} ↗</a>
-          <span className="head-lang mt-3 text-[11px] tracking-[.2em]">
-            <Link href={path("ja", "home")} aria-current={lang === "ja" ? "true" : undefined}>JP</Link>
-            <Link href={path("en", "home")} aria-current={lang === "en" ? "true" : undefined}>EN</Link>
-          </span>
+    <section className="h-contact">
+      {/* poster and film are loaded by SceneMotion once it is close (the film only where motion is allowed) */}
+      <video className="h-contact-bg" data-lazy-src={asset("/videos/lattice-loop.mp4")} data-lazy-poster={asset("/images/lattice-loop-poster.jpg")} muted loop playsInline preload="none" aria-hidden="true" />
+      <div className="h-contact-inner">
+        <p className="kicker" data-reveal>Contact</p>
+        <h2 className="display h-contact-title" data-split>{t.home.contactTitle}</h2>
+        <p className="h-body" data-reveal>{t.home.contactBody}</p>
+        <div className="h-contact-actions" data-reveal>
+          <Link href={`${path(lang, "contact")}#${FORM_ID}`} className="btn btn-accent magnetic">{t.nav.cta}<i className="btn-arrow" /></Link>
+          <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line magnetic">Instagram DM<i className="btn-arrow" /></a>
         </div>
       </div>
-      <p className="foot-word display" aria-hidden="true">THE JEWELRY</p>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <span className="logo w-12" />
-        <p className="caption">{t.footer.rights}</p>
+    </section>
+  );
+}
+
+
+/**
+ * Footer: brand and address, page links, outside links and a way back up, closed by the name
+ * set across the full width (its letters rise as the footer comes into view: .ft-word).
+ */
+function Footer({ lang, page }: { lang: Lang; page: PageKey }) {
+  const t = content[lang];
+  return (
+    <footer className="site-foot ft">
+      <div className="ft-grid">
+        <div className="ft-brand">
+          <span className="logo ft-mark" aria-hidden="true" />
+          <p className="ft-name">The Jewelry<small>Osaka Bay</small></p>
+          <p className="ft-addr">{t.footer.address}</p>
+          <p className="ft-tag">{t.footer.tagline}</p>
+        </div>
+        <nav className="ft-nav" aria-label="Footer">
+          {PAGES.map((p, i) => (
+            <Link key={p} href={path(lang, p)}><span>{String(i + 1).padStart(2, "0")}</span>{t.nav.labels[p]}</Link>
+          ))}
+        </nav>
+        <div className="ft-links">
+          <a href={IG_URL} target="_blank" rel="noopener">Instagram <i>↗</i></a>
+          <a href={COMPANY_URL} target="_blank" rel="noopener">{t.footer.company} <i>↗</i></a>
+          <a href={PRIVACY_URL} target="_blank" rel="noopener">{t.footer.privacy} <i>↗</i></a>
+          <a href="#top" className="ft-top">Page top <i>↑</i></a>
+        </div>
+      </div>
+      <p className="ft-word" aria-hidden="true">
+        {[..."THE JEWELRY"].map((c, i) => <span key={i} style={{ "--i": i } as React.CSSProperties}>{c === " " ? " " : c}</span>)}
+      </p>
+      <div className="ft-base">
+        <p>{t.footer.rights}</p>
+        <span className="hd-lang">
+          <Link href={path("ja", page)} aria-current={lang === "ja" ? "true" : undefined} lang="ja">JP</Link>
+          <Link href={path("en", page)} aria-current={lang === "en" ? "true" : undefined} lang="en">EN</Link>
+        </span>
       </div>
     </footer>
   );

@@ -1,199 +1,14 @@
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
 import { Fragment } from "react";
-import { asset, content, IG_URL, MAP_EMBED, PARKING_URL, path, type Content, type Lang } from "@/content/site";
+import { asset, content, EVENT_IDS, FORM_ID, IG_URL, MAP_EMBED, PARKING_URL, path, SPACE_IDS, type Content, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
 import { feed, type FeedItem } from "@/lib/feed";
 import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
-import { SpacesCards } from "./SpacesCards";
-import { ProgrammeCarousel } from "./ProgrammeCarousel";
-import { PhotoCarousel } from "./PhotoCarousel";
-import { HeroFilm } from "./HeroFilm";
-import { ContactBand, Marquee, PageHero, Shell, WindowFilm } from "./Shared";
+import { Band, ContactBand, Marquee, PageHero, Shell, WindowFilm } from "./Shared";
 
 const d = (s: string) => ({ "--d": s }) as React.CSSProperties;
-
-/* ======================= HOME ======================= */
-
-// Sky twinkles, in image coordinates (% of width, % of height, delay in s).
-const TWINKLES = [
-  [11, 12, 0], [27, 21, 1.8], [44, 7, 3.1], [71, 9, 0.9], [84, 15, 2.4], [93, 29, 4.2], [6, 33, 3.6], [36, 30, 5.1],
-];
-
-/**
- * Hero still made to feel like film: the camera drifts, the water ripples, the dome's LED
- * colours shift and lights twinkle. All layers share the photo's proportions (cover-sized box)
- * so the effects stay on the dome and its reflection at any screen size.
- */
-function HeroLive({ src }: { src: string }) {
-  return (
-    <div className="hero-live" aria-hidden="true">
-      <svg className="absolute size-0" focusable="false">
-        <filter id="hero-water" x="0" y="0" width="100%" height="100%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.002 0.06" numOctaves="2" seed="7">
-            <animate attributeName="baseFrequency" dur="14s" values="0.002 0.06;0.0026 0.078;0.002 0.06" repeatCount="indefinite" />
-          </feTurbulence>
-          <feDisplacementMap in="SourceGraphic" scale="6" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </svg>
-      <img {...responsive(src)} alt="" fetchPriority="high" />
-      <div className="hero-live-water"><img {...responsive(src)} alt="" /></div>
-      <div className="hero-live-water hero-live-reflection"><img {...responsive(src)} alt="" className="hero-live-led" /></div>
-      <div className="hero-live-dome"><img {...responsive(src)} alt="" className="hero-live-led" /></div>
-      {TWINKLES.map(([x, y, t]) => (
-        <i key={`${x}-${y}`} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${t}s` }} />
-      ))}
-    </div>
-  );
-}
-
-/**
- * A sentence whose words light up one by one while scrolling (Motion.tsx adds `.lit`).
- * Japanese is lit character by character; `word` is lit as one iridescent phrase.
- */
-function LitText({ text, word }: { text: string; word: string }) {
-  const i = text.indexOf(word);
-  const parts = i < 0 ? [text] : [text.slice(0, i), word, text.slice(i + word.length)];
-  const tokens = (t: string) => t.split(/(\s+)/).flatMap((w) => (/[\u3000-\u9fff\uff00-\uffef]/.test(w) ? [...w] : [w])).filter(Boolean);
-  return (
-    <>
-      {parts.map((part, p) =>
-        p === 1 ? (
-          <span key={p} className="lw iri-text">{part}</span>
-        ) : (
-          tokens(part).map((w, k) => (/^\s+$/.test(w) ? " " : <span key={`${p}-${k}`} className="lw">{w}</span>))
-        ),
-      )}
-    </>
-  );
-}
-
-export function HomePage({ lang }: { lang: Lang }) {
-  const t = content[lang];
-  const h = t.home;
-  return (
-    <Shell lang={lang} page="home">
-      {/* hero: editorial, text anchored bottom-left over the living still */}
-      <section className="hero hero-v2" data-hero>
-        <div className="hero-img">
-          <HeroLive src={asset("/images/hero-night.jpg")} />
-          <HeroFilm />
-        </div>
-        <div className="hero-veil" />
-        <div className="hero-inner hero-drift">
-          {/* logo and tagline only, the logo in the dome's colours */}
-          <h1 className="rv m-0" aria-label="THE JEWELRY">
-            <span className="logo logo-iri hero-logo" aria-hidden="true" />
-          </h1>
-          <p className="hero-tagline rv" style={d(".2s")}>{h.kicker}</p>
-          <div className="hero-foot rv" style={d(".4s")}>
-            <div className="hero-actions">
-              <Link href={path(lang, "contact")} className="btn btn-accent">{h.ctaPrimary}</Link>
-              <Link href={path(lang, "spaces")} className="btn btn-line">{h.ctaSecondary}</Link>
-            </div>
-          </div>
-        </div>
-        <p className="hero-meta rv" style={d(".8s")} aria-hidden="true">34°38′N&nbsp;&nbsp;135°24′E<br />Osaka Bay</p>
-        <span className="hero-scroll" aria-hidden="true">Scroll</span>
-      </section>
-
-      {/* statement: one large sentence, the key phrase in the dome's colours */}
-      <section className="sec statement aura">
-        {/* the floating photos live in the text block's right-hand column, so they never reach the figures below */}
-        <div className="statement-main">
-          <div className="collage-item c1 frame" data-speed="0.12" aria-hidden="true"><img {...responsive(asset("/images/story-ship.jpg"), "18vw")} alt="" loading="lazy" /></div>
-          <div className="collage-item c2 frame" data-speed="0.2" aria-hidden="true"><img {...responsive(asset("/images/story-lattice.jpg"), "12vw")} alt="" loading="lazy" /></div>
-          <div className="collage-item c3 frame" data-speed="0.08" aria-hidden="true"><img {...responsive(asset("/images/story-violet.jpg"), "10vw")} alt="" loading="lazy" /></div>
-          <p className="kicker rv">{h.statementLabel}</p>
-          <h2 className="display statement-text mt-10" aria-label={h.statement}>
-            <span aria-hidden="true"><LitText text={h.statement} word={lang === "ja" ? "新しい舞台" : "a new stage"} /></span>
-          </h2>
-          <div className="statement-foot">
-            <p className="rv max-w-xl text-white/85" style={d(".15s")}>{h.statementBody}</p>
-            <Link href={path(lang, "about")} className="link-arrow rv" style={d(".2s")}>{t.common.more} <span>→</span></Link>
-          </div>
-        </div>
-        <div className="figures">
-          {h.figures.map((f, i) => (
-            <div key={f.label} className="rv" style={d(`${0.1 + i * 0.1}s`)}>
-              <p className="display figure-value">{f.value}<small>{f.unit}</small></p>
-              <p className="caption mt-3">{f.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <Marquee words={["Museum", "Exhibitions", "Events", "Osaka Bay"]} />
-
-      {/* spaces */}
-      <section className="sec aura !pt-[clamp(60px,8vw,120px)] !pb-[clamp(60px,8vw,120px)]">
-        <div className="mb-16 flex flex-wrap items-end justify-between gap-8">
-          <div>
-            <p className="kicker rv">Spaces</p>
-            <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.spacesTitle}</h2>
-          </div>
-          <p className="rv max-w-md text-white/85" style={d(".2s")}>{h.spacesLead}</p>
-        </div>
-        <SpacesCards lang={lang} />
-      </section>
-
-      <FeedSection lang={lang} manual={feed(lang)} limit={3} className="!pt-[clamp(60px,8vw,120px)]" />
-
-      {/* lights on: scrolling turns the dark dome into its full colour illumination */}
-      <section className="lights" data-lights>
-        <div className="lights-stick">
-          <img {...responsive(asset("/images/lights-dusk.jpg"))} alt="" className="lights-img" loading="lazy" />
-          <div className="lights-text">
-            <p className="kicker">{h.window.kicker}</p>
-            <h2 className="display sec-title mt-5">
-              <span className="lights-before">{h.lights.before}</span>
-              <span className="lights-after">{h.lights.after}</span>
-            </h2>
-            <p className="lights-after mx-auto mt-6 max-w-xl text-white/85">{h.window.body}</p>
-          </div>
-        </div>
-      </section>
-
-      {/* programme: one large photo per event type, the neighbours at the sides */}
-      <section className="programme">
-        <div className="programme-head">
-          <p className="kicker kicker-center rv">Programme</p>
-          <h2 className="display sec-title rv mt-5" style={d(".1s")}>{h.programmeTitle}</h2>
-          <p className="rv mx-auto mt-6 max-w-xl text-white/85" style={d(".2s")}>{t.events.hero.lead}</p>
-        </div>
-        <div className="rv" style={d(".3s")}>
-          <ProgrammeCarousel items={t.events.types.map((e) => ({ no: e.no, title: e.title, en: e.en, image: e.card }))} prev={lang === "ja" ? "前へ" : "Previous"} next={lang === "ja" ? "次へ" : "Next"} />
-        </div>
-        <p className="programme-more rv">
-          <Link href={path(lang, "events")} className="link-arrow">{t.common.more} <span>→</span></Link>
-        </p>
-      </section>
-
-      {/* relaunch: the date, full screen */}
-      <section className="relaunch aura">
-        <p className="kicker rv">Re:Start</p>
-        <p className="display relaunch-date rv" style={{ ...d(".1s"), "--photo": `url(${asset("/images/relaunch-led-1600.webp")})` } as React.CSSProperties}>{h.relaunch.date}</p>
-        <h2 className="display rv mt-6 text-[clamp(24px,2.6vw,40px)]" style={d(".2s")}>{h.relaunch.title}</h2>
-        <p className="rv mx-auto mt-6 max-w-xl text-white/85" style={d(".3s")}>{h.relaunch.body}</p>
-        <Link href={path(lang, "contact")} className="btn btn-accent rv mt-10" style={d(".4s")}>{h.relaunch.cta} →</Link>
-      </section>
-
-      {/* visit: one row, photo and text */}
-      <section className="visit-row">
-        <div className="frame rv-img visit-photo"><img {...responsive(asset("/images/visit-entrance.jpg"), "(min-width: 1024px) 50vw, 100vw")} alt="" loading="lazy" /></div>
-        <div className="visit-text">
-          <p className="kicker rv">Visit</p>
-          <h2 className="display sec-title rv mt-4" style={d(".1s")}>{h.visitTitle}</h2>
-          <p className="rv mt-6 max-w-md text-white/85" style={d(".2s")}>{h.visitBody}</p>
-          <Link href={path(lang, "visit")} className="link-arrow rv mt-10" style={d(".3s")}>{t.common.more} <span>→</span></Link>
-        </div>
-      </section>
-
-      <ContactBand lang={lang} />
-    </Shell>
-  );
-}
 
 /* ======================= ABOUT ======================= */
 export function AboutPage({ lang }: { lang: Lang }) {
@@ -202,17 +17,8 @@ export function AboutPage({ lang }: { lang: Lang }) {
     <Shell lang={lang} page="about">
       <PageHero hero={a.hero} index="02" />
       <Marquee words={["Museum", "Architecture", "Light", "Osaka Bay"]} />
-      {a.chapters.map((c) => (
-        <article key={c.no} className="chapter">
-          <div className="chapter-band frame rv-img">
-            <img {...responsive(c.image)} alt="" loading="lazy" />
-            <span className="chapter-no display" aria-hidden="true">{c.no}</span>
-          </div>
-          <div className="chapter-text">
-            <h2 className="display rv text-[clamp(30px,3.6vw,56px)] leading-tight">{c.title}</h2>
-            <p className="rv text-white/85" style={d(".12s")}>{c.body}</p>
-          </div>
-        </article>
+      {a.chapters.map((c, i) => (
+        <Band key={c.no} no={c.no} kicker={`Chapter ${c.no}`} title={c.title} body={c.body} image={c.image} rev={i % 2 === 1} />
       ))}
       <WindowFilm kicker="Vision" title={a.quote} image={asset("/images/about-vision.jpg")} />
       <ContactBand lang={lang} />
@@ -228,33 +34,19 @@ export function SpacesPage({ lang }: { lang: Lang }) {
     <Shell lang={lang} page="spaces">
       <PageHero hero={s.hero} index="03" />
       <Marquee words={content.en.spaces.spaces.map((x) => x.name)} />
-      {s.spaces.map((sp) => (
-        <section key={sp.no} className="plate">
-          <div className="plate-photo frame rv-img">
-            <img {...responsive(sp.image)} alt={sp.name} loading="lazy" />
-            <div className="plate-title">
-              <p className="caption">{sp.no} · {sp.en}</p>
-              <h2 className="display">{sp.name}</h2>
+      {s.spaces.map((sp, i) => (
+        <Band key={sp.no} id={SPACE_IDS[i]} no={sp.no.replace("Pl. ", "")} kicker={`${sp.no} · ${sp.en}`} title={sp.name} body={sp.body} image={sp.image} rev={i % 2 === 1}>
+          <dl className="specs" data-reveal>
+            <div>
+              <dt>{s.capacityLabel}</dt>
+              <dd className="specs-big">{sp.capacity}<small>{t.common.guests}</small></dd>
             </div>
-            <p className="plate-cap display" aria-hidden="true">{sp.capacity}</p>
-          </div>
-          <dl className="plate-specs">
-            <div className="rv">
-              <dt className="kicker">{s.capacityLabel}</dt>
-              <dd className="display mt-3 text-[clamp(30px,3vw,44px)]">{sp.capacity}<small className="ml-2 text-sm text-white/85">{t.common.guests}</small></dd>
-            </div>
-            <div className="rv" style={d(".1s")}>
-              <dt className="kicker">{s.usesLabel}</dt>
-              <dd className="mt-4 flex flex-wrap gap-2">
-                {sp.uses.map((u) => <span key={u} className="chip">{u}</span>)}
-              </dd>
-            </div>
-            <div className="rv" style={d(".2s")}>
-              <dt className="sr-only">{sp.name}</dt>
-              <dd className="text-white/85">{sp.body}</dd>
+            <div>
+              <dt>{s.usesLabel}</dt>
+              <dd><ul className="uses">{sp.uses.map((u) => <li key={u}>{u}</li>)}</ul></dd>
             </div>
           </dl>
-        </section>
+        </Band>
       ))}
       <WindowFilm kicker="Combination" title={s.combineTitle} body={s.combineBody} image={asset("/images/spaces-combine.jpg")} />
       <ContactBand lang={lang} />
@@ -266,82 +58,70 @@ export function SpacesPage({ lang }: { lang: Lang }) {
 export function EventsPage({ lang }: { lang: Lang }) {
   const t = content[lang];
   const e = t.events;
-  const arrows = { prev: lang === "ja" ? "前へ" : "Previous", next: lang === "ja" ? "次へ" : "Next" };
   return (
     <Shell lang={lang} page="events">
-      <PageHero hero={e.hero} video={asset("/videos/events-hero.mp4")} index="04" />
+      <PageHero hero={e.hero} index="04" />
 
       {/* intro and enquiry */}
-      <section className="sec ev-intro">
-        <h2 className="display ev-intro-title rv">{e.intro.title}</h2>
-        <div className="rv" style={d(".1s")}>
-          <p className="text-white/85">{e.intro.body}</p>
-          <Link href={path(lang, "contact")} className="btn btn-line mt-8">{e.intro.cta} →</Link>
+      <section className="lead-sec">
+        <p className="kicker" data-reveal>{e.hero.kicker}</p>
+        <h2 className="display lead-title" data-split>{e.intro.title}</h2>
+        <div className="lead-side">
+          <p className="h-body" data-reveal>{e.intro.body}</p>
+          <Link href={`${path(lang, "contact")}#${FORM_ID}`} className="btn btn-line magnetic" data-reveal>{e.intro.cta}<i className="btn-arrow" /></Link>
         </div>
       </section>
 
-      {/* one block per event type: photo carousel, text, facts that fold open */}
-      <section className="ev-types">
-        <h2 className="display sec-title rv px-[var(--pad)]">{e.typesTitle}</h2>
-        {e.types.map((ty) => (
-          <article key={ty.no} className="ev-type">
-            <div className="rv"><PhotoCarousel images={ty.images} label={`${ty.no} — ${ty.en}`} {...arrows} /></div>
-            <div className="ev-type-body">
-              <div className="rv">
-                <p className="caption">{ty.no} — {ty.en}</p>
-                <h3 className="display ev-type-title">{ty.title}</h3>
-                <p className="mt-6 leading-[2.1] text-white/85">{ty.body}</p>
-                <p className="mt-4 leading-[2.1] text-white/85">{ty.more}</p>
-              </div>
-              <div className="ev-facts rv" style={d(".1s")}>
-                {ty.facts.map((f, k) => (
-                  <details key={f.label} open={k === 0}>
-                    <summary>{f.label}</summary>
-                    <p>{f.value}</p>
-                  </details>
-                ))}
-                <p className="mt-6 text-xs text-white/85">{t.common.pending}</p>
-              </div>
-            </div>
-          </article>
+      {/* one band per event type: main photo, text, two more photos and the key facts */}
+      {e.types.map((ty, i) => (
+        <Band key={ty.no} id={EVENT_IDS[i]} no={ty.no} kicker={`${ty.no} — ${ty.en}`} title={ty.title} body={<><p>{ty.body}</p><p>{ty.more}</p></>} image={ty.images[0]} rev={i % 2 === 1}>
+          <div className="thumbs" data-reveal aria-hidden="true">
+            {ty.images.slice(1).map((src) => <span key={src} className="thumb"><img {...responsive(src, "16vw")} alt="" loading="lazy" /></span>)}
+          </div>
+          <dl className="facts" data-reveal>
+            {ty.facts.map((f) => (
+              <div key={f.label}><dt>{f.label}</dt><dd>{f.value}</dd></div>
+            ))}
+          </dl>
+          <p className="pending" data-reveal>{t.common.pending}</p>
+        </Band>
+      ))}
+
+      {/* the spaces, as tall cards */}
+      <section className="cats-head">
+        <p className="kicker" data-reveal>Spaces</p>
+        <h2 className="display h-title" data-split>{e.spacesTitle}</h2>
+        <Link href={path(lang, "spaces")} className="h-link" data-reveal>{t.common.more}<i className="btn-arrow" /></Link>
+      </section>
+      <section className="cats cats-3" aria-label={e.spacesTitle}>
+        {t.spaces.spaces.map((sp, i) => (
+          <Link key={sp.no} href={`${path(lang, "spaces")}#${SPACE_IDS[i]}`} className="cat" data-cursor="view">
+            <span className="cat-img"><img {...responsive(sp.image, "(min-width: 1025px) 33vw, 50vw")} alt="" loading="lazy" /></span>
+            <span className="cat-text">
+              <span className="cat-no">{sp.no}</span>
+              <span className="cat-en">{sp.en}</span>
+              <span className="cat-title">{sp.name} · {sp.capacity}{t.common.guests}</span>
+              <span className="cat-body">{sp.body}</span>
+              <i className="btn-arrow" />
+            </span>
+          </Link>
         ))}
       </section>
 
-      {/* spaces: photo cards with a caption underneath */}
-      <section className="sec ev-spaces">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="display sec-title rv">{e.spacesTitle}</h2>
-          <Link href={path(lang, "spaces")} className="link-arrow rv">{t.common.more} <span>→</span></Link>
-        </div>
-        <ul className="ev-space-grid">
-          {t.spaces.spaces.map((sp, i) => (
-            <li key={sp.no} className="rv" style={d(`${i * 0.08}s`)}>
-              <Link href={path(lang, "spaces")} className="ev-space group">
-                <span className="frame block aspect-[3/4]"><img {...responsive(sp.image, "(min-width: 768px) 33vw, 100vw")} alt="" loading="lazy" /></span>
-                <span className="mt-4 flex items-baseline justify-between gap-4">
-                  <span className="display text-2xl transition-colors group-hover:text-accent-hi">{sp.name}</span>
-                  <span className="caption">{sp.capacity}{t.common.guests}</span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
       <FeedSection lang={lang} manual={feed(lang, "event")} kind="event" />
-      <section className="sec flow aura">
-        <div className="flow-head">
-          <p className="kicker rv">Flow</p>
-          <h2 className="display sec-title rv mt-4" style={d(".1s")}>{e.flowTitle}</h2>
+
+      {/* how booking works: four numbered steps along a gold line */}
+      <section className="flow2">
+        <div className="flow2-head">
+          <p className="kicker" data-reveal>Flow</p>
+          <h2 className="display h-title" data-split>{e.flowTitle}</h2>
         </div>
-        <ol className="flow-steps">
-          {e.flow.map((f, i) => (
-            <li key={f.no} className="rv" style={d(`${i * 0.1}s`)}>
-              <span className="flow-no display">{f.no}</span>
-              <div>
-                <h3 className="display text-[clamp(22px,2vw,30px)]">{f.title}</h3>
-                <p className="mt-3 text-sm leading-[2] text-white/85">{f.body}</p>
-              </div>
+        <ol className="flow2-steps">
+          {e.flow.map((f) => (
+            <li key={f.no} data-reveal>
+              <span className="flow2-no">{f.no}</span>
+              <h3 className="display flow2-title">{f.title}</h3>
+              <p>{f.body}</p>
             </li>
           ))}
         </ol>
@@ -359,50 +139,57 @@ export function VisitPage({ lang }: { lang: Lang }) {
     <Shell lang={lang} page="visit">
       <PageHero hero={v.hero} index="05" />
       <Marquee words={["Nanko", "Osaka Bay", "Cosmosquare", "Access"]} />
-      <section className="sec info-grid aura">
-        <div className="rv">
+
+      {/* hours, address, travel times */}
+      <section className="facts3">
+        <div data-reveal>
           <h2 className="kicker">{v.hoursTitle}</h2>
-          <p className="display info-value">{v.hours}</p>
-          <p className="mt-4 text-sm text-white/85">{v.hoursNote}</p>
-          <span className="chip mt-5 inline-block">{t.common.pending}</span>
+          <p className="facts3-value">{v.hours}</p>
+          <p className="facts3-note">{v.hoursNote}</p>
+          <p className="pending">{t.common.pending}</p>
         </div>
-        <div className="rv" style={d(".1s")}>
+        <div data-reveal>
           <h2 className="kicker">{v.addressTitle}</h2>
-          <p className="display info-value">{v.address[0]}<br />{v.address[1]}</p>
-          <ul className="mt-6 text-sm text-white/85">{v.trains.map((x) => <li key={x} className="border-t border-white/10 py-3">{x}</li>)}</ul>
+          <p className="facts3-value facts3-address">{v.address[0]}<br />{v.address[1]}</p>
+          <ul className="facts3-list">{v.trains.map((x) => <li key={x}>{x}</li>)}</ul>
         </div>
-        <div className="rv" style={d(".2s")}>
+        <div data-reveal>
           <h2 className="kicker">{v.timesTitle}</h2>
-          <ul className="times">
+          <ul className="times2">
             {v.times.map((x) => (
               <li key={x.from}><span>{x.from}</span><i aria-hidden="true" /><b>{x.time}</b></li>
             ))}
           </ul>
         </div>
       </section>
+
       <WindowFilm kicker="Osaka Bay" title={v.window.title} body={v.window.body} image={asset("/images/visit-bay.jpg")} />
-      <section className="grid md:grid-cols-2">
-        <div className="map-frame">
-          <iframe title="Map" src={MAP_EMBED} loading="lazy" className="h-full min-h-[460px] w-full border-0" />
+
+      {/* map and parking */}
+      <section className="access2">
+        <div className="access2-map">
+          <iframe title="Map" src={MAP_EMBED} loading="lazy" />
         </div>
-        <div className="sec bg-coal">
-          <p className="kicker rv">{v.parkingTitle}</p>
-          <p className="rv mt-6 max-w-md text-white/85" style={d(".1s")}>{v.parking}</p>
-          <a href={PARKING_URL} target="_blank" rel="noopener" className="btn btn-line rv mt-8" style={d(".2s")}>{v.parkingLink} ↗</a>
-          <figure className="rv mt-10" style={d(".3s")}>
-            <img src={asset("/images/parking-atc.png")} alt={v.parkingAtc} loading="lazy" className="w-full" />
-            <figcaption className="caption mt-3">{v.parkingAtc}</figcaption>
+        <div className="access2-text">
+          <p className="kicker" data-reveal>{v.parkingTitle}</p>
+          <p className="h-body" data-reveal>{v.parking}</p>
+          <a href={PARKING_URL} target="_blank" rel="noopener" className="btn btn-line magnetic" data-reveal>{v.parkingLink}<i className="btn-arrow" /></a>
+          <figure className="access2-fig" data-reveal>
+            <img src={asset("/images/parking-atc.png")} alt={v.parkingAtc} width={1200} height={780} loading="lazy" />
+            <figcaption>{v.parkingAtc}</figcaption>
           </figure>
         </div>
       </section>
-      <section className="sec">
-        <p className="kicker rv">{v.routesTitle}</p>
-        <div className="mt-10 grid items-start gap-10 lg:grid-cols-2">
+
+      {/* train routes */}
+      <section className="routes2">
+        <p className="kicker" data-reveal>{v.routesTitle}</p>
+        <div className="routes2-grid">
           {v.routes.map((r, i) => (
             <RouteChart key={r.caption} route={r} end={v.routeEnd} delay={i * 0.12} />
           ))}
         </div>
-        <p className="caption rv mt-8">{v.routeEnd.note}</p>
+        <p className="facts3-note" data-reveal>{v.routeEnd.note}</p>
       </section>
       <ContactBand lang={lang} />
     </Shell>
@@ -477,14 +264,14 @@ export function ContactPage({ lang }: { lang: Lang }) {
   return (
     <Shell lang={lang} page="contact">
       <PageHero hero={c.hero} index="07" />
-      <Marquee words={["Let's talk", "Exhibitions", "Events", "Receptions"]} />
-      <section className="sec contact-layout aura">
-        <aside className="contact-aside">
-          <p className="display rv text-[clamp(24px,2.4vw,34px)] leading-snug">{c.intro}</p>
-          <div className="dm-card rv" style={d(".1s")}>
-            <h2 className="display text-2xl">{c.dmTitle}</h2>
-            <p className="mt-3 text-sm text-white/85">{c.dmBody}</p>
-            <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line mt-6">Instagram DM ↗</a>
+      <section className="contact2" id={FORM_ID}>
+        <aside className="contact2-aside">
+          <p className="kicker" data-reveal>Contact</p>
+          <p className="display contact2-intro" data-split>{c.intro}</p>
+          <div className="contact2-dm" data-reveal>
+            <h2 className="display">{c.dmTitle}</h2>
+            <p>{c.dmBody}</p>
+            <a href={IG_URL} target="_blank" rel="noopener" className="btn btn-line magnetic">Instagram DM<i className="btn-arrow" /></a>
           </div>
         </aside>
         <ContactForm lang={lang} />

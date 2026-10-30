@@ -1,4 +1,4 @@
-import { HomePage } from "@/components/Pages";
+import { HomePage } from "@/components/home/Home";
 import { pageMeta } from "@/lib/meta";
 
 export const metadata = pageMeta("en", "home");

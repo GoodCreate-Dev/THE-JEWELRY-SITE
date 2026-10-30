@@ -121,6 +121,22 @@ RewriteCond %{REQUEST_URI} !^/404\\.html$
 RewriteCond %{HTTP:X-Sakura-Forwarded-For} ^$
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 </IfModule>
+
+# Smaller transfers: pages carry their styles inline, so compressing them matters most.
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/plain text/css text/x-component application/javascript text/javascript application/json image/svg+xml
+</IfModule>
+
+# Browser caching: Next's files have content hashes in their names and never change; photos,
+# films and fonts keep their names, so they are kept for a week only.
+<IfModule mod_headers.c>
+<If "%{REQUEST_URI} =~ m#^/_next/static/#">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</If>
+<ElseIf "%{REQUEST_URI} =~ m#\\.(webp|jpg|png|svg|mp4|woff2|ico)$#">
+Header set Cache-Control "public, max-age=604800"
+</ElseIf>
+</IfModule>
 `,
 );
 

@@ -3,29 +3,30 @@
 /* eslint-disable @next/next/no-img-element -- local photos, sized by CSS */
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { asset, content, path, PAGES, type Lang, type PageKey } from "@/content/site";
+import { asset, content, FORM_ID, path, PAGES, type Lang, type PageKey } from "@/content/site";
 import { responsive } from "@/lib/img";
+import "./header.css";
 
 /**
  * Photo shown beside each page name in the full-screen menu (a tall frame). Pages whose wide
  * hero crops badly there get their own photo; the rest use the page hero.
  */
-const MENU_IMAGES: Partial<Record<PageKey, string>> = {
-  about: "about-vision",
-  spaces: "space-dome",
-  events: "prog-reception",
-  news: "news-open",
-};
+const MENU_IMAGES: Partial<Record<PageKey, string>> = {};
 
 function menuImage(lang: Lang, p: PageKey) {
-  if (p === "home") return asset("/images/hero-night.jpg");
+  if (p === "home") return asset("/images/hero-stage.jpg");
   const own = MENU_IMAGES[p];
   return own ? asset(`/images/${own}.jpg`) : content[lang][p].hero.image;
 }
 
+/** The bar's own short labels, in English on both sites (as in an editorial masthead). */
+const BAR: [PageKey, string][] = [["about", "About"], ["spaces", "Spaces"], ["events", "Events"], ["news", "News"], ["visit", "Access"]];
+
 /**
- * Fixed header (no logo; the home hero carries it): language, enquiry and the menu icon on the right. The icon opens a full-screen
- * menu with large numbered page names and a photo of the page under the pointer.
+ * Fixed header: brand left, page links centred, language, enquiry and the menu icon right.
+ * Transparent over the hero, a dark glass bar once the page scrolls; slides away while
+ * scrolling down and returns on scroll up. The icon opens a full-screen menu with large
+ * numbered page names and a photo of the page under the pointer.
  */
 export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const t = content[lang];
@@ -34,7 +35,6 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<PageKey>(page);
 
-  // Solid after the hero edge; slides away while scrolling down, returns on scroll up.
   useEffect(() => {
     let last = window.scrollY;
     const onScroll = () => {
@@ -69,26 +69,35 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
 
   return (
     <>
-      <header className={`site-head${solid || open ? " solid" : ""}${away && !open ? " away" : ""}`}>
-        {!open && (
+      <header className={`hd${solid || open ? " is-solid" : ""}${away && !open ? " is-away" : ""}`}>
+        {/* the home page announces 11.01 itself, further down */}
+        {page !== "home" && !open && (
           <div className="notice-bar">
             <span>{t.notice.text}</span>
-            <Link href={path(lang, "contact")}>{t.notice.link} →</Link>
+            <Link href={`${path(lang, "contact")}#${FORM_ID}`}>{t.notice.link} →</Link>
             <button type="button" className="notice-close" aria-label={t.nav.close} onClick={closeNotice}>×</button>
           </div>
         )}
-        <div className="head-row">
-          <div className="head-right">
-            <span className="head-lang">
+        <div className="hd-row">
+          <Link href={path(lang, "home")} className="hd-brand" aria-label="THE JEWELRY">
+            <span className="hd-word" aria-hidden="true"><b>The Jewelry</b><small>Osaka Bay</small></span>
+          </Link>
+          <nav className="hd-nav" aria-label="Primary">
+            {BAR.map(([p, label]) => (
+              <Link key={p} href={path(lang, p)} aria-current={p === page ? "page" : undefined}>{label}</Link>
+            ))}
+          </nav>
+          <div className="hd-right">
+            <span className="hd-lang">
               <Link href={path("ja", page)} aria-current={lang === "ja" ? "true" : undefined} lang="ja">JP</Link>
               <Link href={path("en", page)} aria-current={lang === "en" ? "true" : undefined} lang="en">EN</Link>
             </span>
-            <Link href={path(lang, "contact")} className="head-cta">
+            <Link href={`${path(lang, "contact")}#${FORM_ID}`} className="hd-cta">
               <span className="cta-long">{t.nav.cta}</span>
               <span className="cta-short">{t.nav.ctaShort}</span>
             </Link>
             <button type="button" className="menu-btn" aria-label={open ? t.nav.close : t.nav.menu} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-              <span className="menu-lines" aria-hidden="true"><i /><i /></span>
+              <span className="menu-lines" aria-hidden="true"><i /><i /><i /></span>
             </button>
           </div>
         </div>
@@ -113,7 +122,7 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
           </ol>
           <div className="menu-foot">
             <span className="caption">THE JEWELRY · OSAKA BAY</span>
-            <span className="head-lang">
+            <span className="hd-lang">
               <Link href={path("ja", page)} aria-current={lang === "ja" ? "true" : undefined} onClick={() => setOpen(false)}>JP</Link>
               <Link href={path("en", page)} aria-current={lang === "en" ? "true" : undefined} onClick={() => setOpen(false)}>EN</Link>
             </span>

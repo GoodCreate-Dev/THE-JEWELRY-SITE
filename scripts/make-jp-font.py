@@ -1,13 +1,15 @@
 """
-Makes the site's own small Noto Sans JP files (src/fonts/noto-sans-jp-{400,500}.woff2): only
+Makes the site's own small Noto Sans JP files (src/fonts/noto-sans-jp-{400,500}.woff2), and
+the Shippori Mincho file for Japanese headlines (src/fonts/shippori-mincho-400.woff2): only
 the characters the site's text uses, plus all kana, Japanese punctuation and full-width
 letters, so one small file replaces the ~270 pieces Google Fonts serves for Japanese.
 Characters outside the file (e.g. a rare kanji in a new Instagram post) show in the device's
 own Japanese font.
 
 Run again after changing Japanese text in src/ (needs fonttools + brotli):
-    python scripts/make-jp-font.py <path to NotoSansJP[wght].ttf>
-The source font is the official variable Noto Sans JP from github.com/google/fonts (OFL).
+    python scripts/make-jp-font.py <path to NotoSansJP[wght].ttf> <path to ShipporiMincho-Regular.ttf>
+The source fonts are the official variable Noto Sans JP and the static Shippori Mincho Regular
+from github.com/google/fonts (both OFL).
 """
 import os
 import pathlib
@@ -33,8 +35,9 @@ chars.update("・ー〜…‥「」『』【】〈〉《》→←↑↓↗※〒
 text = "".join(sorted(c for c in chars if c.isprintable()))
 
 OUT.mkdir(parents=True, exist_ok=True)
-for weight in WEIGHTS:
-    font = instancer.instantiateVariableFont(TTFont(sys.argv[1]), {"wght": weight})
+
+
+def save(font, name):
     options = subset.Options()
     options.flavor = "woff2"
     options.layout_features = ["palt", "kern", "liga", "vert", "vkrn", "vpal"]
@@ -42,8 +45,13 @@ for weight in WEIGHTS:
     sub = subset.Subsetter(options)
     sub.populate(text=text)
     sub.subset(font)
-    target = OUT / f"noto-sans-jp-{weight}.woff2"
+    target = OUT / name
     font.flavor = "woff2"
     font.save(target)
     print(f"{target.name}: {os.path.getsize(target) // 1024} KB")
+
+
+for weight in WEIGHTS:
+    save(instancer.instantiateVariableFont(TTFont(sys.argv[1]), {"wght": weight}), f"noto-sans-jp-{weight}.woff2")
+save(TTFont(sys.argv[2]), "shippori-mincho-400.woff2")
 print(f"{len(text)} characters")

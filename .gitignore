@@ -45,3 +45,7 @@ next-env.d.ts
 
 # Sakura upload package (node scripts/build-sakura.mjs)
 /deploy/
+
+# ungraded originals of graded photos (scripts/grade.mjs)
+/photo-originals
+/photo-preview

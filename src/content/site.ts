@@ -16,6 +16,12 @@ export function path(lang: Lang, page: PageKey): string {
 export const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export const asset = (p: string) => `${BASE}${p}`;
 
+/** Anchors of the sections other pages link straight to (same in both languages, in content order). */
+export const EVENT_IDS = ["exhibitions", "brand-events", "receptions", "fairs"];
+export const SPACE_IDS = ["dome", "outer-area", "entrance-hall"];
+/** The enquiry form on the contact page: every enquiry button opens the page here. */
+export const FORM_ID = "form";
+
 export const IG_URL = "https://www.instagram.com/thejewelry_official/";
 export const COMPANY_URL = "https://symphonicsourire.com/";
 export const PRIVACY_URL = "https://symphonicsourire.com/privacypolicy.html";
@@ -53,6 +59,11 @@ export type Content = {
     lights: { before: string; after: string };
     relaunch: { date: string; title: string; body: string; cta: string };
     programmeTitle: string;
+    gallery: { kicker: string; title: string; items: { image: string; caption: string }[] };
+    /** Hero line, top left (new-version copy: to be confirmed by the client). */
+    tagline: [string, string];
+    /** Full-width bands under the hero, image and text alternating sides. */
+    bands: { kicker: string; title: [string, string]; body: string; cta: string; page: PageKey; image: string; focus?: string }[];
     visitTitle: string;
     visitBody: string;
     newsTitle: string;
@@ -160,7 +171,7 @@ const ja: Content = {
     rights: "© Symphonic Sourire Co., Ltd.",
   },
   home: {
-    kicker: "Museum & Event Space ・ Osaka Bay",
+    kicker: "Museum & Event Space · Osaka Bay",
     title: ["ジュエリー", "再起動"],
     lead: "博物館として生まれたドームが、あなたの展示と催事のために、扉をひらきます。",
     ctaPrimary: "催事・展示のご相談",
@@ -189,14 +200,32 @@ const ja: Content = {
       cta: "ご相談フォームへ",
     },
     programmeTitle: "ご利用いただける催事",
+    gallery: {
+      kicker: "Inside the Dome",
+      title: "光をまとうドーム",
+      items: [
+        { image: IMG("v2-ship-oval.jpg"), caption: "楕円の窓から見る帆船" },
+        { image: IMG("v2-violet.jpg"), caption: "光をまとう格子" },
+        { image: IMG("v2-ring.jpg"), caption: "天窓のリングと帆" },
+        { image: IMG("v2-lounge.jpg"), caption: "夕暮れのラウンジ" },
+        { image: IMG("v2-colonnade.jpg"), caption: "夜の回廊" },
+        { image: IMG("v2-path.jpg"), caption: "光の小径" },
+      ],
+    },
+    tagline: ["この景色が、", "特別な一日をつくる。"],
+    bands: [
+      { kicker: "Event", title: ["ここでしか生まれない", "催事と展示の舞台。"], body: "展覧会、ブランド発表会、レセプション、マーケット。光のドームと大阪湾の景色が、唯一無二のステージになります。", cta: "View events", page: "events", image: IMG("home-event.jpg") },
+      { kicker: "Spaces", title: ["海に浮かぶ、", "光のドーム。"], body: "ドーム、海へひらけた外周部、エントランス館内。目的と規模にあわせて、三つの空間をお選びいただけます。", cta: "View spaces", page: "spaces", image: IMG("home-dome.jpg"), focus: "92% 50%" },
+      { kicker: "Museum", title: ["博物館として", "生まれた建築。"], body: "展示のために設計された空間が、作品や商品を美しく見せ、訪れる人の記憶に残る体験をつくります。", cta: "About the venue", page: "about", image: IMG("v2-ship.jpg") },
+    ],
     visitTitle: "ご来館案内",
     visitBody: "コスモスクエア駅から徒歩約10分。大阪駅・新大阪駅から約30分、関西国際空港から約40分。",
     newsTitle: "お知らせ",
     contactTitle: "特別な一日の、ご相談を。",
-    contactBody: "主催者さま・出展者さまからのご相談は、フォームまたは公式InstagramのDMで承ります。",
+    contactBody: "ジュエリーのご利用につきましては、下記からお問い合わせください。メールフォーム、または公式InstagramのDMで承ります。",
   },
   about: {
-    hero: { kicker: "About", title: "施設について", lead: "博物館として生まれた、光のドーム。", image: IMG("about-hero.jpg") },
+    hero: { kicker: "About", title: "施設について", lead: "博物館として生まれた、光のドーム。", image: IMG("hero-stage.jpg") },
     chapters: [
       { no: "I", title: "博物館として生まれた建築", body: "THE JEWELRY は、建築上は博物館として誕生したドーム型の展示施設です。展示のために設計された空間は、作品や商品を美しく見せ、訪れる人の記憶に残る体験をつくります。", image: IMG("about-arch.jpg") },
       { no: "II", title: "光をまとうドーム", body: "日が沈むと、ドームはゆっくりと輝きはじめます。ライトアップによる演出は、展示やレセプションに、ここでしか生まれない特別な雰囲気をもたらします。", image: IMG("about-light.jpg") },
@@ -205,7 +234,7 @@ const ja: Content = {
     quote: "表現と出会いのための、新しい舞台へ。",
   },
   spaces: {
-    hero: { kicker: "Spaces", title: "スペース", lead: "目的と規模にあわせて選べる、三つの空間。", image: IMG("spaces-hero.jpg") },
+    hero: { kicker: "Spaces", title: "スペース", lead: "目的と規模にあわせて選べる、三つの空間。", image: IMG("home-dome.jpg") },
     usesLabel: "主な用途",
     capacityLabel: "収容人数",
     spaces: [
@@ -217,7 +246,7 @@ const ja: Content = {
     combineBody: "ドームでの展示と外周部でのレセプションなど、複数の空間を組み合わせたご利用も可能です。内容に合わせてご提案いたします。",
   },
   events: {
-    hero: { kicker: "Exhibitions & Events", title: "催事・展示", lead: "ミュージアムとしての空間で、表現を、特別な体験に。", image: IMG("ev-hero.jpg") },
+    hero: { kicker: "Exhibitions & Events", title: "催事・展示", lead: "ミュージアムとしての空間で、表現を、特別な体験に。", image: IMG("home-event.jpg") },
     intro: {
       title: "ミュージアムとして生まれた、催事と展示の舞台。",
       body: "光のドーム、海へひらけた屋外空間、落ち着いたエントランス館内。展覧会から大規模な催事まで、内容に合わせて空間をご提案します。",
@@ -253,8 +282,8 @@ const ja: Content = {
         no: "03", title: "レセプション・パーティー", en: "Receptions",
         body: "周年記念、企業パーティー、ガラディナー。ライトアップされた夜のドームを貸切で。",
         more: "夜景を背景にした特別な一夜に。少人数のレセプションには、エントランス館内もご利用いただけます。",
-        card: IMG("prog-reception.jpg"),
-        images: [IMG("prog-reception.jpg"), IMG("ev-sunset-lounge.jpg"), IMG("ev-evening.jpg")],
+        card: IMG("home-lounge.jpg"),
+        images: [IMG("home-lounge.jpg"), IMG("ev-sunset-lounge.jpg"), IMG("ev-evening.jpg")],
         facts: [
           { label: "おすすめの空間", value: "ドーム／エントランス館内" },
           { label: "収容人数", value: "ドーム 3,000名／エントランス館内 300名" },
@@ -284,7 +313,7 @@ const ja: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪ベイエリアを盛り上げる、イベント会場＆ミュージアム。", image: IMG("visit-hero.jpg") },
+    hero: { kicker: "Visit", title: "ご来館案内", lead: "大阪ベイエリアを盛り上げる、イベント会場＆ミュージアム。", image: IMG("home-dome.jpg") },
     hoursTitle: "開館時間",
     hours: "催事・展示の開催時に開館",
     hoursNote: "開館日・時間は、各催事のお知らせをご確認ください。",
@@ -323,7 +352,7 @@ const ja: Content = {
     routeEnd: { station: "コスモスクエア駅", walk: "徒歩 約10分", note: "コスモスクエア駅から夢洲駅（大阪IR予定地）へは1駅・約5分です。" },
   },
   news: {
-    hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("news-hero.jpg") },
+    hero: { kicker: "News", title: "お知らせ", lead: "THE JEWELRY からの最新情報。", image: IMG("hero-stage.jpg") },
     items: [
       { id: "2026-11-01-open", date: "2026.11.01", title: "催事・展示のご依頼の受付を開始しました", body: "本日より、催事・展示の主催者さまからのご依頼を正式に受け付けます。", image: IMG("news-open.jpg") },
       { id: "2026-10-31-renewal", date: "2026.10.31", title: "公式サイトをリニューアルしました", body: "THE JEWELRY 公式サイトを全面リニューアルしました。", image: IMG("news-renewal.jpg") },
@@ -340,8 +369,8 @@ const ja: Content = {
     follow: "Instagramをフォロー",
   },
   contact: {
-    hero: { kicker: "Contact", title: "お問い合わせ", lead: "催事・展示のご相談をお待ちしています。", image: IMG("contact-hero.jpg") },
-    intro: "主催者さま・出展者さまからのご相談を承ります。日程や内容が未定でもお気軽にご連絡ください。担当者よりご連絡いたします。",
+    hero: { kicker: "Contact", title: "お問い合わせ", lead: "催事・展示のご相談をお待ちしています。", image: IMG("home-lounge.jpg") },
+    intro: "ジュエリーのご利用につきましては、下記からお問い合わせください。日程や内容が未定でもお気軽にご連絡ください。担当者よりご連絡いたします。",
     dmTitle: "InstagramのDMでも",
     dmBody: "公式Instagramのダイレクトメッセージでも、ご相談を受け付けています。",
     form: {
@@ -401,7 +430,7 @@ const en: Content = {
     caption: "THE JEWELRY — a dome wrapped in light. Osaka Bay Area.",
     statementLabel: "Our Story",
     statement: "Born as a museum, now a new stage for expression and encounters.",
-    statementBody: "A dome-shaped exhibition hall on the Osaka Bay Area. From exhibitions and art installations to brand launches and receptions, a space wrapped in light sets the scene for a special day.",
+    statementBody: "A dome-shaped exhibition hall in the Osaka Bay Area. From exhibitions and art installations to brand launches and receptions, a space wrapped in light sets the scene for a special day.",
     figures: [
       { value: "10,000", unit: "", label: "Maximum capacity" },
       { value: "3", unit: "", label: "Distinct spaces" },
@@ -422,23 +451,41 @@ const en: Content = {
       cta: "Go to the enquiry form",
     },
     programmeTitle: "What you can host",
+    gallery: {
+      kicker: "Inside the Dome",
+      title: "A dome wrapped in light",
+      items: [
+        { image: IMG("v2-ship-oval.jpg"), caption: "The ship through the oval window" },
+        { image: IMG("v2-violet.jpg"), caption: "The lattice in light" },
+        { image: IMG("v2-ring.jpg"), caption: "Roof ring and sail" },
+        { image: IMG("v2-lounge.jpg"), caption: "The lounge at dusk" },
+        { image: IMG("v2-colonnade.jpg"), caption: "The colonnade at night" },
+        { image: IMG("v2-path.jpg"), caption: "The path of lights" },
+      ],
+    },
+    tagline: ["Where the bay at night", "becomes your stage."],
+    bands: [
+      { kicker: "Event", title: ["Moments that happen", "nowhere else."], body: "Exhibitions, brand launches, receptions and markets. The dome of light and the Osaka Bay view become a stage like no other.", cta: "View events", page: "events", image: IMG("home-event.jpg") },
+      { kicker: "Spaces", title: ["A dome of light", "on the water."], body: "The Dome, the Outer Area facing the sea, and the Entrance Hall: three spaces to suit the scale and purpose of your event.", cta: "View spaces", page: "spaces", image: IMG("home-dome.jpg"), focus: "92% 50%" },
+      { kicker: "Museum", title: ["Architecture", "built as a museum."], body: "Designed for display, its spaces present works and products at their best and create experiences people remember.", cta: "About the venue", page: "about", image: IMG("v2-ship.jpg") },
+    ],
     visitTitle: "Plan your visit",
     visitBody: "A 10-minute walk from Cosmosquare Station. About 30 minutes from Osaka and Shin-Osaka stations, 40 minutes from Kansai International Airport.",
     newsTitle: "News",
     contactTitle: "Let’s plan your special day.",
-    contactBody: "Organisers and exhibitors can reach us through the form or by Instagram DM.",
+    contactBody: "To use THE JEWELRY, please contact us below, through the enquiry form or by Instagram DM.",
   },
   about: {
-    hero: { kicker: "About", title: "About", lead: "A dome of light, born as a museum.", image: IMG("about-hero.jpg") },
+    hero: { kicker: "About", title: "About", lead: "A dome of light, born as a museum.", image: IMG("hero-stage.jpg") },
     chapters: [
-      { no: "I", title: "Architecture built as a museum", body: "THE JEWELRY is a dome-shaped exhibition hall registered as a museum. Designed for display, its spaces present works and products at their best and create experiences people remember.", image: IMG("about-arch.jpg") },
+      { no: "I", title: "Architecture built as a museum", body: "THE JEWELRY is a dome-shaped exhibition hall built as a museum. Designed for display, its spaces present works and products at their best and create experiences people remember.", image: IMG("about-arch.jpg") },
       { no: "II", title: "A dome wrapped in light", body: "As the sun sets, the dome slowly begins to glow. The illumination gives exhibitions and receptions an atmosphere found nowhere else.", image: IMG("about-light.jpg") },
       { no: "III", title: "Osaka Bay, open to the world", body: "The Osaka Bay Area is where Osaka IR and many other entertainment projects are planned. THE JEWELRY is an event venue and museum bringing this area to life, a place where people from Japan and abroad meet new expression.", image: IMG("about-bay.jpg") },
     ],
     quote: "A new stage for expression and encounters.",
   },
   spaces: {
-    hero: { kicker: "Spaces", title: "Spaces", lead: "Three spaces for every scale and purpose.", image: IMG("spaces-hero.jpg") },
+    hero: { kicker: "Spaces", title: "Spaces", lead: "Three spaces for every scale and purpose.", image: IMG("home-dome.jpg") },
     usesLabel: "Ideal for",
     capacityLabel: "Capacity",
     spaces: [
@@ -450,11 +497,11 @@ const en: Content = {
     combineBody: "Spaces can be combined, for example an exhibition in the Dome with a reception in the Outer Area. We will propose the best layout for your event.",
   },
   events: {
-    hero: { kicker: "Exhibitions & Events", title: "Exhibitions & Events", lead: "Turn your work into an unforgettable experience, in a space built as a museum.", image: IMG("ev-hero.jpg") },
+    hero: { kicker: "Exhibitions & Events", title: "Exhibitions & Events", lead: "Turn your work into an unforgettable experience, in a space built as a museum.", image: IMG("home-event.jpg") },
     intro: {
       title: "Built as a museum, made for events and exhibitions.",
       body: "A dome of light, a vast open-air space facing the sea and a calm Entrance Hall. From exhibitions to large-scale events, we will propose the right space for your event.",
-      cta: "Propose an event",
+      cta: "Host an event",
     },
     typesTitle: "What you can host",
     types: [
@@ -486,8 +533,8 @@ const en: Content = {
         no: "03", title: "Receptions", en: "Parties & galas",
         body: "Anniversaries, corporate parties and gala dinners, with the illuminated dome to yourselves at night.",
         more: "A special night with the bay view as a backdrop. For smaller receptions, the Entrance Hall is also available.",
-        card: IMG("prog-reception.jpg"),
-        images: [IMG("prog-reception.jpg"), IMG("ev-sunset-lounge.jpg"), IMG("ev-evening.jpg")],
+        card: IMG("home-lounge.jpg"),
+        images: [IMG("home-lounge.jpg"), IMG("ev-sunset-lounge.jpg"), IMG("ev-evening.jpg")],
         facts: [
           { label: "Suggested spaces", value: "The Dome / Entrance Hall" },
           { label: "Capacity", value: "The Dome 3,000 / Entrance Hall 300" },
@@ -517,7 +564,7 @@ const en: Content = {
     ],
   },
   visit: {
-    hero: { kicker: "Visit", title: "Plan your visit", lead: "An event venue and museum bringing the Osaka Bay Area to life.", image: IMG("visit-hero.jpg") },
+    hero: { kicker: "Visit", title: "Plan your visit", lead: "An event venue and museum bringing the Osaka Bay Area to life.", image: IMG("home-dome.jpg") },
     hoursTitle: "Opening hours",
     hours: "Open during events and exhibitions",
     hoursNote: "Please check each event’s announcement for dates and times.",
@@ -556,7 +603,7 @@ const en: Content = {
     routeEnd: { station: "Cosmosquare Sta.", walk: "approx. 10 min walk", note: "Yumeshima Station (planned site of Osaka IR) is one stop, about 5 minutes, from Cosmosquare." },
   },
   news: {
-    hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("news-hero.jpg") },
+    hero: { kicker: "News", title: "News", lead: "The latest from THE JEWELRY.", image: IMG("hero-stage.jpg") },
     items: [
       { id: "2026-11-01-open", date: "2026.11.01", title: "We are now accepting event and exhibition proposals", body: "From today, we officially welcome proposals from event and exhibition organisers.", image: IMG("news-open.jpg") },
       { id: "2026-10-31-renewal", date: "2026.10.31", title: "Our website has been renewed", body: "The official THE JEWELRY website has been fully renewed.", image: IMG("news-renewal.jpg") },
@@ -573,8 +620,8 @@ const en: Content = {
     follow: "Follow on Instagram",
   },
   contact: {
-    hero: { kicker: "Contact", title: "Contact", lead: "We look forward to hearing about your event.", image: IMG("contact-hero.jpg") },
-    intro: "We welcome enquiries from organisers and exhibitors, even if your dates or details are not fixed yet. Our team will get back to you.",
+    hero: { kicker: "Contact", title: "Contact", lead: "We look forward to hearing about your event.", image: IMG("home-lounge.jpg") },
+    intro: "To use THE JEWELRY, please contact us below. Even if your dates or details are not fixed yet, feel free to get in touch. Our team will get back to you.",
     dmTitle: "Or message us on Instagram",
     dmBody: "We also accept enquiries by direct message on our official Instagram.",
     form: {

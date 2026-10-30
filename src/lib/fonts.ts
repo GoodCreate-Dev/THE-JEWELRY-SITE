@@ -1,4 +1,4 @@
-import { Manrope } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import localFont from "next/font/local";
 
 // Latin: Manrope for headings (light) and text: modern and minimal.
@@ -18,4 +18,15 @@ export const notoSans = localFont({
   fallback: ["Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", "Yu Gothic", "Meiryo", "sans-serif"],
 });
 
-export const fontVars = `${manrope.variable} ${notoSans.variable}`;
+// Headlines: Cormorant Garamond (high-contrast editorial serif) and Shippori Mincho, cut down
+// like Noto Sans JP by scripts/make-jp-font.py.
+export const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "500"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
+export const mincho = localFont({
+  src: [{ path: "../fonts/shippori-mincho-400.woff2", weight: "400", style: "normal" }],
+  variable: "--font-mincho-jp",
+  display: "swap",
+  preload: false,
+  fallback: ["Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif CJK JP", "serif"],
+});
+
+export const fontVars = `${manrope.variable} ${notoSans.variable} ${cormorant.variable} ${mincho.variable}`;
