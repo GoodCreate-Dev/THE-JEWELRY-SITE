@@ -3,10 +3,11 @@
  * THE JEWELRY contact form -> email (Sakura rental server, PHP 8).
  * ----------------------------------------------------------------
  * The site's form (ContactForm.tsx) posts JSON here; this checks it and emails it to
- * CONTACT_TO in config.php, with Reply-To set to the visitor so a reply goes straight back.
+ * CONTACT_TO in config.php as a designed HTML email (with a plain-text version), with Reply-To
+ * set to the visitor so a reply goes straight back.
  * Answers JSON: {"success": true} or {"success": false, "message": "..."}.
  *
- * Guards: POST only, same-site requests only, hidden "botcheck" field, field length limits,
+ * Guards: POST only, this site (or a CONTACT_ORIGINS site, e.g. the GitHub demo) only, hidden "botcheck" field, field length limits,
  * no line breaks in header values, and at most RATE_MAX messages per visitor per RATE_WINDOW.
  */
 
@@ -21,14 +22,27 @@ function reply($ok, $message = '', $status = 200) {
     exit;
 }
 
+// Requests only from this site, or from another site listed in CONTACT_ORIGINS (config.php):
+// the browser's Origin (or Referer) must match. The other sites get the CORS headers they need.
+$host = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''); // without a port
+$from = $_SERVER['HTTP_ORIGIN'] ?? ($_SERVER['HTTP_REFERER'] ?? '');
+$origin = preg_replace('#^(https?://[^/]+).*$#', '$1', $from);
+$cross = in_array($origin, defined('CONTACT_ORIGINS') ? CONTACT_ORIGINS : [], true);
+if ($cross) {
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Vary: Origin');
+}
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS' && $cross) {
+    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Headers: Content-Type, Accept');
+    header('Access-Control-Max-Age: 86400');
+    http_response_code(204);
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     reply(false, 'POST only', 405);
 }
-
-// Same-site only: the browser's Origin (or Referer) must be this site.
-$host = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''); // without a port
-$from = $_SERVER['HTTP_ORIGIN'] ?? ($_SERVER['HTTP_REFERER'] ?? '');
-if ($host === '' || parse_url($from, PHP_URL_HOST) !== $host) {
+if (!$cross && ($host === '' || parse_url($from, PHP_URL_HOST) !== $host)) {
     reply(false, 'Forbidden', 403);
 }
 
@@ -95,56 +109,96 @@ if ($fh && flock($fh, LOCK_EX)) {
     fclose($fh);
 }
 
-$lang = $v['lang'] === 'en' ? 'English' : '日本語';
-$date = date('Y-m-d H:i');
-$dash = fn($s) => $s === '' ? '-' : $s;
-$body = <<<TXT
-THE JEWELRY ウェブサイトからお問い合わせがありました。
-New enquiry from the THE JEWELRY website.
+$lang = $v['lang'] === 'en' ? '英語' : '日本語';
 
-■ 種別 / Type
-{$dash($v['type'])}
+// Rows of the "お問い合わせ情報" table, in form order; optional fields only when filled in.
+$rows = array_filter([
+    '会社名・団体名' => $v['company'],
+    'お名前'         => $v['name'],
+    'メールアドレス' => $v['email'],
+    '電話番号'       => $v['tel'],
+    'ご希望時期'     => $v['date'],
+    '想定人数'       => $v['guests'],
+    'サイト言語'     => $lang,
+], fn($s) => $s !== '');
+$type = $v['type'] !== '' ? $v['type'] : 'その他';
 
-■ 会社名・団体名 / Company
-{$v['company']}
+// ---- plain-text version (mail apps that do not show HTML, e.g. Sakura webmail) ----
+$text = "THE JEWELRY 公式サイトのお問い合わせフォームより、{$v['company']} 様から新しいお問い合わせがありました。\n"
+    . "以下の内容をご確認のうえ、必要に応じてご対応をお願いいたします。\n\n"
+    . "■ お問い合わせ種別\n{$type}\n\n■ お問い合わせ情報\n";
+foreach ($rows as $label => $value) {
+    $text .= "{$label}：{$value}\n";
+}
+$text .= "\n■ ご相談内容\n{$v['message']}\n\n"
+    . "――――――――――――――――――\n"
+    . "このメールは THE JEWELRY 公式サイトのお問い合わせフォームから自動送信されています。\n"
+    . "このメールに返信すると、お問い合わせいただいた方（{$v['email']}）に届きます。\n";
 
-■ お名前 / Name
-{$v['name']}
+// ---- HTML version: the design the client asked for. Tables and inline styles only, so it
+// renders the same in Gmail, Outlook and phone mail apps. ----
+$h = fn($s) => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+$font = "'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic','Meiryo',sans-serif";
+$tr = '';
+foreach ($rows as $label => $value) {
+    $cell = $label === 'メールアドレス'
+        ? '<a href="mailto:' . $h($value) . '" style="color:#2a5db0;text-decoration:none;">' . $h($value) . '</a>'
+        : $h($value);
+    $tr .= '<tr>'
+        . '<td valign="top" style="width:36%;padding:14px 12px 14px 0;border-bottom:1px solid #ececec;font-size:12px;color:#777777;">' . $h($label) . '</td>'
+        . '<td valign="top" style="padding:12px 0;border-bottom:1px solid #ececec;font-size:15px;color:#1a1a1a;word-break:break-all;">' . $cell . '</td>'
+        . '</tr>';
+}
+$html = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . $h('新しいお問い合わせ') . '</title></head>'
+    . '<body style="margin:0;padding:0;background:#f1f1f1;">'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f1f1f1;"><tr><td align="center" style="padding:16px 8px;">'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;background:#ffffff;border-radius:12px;overflow:hidden;font-family:' . $font . ';">'
+    // header
+    . '<tr><td align="center" style="background:#1a1a1d;padding:22px 24px 18px;">'
+    . '<div style="font-size:13px;font-weight:bold;letter-spacing:.06em;color:#c9b48a;">THE JEWELRY</div>'
+    . '<div style="margin-top:6px;font-size:22px;font-weight:bold;color:#ffffff;">新しいお問い合わせ</div>'
+    . '<div style="margin-top:6px;font-size:13px;color:#bdbdbd;">公式サイト｜お問い合わせ通知</div>'
+    . '</td></tr>'
+    // body
+    . '<tr><td style="padding:22px 24px 8px;">'
+    . '<p style="margin:0 0 10px;font-size:15px;line-height:1.7;color:#1a1a1a;">公式サイトのお問い合わせフォームより、<strong>' . $h($v['company']) . ' 様から新しいお問い合わせがありました。</strong></p>'
+    . '<p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#666666;">以下の内容をご確認のうえ、必要に応じてご対応をお願いいたします。</p>'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3eee6;border-radius:8px;"><tr><td style="padding:14px 16px;">'
+    . '<div style="font-size:12px;font-weight:bold;color:#8a7354;">お問い合わせ種別</div>'
+    . '<div style="margin-top:6px;font-size:18px;font-weight:bold;color:#1a1a1a;">' . $h($type) . '</div>'
+    . '</td></tr></table>'
+    . '<div style="margin:22px 0 6px;font-size:14px;font-weight:bold;color:#8a7354;">お問い合わせ情報</div>'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' . $tr . '</table>'
+    . '<div style="margin:22px 0 8px;font-size:14px;font-weight:bold;color:#8a7354;">ご相談内容</div>'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f6f6f6;border-radius:8px;"><tr><td style="padding:16px;font-size:15px;line-height:1.8;color:#1a1a1a;word-break:break-word;">' . nl2br($h($v['message'])) . '</td></tr></table>'
+    . '</td></tr>'
+    // footer
+    . '<tr><td style="padding:8px 24px 22px;">'
+    . '<div style="border-top:1px solid #e3e3e3;padding-top:16px;font-size:12px;line-height:1.9;color:#777777;">'
+    . 'このメールはTHE JEWELRY公式サイトのお問い合わせフォームから自動送信されています。<br>'
+    . 'ご返信の際は、お問い合わせいただいた方のメールアドレスをご確認ください。'
+    . '</div></td></tr>'
+    . '</table></td></tr></table></body></html>';
 
-■ メール / Email
-{$v['email']}
-
-■ 電話番号 / Phone
-{$dash($v['tel'])}
-
-■ 希望時期 / Preferred timing
-{$dash($v['date'])}
-
-■ 想定人数 / Expected guests
-{$dash($v['guests'])}
-
-■ 内容 / Message
-{$v['message']}
-
-――――――――――――――――――
-送信日時 / Sent: {$date}
-サイト言語 / Site language: {$lang}
-このメールに返信すると、お問い合わせ者に届きます。
-Reply to this email to answer the sender directly.
-TXT;
-
-// UTF-8 mail ('uni'): ISO-2022-JP cannot hold characters such as 髙, ①, ㈱ or "—".
-mb_language('uni');
+// ---- send: multipart/alternative, UTF-8, base64 (ISO-2022-JP cannot hold 髙, ①, ㈱ ...) ----
 mb_internal_encoding('UTF-8');
-$subject = '【THE JEWELRY】お問い合わせ（' . $dash($v['type']) . '）' . mb_strimwidth($v['company'], 0, 60, '…') . '様';
+$subject = '【THE JEWELRY】お問い合わせ（' . $type . '）' . mb_strimwidth($v['company'], 0, 60, '…') . '様';
+$boundary = 'tj-' . bin2hex(random_bytes(12));
+$part = fn($mime, $content) => "--{$boundary}\r\n"
+    . "Content-Type: {$mime}; charset=UTF-8\r\n"
+    . "Content-Transfer-Encoding: base64\r\n\r\n"
+    . chunk_split(base64_encode(str_replace("\n", "\r\n", str_replace("\r\n", "\n", $content))));
+$message = $part('text/plain', $text) . $part('text/html', $html) . "--{$boundary}--\r\n";
 $headers = implode("\r\n", [
-    'From: ' . mb_encode_mimeheader(CONTACT_FROM_NAME) . ' <' . CONTACT_FROM . '>',
+    'From: ' . mb_encode_mimeheader(CONTACT_FROM_NAME, 'UTF-8', 'B') . ' <' . CONTACT_FROM . '>',
     'Reply-To: ' . $v['email'],
+    'MIME-Version: 1.0',
+    'Content-Type: multipart/alternative; boundary="' . $boundary . '"',
 ]);
 
-$sent = mb_send_mail(CONTACT_TO, $subject, $body, $headers, '-f' . CONTACT_FROM);
+$sent = mail(CONTACT_TO, mb_encode_mimeheader($subject, 'UTF-8', 'B'), $message, $headers, '-f' . CONTACT_FROM);
 if (!$sent) {
-    error_log('contact.php: mb_send_mail failed');
+    error_log('contact.php: mail failed');
     reply(false, 'Mail could not be sent', 500);
 }
 reply(true);

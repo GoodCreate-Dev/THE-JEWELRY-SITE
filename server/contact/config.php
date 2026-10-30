@@ -11,7 +11,10 @@ define('CONTACT_TO', 'PASTE_EMAIL_HERE');
 // Sender shown on the email. Must be an address on this server's domain, or providers
 // mark the mail as spam; the account's own mailbox exists on every Sakura server.
 define('CONTACT_FROM', 'the-jewelry@the-jewelry.sakura.ne.jp');
-define('CONTACT_FROM_NAME', 'THE JEWELRY Website');
+define('CONTACT_FROM_NAME', 'THE JEWELRY ウェブサイト');
+
+// Other sites whose form may post here (exact origin, no trailing slash): the GitHub demo.
+define('CONTACT_ORIGINS', ['https://anamul009.github.io']);
 
 // At most RATE_MAX messages per visitor within RATE_WINDOW seconds.
 define('RATE_MAX', 5);
