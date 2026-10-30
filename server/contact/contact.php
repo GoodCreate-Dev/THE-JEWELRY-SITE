@@ -152,19 +152,19 @@ foreach ($rows as $label => $value) {
         . '</tr>'
         . '<tr><td colspan="2" height="1" bgcolor="#ececec" style="height:1px;padding:0;line-height:1px;font-size:1px;mso-line-height-rule:exactly;background:#ececec;">&nbsp;</td></tr>';
 }
-$html = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . $h('新しいお問い合わせ') . '</title></head>'
+$html = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . $h('お問い合わせ') . '</title></head>'
     . '<body style="margin:0;padding:0;background:#f1f1f1;">'
     . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f1f1f1;"><tr><td align="center" style="padding:16px 8px;">'
     . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;background:#ffffff;border-radius:12px;overflow:hidden;font-family:' . $font . ';">'
     // header
     . '<tr><td align="center" style="background:#1a1a1d;padding:22px 24px 18px;">'
     . '<div style="font-size:16px;font-weight:bold;letter-spacing:.06em;color:#c9b48a;">THE JEWELRY</div>'
-    . '<div style="margin-top:6px;font-size:26px;font-weight:bold;color:#ffffff;">新しいお問い合わせ</div>'
+    . '<div style="margin-top:6px;font-size:26px;font-weight:bold;color:#ffffff;">お問い合わせ</div>'
     . '<div style="margin-top:6px;font-size:15px;color:#bdbdbd;">公式サイト｜お問い合わせ通知</div>'
     . '</td></tr>'
     // body
     . '<tr><td style="padding:22px 24px 8px;">'
-    . '<p style="margin:0 0 10px;font-size:18px;line-height:1.7;color:#1a1a1a;">公式サイトのお問い合わせフォームより、<strong>' . $h($v['company']) . ' 様から新しいお問い合わせがありました。</strong></p>'
+    . '<p style="margin:0 0 10px;font-size:18px;line-height:1.7;color:#1a1a1a;">公式サイトのお問い合わせフォームより、' . $h($v['company']) . ' 様から新しいお問い合わせがありました。</p>'
     . '<p style="margin:0 0 18px;font-size:17px;line-height:1.7;color:#555555;">以下の内容をご確認のうえ、必要に応じてご対応をお願いいたします。</p>'
     . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3eee6;border-radius:8px;"><tr><td style="padding:14px 16px;">'
     . '<div style="font-size:15px;font-weight:bold;color:#8a7354;">お問い合わせ種別</div>'
