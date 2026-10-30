@@ -34,6 +34,8 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
   const [away, setAway] = useState(false);
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<PageKey>(page);
+  // The menu photos load the first time the menu opens, not with every page.
+  const [opened, setOpened] = useState(false);
 
   useEffect(() => {
     let last = window.scrollY;
@@ -96,7 +98,7 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
               <span className="cta-long">{t.nav.cta}</span>
               <span className="cta-short">{t.nav.ctaShort}</span>
             </Link>
-            <button type="button" className="menu-btn" aria-label={open ? t.nav.close : t.nav.menu} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+            <button type="button" className="menu-btn" aria-label={open ? t.nav.close : t.nav.menu} aria-expanded={open} onClick={() => { setOpen((v) => !v); setOpened(true); }}>
               <span className="menu-lines" aria-hidden="true"><i /><i /><i /></span>
             </button>
           </div>
@@ -105,7 +107,7 @@ export function Header({ lang, page }: { lang: Lang; page: PageKey }) {
 
       <div className="menu-panel" inert={!open}>
         <div className="menu-media" aria-hidden="true">
-          {PAGES.map((p) => (
+          {opened && PAGES.map((p) => (
             <img key={p} {...responsive(menuImage(lang, p), "40vw")} alt="" className={p === preview ? "on" : ""} loading="lazy" />
           ))}
         </div>

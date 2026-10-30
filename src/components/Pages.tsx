@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { asset, content, EVENT_IDS, FORM_ID, IG_URL, MAP_EMBED, PARKING_URL, path, SPACE_IDS, type Content, type Lang } from "@/content/site";
 import { ContactForm } from "./ContactForm";
+import { MapEmbed } from "./MapEmbed";
 import { feed, type FeedItem } from "@/lib/feed";
 import { responsive } from "@/lib/img";
 import { FeedBody, FeedSection, IgPostDetail } from "./Feed";
@@ -167,9 +168,7 @@ export function VisitPage({ lang }: { lang: Lang }) {
 
       {/* map and parking */}
       <section className="access2">
-        <div className="access2-map">
-          <iframe title="Map" src={MAP_EMBED} loading="lazy" />
-        </div>
+        <MapEmbed src={MAP_EMBED} title="Map" />
         <div className="access2-text">
           <p className="kicker" data-reveal>{v.parkingTitle}</p>
           <p className="h-body" data-reveal>{v.parking}</p>

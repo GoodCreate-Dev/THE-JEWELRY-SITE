@@ -3,6 +3,7 @@ import Link from "next/link";
 import { asset, content, EVENT_IDS, FORM_ID, path, SPACE_IDS, type Lang } from "@/content/site";
 import { responsive } from "@/lib/img";
 import { HeroCine } from "../HeroCine";
+import { HeroImg } from "../HeroImg";
 import { Band, ContactBand, Shell } from "../Shared";
 
 /**
@@ -45,7 +46,7 @@ export function HomePage({ lang }: { lang: Lang }) {
       {/* 00 hero: opens (first visit) on JEWELRY lit from inside, rushing through to the bay at night */}
       <HeroCine>
         <div className="cine-stage">
-          <div className="cine-night"><img {...responsive(asset("/images/hero-stage.jpg"))} alt="" fetchPriority="high" /></div>
+          <div className="cine-night"><HeroImg {...responsive(asset("/images/hero-stage.jpg"))} /></div>
           <div className="cine-veil" />
           <div className="cine-black" aria-hidden="true" />
 

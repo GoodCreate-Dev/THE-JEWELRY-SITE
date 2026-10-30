@@ -1,6 +1,6 @@
 "use client";
 
-import Lenis from "lenis";
+import type Lenis from "lenis";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { BASE } from "@/content/site";
@@ -8,7 +8,8 @@ import { BASE } from "@/content/site";
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 /**
- * Page-wide motion: Lenis smooth scrolling, and fade-in of every `.rv` / `.rv-img` element.
+ * Page-wide motion: Lenis smooth scrolling (mouse and trackpad only: touch screens keep their
+ * native scroll and never download it), and fade-in of every `.rv` / `.rv-img` element.
  * Elements already on screen show at once, others as they scroll in, and a safety timer
  * reveals everything, so content can never stay hidden (the problem with earlier samples).
  *
@@ -107,8 +108,15 @@ export function Motion() {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const lenis = new Lenis({ duration: 1.2, smoothWheel: true, anchors: true });
-    lenisRef.current = lenis;
+    let lenis: Lenis | null = null;
+    let cancelled = false;
+    if (window.matchMedia("(pointer: fine)").matches) {
+      import("lenis").then(({ default: L }) => {
+        if (cancelled) return;
+        lenis = new L({ duration: 1.2, smoothWheel: true, anchors: true });
+        lenisRef.current = lenis;
+      });
+    }
 
     let lastIndex = "";
     const scrollDetails = (vh: number, foot: Element | null) => {
@@ -191,12 +199,14 @@ export function Motion() {
 
     let id = requestAnimationFrame(function tick(t) {
       // The page behind the full-screen menu must not scroll (Lenis ignores body overflow).
-      const menuOpen = document.documentElement.classList.contains("menu-open");
-      if (menuOpen !== lenis.isStopped) {
-        if (menuOpen) lenis.stop();
-        else lenis.start();
+      if (lenis) {
+        const menuOpen = document.documentElement.classList.contains("menu-open");
+        if (menuOpen !== lenis.isStopped) {
+          if (menuOpen) lenis.stop();
+          else lenis.start();
+        }
+        lenis.raf(t);
       }
-      lenis.raf(t);
       scrollEffects();
       id = requestAnimationFrame(tick);
     });
@@ -204,7 +214,8 @@ export function Motion() {
     return () => {
       cancelAnimationFrame(id);
       mo.disconnect();
-      lenis.destroy();
+      cancelled = true;
+      lenis?.destroy();
       lenisRef.current = null;
     };
   }, []);

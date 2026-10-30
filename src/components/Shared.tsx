@@ -5,6 +5,7 @@ import { responsive } from "@/lib/img";
 import { asset, COMPANY_URL, content, FORM_ID, IG_URL, path, PAGES, PRIVACY_URL, type Lang, type PageKey } from "@/content/site";
 import { Cursor } from "./Cursor";
 import { Header } from "./Header";
+import { HeroImg } from "./HeroImg";
 import { SceneMotion } from "./SceneMotion";
 import "./footer.css";
 import "./scenes.css";
@@ -33,7 +34,7 @@ export function PageHero({ hero, video, index }: { hero: { kicker: string; title
     // Motion.tsx may set --hp on it before hydration
     <section className="ph" data-hero suppressHydrationWarning>
       <div className="ph-media">
-        {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <img {...responsive(hero.image)} alt="" fetchPriority="high" />}
+        {video ? <video src={video} poster={hero.image} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : <HeroImg {...responsive(hero.image)} />}
       </div>
       <div className="ph-veil" />
       {index && <span className="ph-index" aria-hidden="true">{index}</span>}
