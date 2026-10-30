@@ -144,10 +144,13 @@ foreach ($rows as $label => $value) {
     $cell = $label === 'メールアドレス'
         ? '<a href="mailto:' . $h($value) . '" style="color:#2a5db0;text-decoration:none;">' . $h($value) . '</a>'
         : $h($value);
+    // The line under each row is a row of its own spanning both columns: some mail apps (Outlook,
+    // Windows Mail) draw cell borders only under the label column, so they looked broken there.
     $tr .= '<tr>'
-        . '<td valign="top" style="width:34%;padding:15px 12px 15px 0;border-bottom:1px solid #dcdcdc;font-size:15px;color:#555555;">' . $h($label) . '</td>'
-        . '<td valign="top" style="padding:13px 0;border-bottom:1px solid #dcdcdc;font-size:18px;line-height:1.6;color:#1a1a1a;word-break:break-all;">' . $cell . '</td>'
-        . '</tr>';
+        . '<td width="34%" valign="top" style="width:34%;padding:15px 12px 14px 0;font-size:15px;line-height:1.6;color:#555555;">' . $h($label) . '</td>'
+        . '<td width="66%" valign="top" style="width:66%;padding:13px 0 12px;font-size:18px;line-height:1.6;color:#1a1a1a;word-break:break-all;">' . $cell . '</td>'
+        . '</tr>'
+        . '<tr><td colspan="2" height="1" style="height:1px;padding:0;line-height:1px;font-size:1px;background:#dcdcdc;">&nbsp;</td></tr>';
 }
 $html = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . $h('新しいお問い合わせ') . '</title></head>'
     . '<body style="margin:0;padding:0;background:#f1f1f1;">'
