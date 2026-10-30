@@ -150,7 +150,7 @@ foreach ($rows as $label => $value) {
         . '<td width="34%" valign="top" style="width:34%;padding:15px 12px 14px 0;font-size:15px;line-height:1.6;color:#555555;">' . $h($label) . '</td>'
         . '<td width="66%" valign="top" style="width:66%;padding:13px 0 12px;font-size:18px;line-height:1.6;color:#1a1a1a;word-break:break-all;">' . $cell . '</td>'
         . '</tr>'
-        . '<tr><td colspan="2" height="1" style="height:1px;padding:0;line-height:1px;font-size:1px;background:#dcdcdc;">&nbsp;</td></tr>';
+        . '<tr><td colspan="2" height="1" bgcolor="#ececec" style="height:1px;padding:0;line-height:1px;font-size:1px;mso-line-height-rule:exactly;background:#ececec;">&nbsp;</td></tr>';
 }
 $html = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . $h('新しいお問い合わせ') . '</title></head>'
     . '<body style="margin:0;padding:0;background:#f1f1f1;">'
