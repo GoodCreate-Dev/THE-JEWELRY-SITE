@@ -182,7 +182,8 @@ $html = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="
 
 // ---- send: multipart/alternative, UTF-8, base64 (ISO-2022-JP cannot hold 髙, ①, ㈱ ...) ----
 mb_internal_encoding('UTF-8');
-$subject = '【THE JEWELRY】お問い合わせ（' . $type . '）' . mb_strimwidth($v['company'], 0, 60, '…') . '様';
+// e.g. 【THE JEWELRY】お問い合わせ（催事・イベント）｜ 山田 太郎 様  (the ｜ divides type and sender)
+$subject = '【THE JEWELRY】お問い合わせ（' . $type . '）｜ ' . mb_strimwidth($v['name'], 0, 60, '…') . ' 様';
 $boundary = 'tj-' . bin2hex(random_bytes(12));
 $part = fn($mime, $content) => "--{$boundary}\r\n"
     . "Content-Type: {$mime}; charset=UTF-8\r\n"
